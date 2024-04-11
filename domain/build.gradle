@@ -1,3 +1,21 @@
 plugins {
     id 'kotlin-conventions'
+    id 'jacoco'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+jacocoTestReport {
+    dependsOn test
+
+    reports {
+        csv.required = true
+    }
 }

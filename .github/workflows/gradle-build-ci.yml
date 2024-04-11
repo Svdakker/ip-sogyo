@@ -22,6 +22,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    permissions:
+      pull-requests: write
+
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 21
@@ -37,6 +40,20 @@ jobs:
 
       - name: perform unit-tests
         run: ./gradlew clean test
+
+      - name: Generate JaCoCo Badge
+        id: jacoco
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          jacoco-csv-file: domain/build/reports/jacoco/test/jacocoTestReport.csv
+          fail-if-coverage-less-than: 95
+
+      - name: Log coverage percentage
+        run: |
+          echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
+
+      - name: Check Style
+        run: ./gradlew checkStyleMain
 
   build-backend:
 
