@@ -1,6 +1,7 @@
 plugins {
     id 'kotlin-conventions'
     id 'jacoco'
+    id 'org.barfuin.gradle.jacocolog' version '3.1.0'
 }
 
 tasks.named('test') {
@@ -16,6 +17,14 @@ jacocoTestReport {
     dependsOn test
 
     reports {
+        html.required = true
+        xml.required = true
         csv.required = true
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule { limit { minimum = 0.95 } }
     }
 }
