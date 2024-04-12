@@ -15,7 +15,7 @@ unit-test-job:
   stage: test
   extends:
     - .standard-rules
-  coverage: '/Complexity Coverage: (\d+\.\d+\%)/'
+  coverage: '/    - Complexity Coverage: ([0-9.]+)%/'
   script:
     - gradle clean test
     - gradle jacocoTestCoverageVerification
