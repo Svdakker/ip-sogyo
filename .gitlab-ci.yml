@@ -1,6 +1,6 @@
 stages:
-  - build
   - test
+  - build
   - deploy
 
 default:
@@ -39,18 +39,19 @@ build-frontend-job:
     - cd ..
   artifacts:
     when: on_success
-    expire_in: 1 minute
+    expire_in: 5 minutes
     paths:
       - client/dist
 
-build-backend-zip:
+build-backend-job:
   stage: build
   script:
-    - gradle distZip -Pversion=$CI_PIPELINE_ID.$CI_COMMIT_BRANCH.$CI_COMMIT_SHORT_SHA
-    - cp $CI_PROJECT_DIR/api/build/distributions/*.zip $CI_PROJECT_DIR/modelr.zip
+    - gradle clean build -Pversion=$CI_PIPELINE_ID.$CI_COMMIT_BRANCH.$CI_COMMIT_SHORT_SHA
   artifacts:
     when: on_success
     name: $CI_JOB_NAME
     paths:
-      - $CI_PROJECT_DIR/*.zip
+      - domain/build/libs/*.jar
+      - api/build/libs/*.jar
+      - persistence/build/libs/*.jar
     expire_in: 5 minutes
