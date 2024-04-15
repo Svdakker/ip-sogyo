@@ -14,7 +14,7 @@ class SimulationResultDTOrepositoryIntegrationTest(@Autowired var restTemplate: 
 
     @Test
     fun addNewSimulationResult() {
-        val result = this.restTemplate.getForEntity("/api/run", SimulationResultDTO::class.java)
+        val result = this.restTemplate.getForEntity("/modelr/api/run", SimulationResultDTO::class.java)
         simulationResultId = result.body?.id!!
         assertTrue { result.body?.duration == 100 }
     }

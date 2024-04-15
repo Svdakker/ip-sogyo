@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("modelr/api")
 class ModelrController(var simulationFactory: ISimulationFactory, var simulationResultService: SimulationResultService) {
 
     @GetMapping("/run")
