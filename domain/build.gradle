@@ -1,12 +1,37 @@
 plugins {
-    id 'kotlin-conventions'
+    id 'org.jetbrains.kotlin.jvm'
     id 'jacoco'
     id 'org.barfuin.gradle.jacocolog' version '3.1.0'
+    id 'checkstyle'
+}
+
+java {
+    sourceCompatibility = '21'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //Kotlin dependencies
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+
+    // Use JUnit Jupiter API for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
+
+    // Use JUnit Jupiter Engine for testing.
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
     finalizedBy jacocoTestReport
+}
+
+checkstyle {
+    toolVersion = "10.7.0"
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
 }
 
 jacoco {
