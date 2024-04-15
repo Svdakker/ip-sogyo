@@ -43,15 +43,33 @@ build-frontend-job:
     paths:
       - client/dist
 
-build-backend-job:
+build-backend-zip:
   stage: build
+  extends:
+    - .standard-rules
   script:
-    - gradle clean build -Pversion=$CI_PIPELINE_ID.$CI_COMMIT_BRANCH.$CI_COMMIT_SHORT_SHA
+    - gradle distZip -Pversion=$CI_PIPELINE_ID.$CI_COMMIT_BRANCH.$CI_COMMIT_SHORT_SHA
+    - cp $CI_PROJECT_DIR/api/build/distributions/*.zip $CI_PROJECT_DIR/individual-project.zip
   artifacts:
     when: on_success
     name: $CI_JOB_NAME
     paths:
-      - domain/build/libs/*.jar
-      - api/build/libs/*.jar
-      - persistence/build/libs/*.jar
+      - $CI_PROJECT_DIR/*.zip
     expire_in: 5 minutes
+
+package-artifact:
+  stage: deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH      # Run for all changes to the default branch only
+  script:
+    - echo "Packaging artifacts"
+  needs:
+    - build-backend-zip
+    - build-frontend-job
+  artifacts:
+    when: on_success
+    name: $CI_JOB_NAME-$CI_PIPELINE_ID.$CI_COMMIT_BRANCH.$CI_COMMIT_SHORT_SHA
+    paths:
+      - client/dist
+      - $CI_PROJECT_DIR/*.zip
+    expire_in: 1 day
