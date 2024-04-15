@@ -7,6 +7,6 @@ import jakarta.persistence.Id
 @Entity
 data class SimulationResult(
     @Id @GeneratedValue
-    val id: Long,
-    val duration: Number
+    var id: Long?,
+    var duration: Number
 )
