@@ -9,11 +9,12 @@ export async function runSimulation()  {
 
     if (response.ok) {
         const result = await response.json()
-        return result.duration
+        return (
+            console.log(result)
+        )
     } else {
-        return {
-            statusCode: response.status,
-            statusText: response.statusText
-        };
+        return (
+            console.log("No simulation found")
+        )
     }
 }
