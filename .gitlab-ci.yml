@@ -45,6 +45,8 @@ build-frontend-job:
 
 build-backend-zip:
   stage: build
+  extends:
+    - .standard-rules
   script:
     - gradle distZip -Pversion=$CI_PIPELINE_ID.$CI_COMMIT_BRANCH.$CI_COMMIT_SHORT_SHA
     - cp $CI_PROJECT_DIR/api/build/distributions/*.zip $CI_PROJECT_DIR/individual-project.zip
