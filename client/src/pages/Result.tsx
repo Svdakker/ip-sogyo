@@ -12,11 +12,9 @@ export const Result = () => {
         }
     }
 
-    fetchResult()
-
     return (
         <>
-            <div>Simulation completed!</div>
+            <button onClick={fetchResult}>Run!</button>
             <div id="resultContainer">{String(results?.duration)}</div>
         </>
     )

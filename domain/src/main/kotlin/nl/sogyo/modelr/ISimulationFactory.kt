@@ -2,5 +2,9 @@ package nl.sogyo.modelr
 
 interface ISimulationFactory {
 
-    fun createNewSimulation(): ISimulation
+    enum class UnitOperations{
+        BATCH_FERMENTATION
+    }
+
+    fun createNewSimulation(operations: String, settings: String): ISimulation
 }
