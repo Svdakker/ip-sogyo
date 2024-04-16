@@ -1,3 +1,5 @@
+import {Output} from "../Types.tsx";
+
 export async function runSimulation()  {
     const response: Response = await fetch("modelr/api/run", {
         method: 'GET',
@@ -8,13 +10,12 @@ export async function runSimulation()  {
     })
 
     if (response.ok) {
-        const result = await response.json()
-        return (
-            console.log(result)
-        )
+        const result = await response.json();
+        return result as Output;
     } else {
-        return (
-            console.log("No simulation found")
-        )
+        return {
+            statusCode: response.status,
+            statusText: response.statusText
+        };
     }
 }
