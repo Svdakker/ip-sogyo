@@ -7,10 +7,11 @@ class BatchFermentationTest {
 
     @Test
     fun testCalculateDuration() {
-        val operation = BatchFermentation()
+        val input = FermentationInput(20.00, 0.12, 0.27, 0.00703, 0.4)
+        val operation = BatchFermentation(input)
 
         val result = operation.calculateDuration()
 
-        assertEquals(result, 100)
+        assertEquals(15.57, result)
     }
 }

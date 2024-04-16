@@ -2,7 +2,7 @@ package nl.sogyo.modelr
 
 interface ISimulation {
 
-    fun runSimulation(): Number
+    fun runSimulation(): OperationOutput
 
-    fun getFirstUnitOperation(): IUnitOperation
+    fun getFirstUnitOperation(): UnitOperation
 }

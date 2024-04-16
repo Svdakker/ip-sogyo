@@ -12,7 +12,7 @@ class SimulationResultService(var simulationRepository: ISimulationRepository) {
     fun addSimulationResult(simulation: ISimulation): SimulationResultDTO {
         val result = simulation.runSimulation()
 
-        val save = simulationRepository.save(SimulationResult(id = null, duration = result))
+        val save = simulationRepository.save(SimulationResult(id = null, duration = result.duration))
 
         return SimulationResultDTO(id = save.id!!, duration = save.duration)
     }

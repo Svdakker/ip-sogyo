@@ -7,24 +7,24 @@ class SimulationTest {
 
     @Test
     fun testSimulationCanBeCreated() {
-        val simulation = Simulation()
+        val simulation = Simulation(BatchFermentation(FermentationInput(20.00, 0.12, 0.27, 0.00703, 0.4)))
 
         assertNotNull(simulation)
     }
 
     @Test
     fun testSimulationStartsWithUnitOperation() {
-        val simulation = Simulation()
+        val simulation = Simulation(BatchFermentation(FermentationInput(20.00, 0.12, 0.27, 0.00703, 0.4)))
 
         assertNotNull(simulation.getFirstUnitOperation())
     }
 
     @Test
     fun testRunSimulationReturnsDuration() {
-        val simulation = Simulation()
+        val simulation = Simulation(BatchFermentation(FermentationInput(20.00, 0.12, 0.27, 0.00703, 0.4)))
 
-        val result = simulation.runSimulation()
+        val result = simulation.runSimulation().duration
 
-        assertEquals(result, 100)
+        assertEquals(15.57, result)
     }
 }
