@@ -1,5 +1,6 @@
 package nl.sogyo.modelr
 
+import nl.sogyo.modelr.data.FermentationInput
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 

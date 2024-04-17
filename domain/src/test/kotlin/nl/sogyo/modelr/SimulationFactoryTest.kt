@@ -1,5 +1,6 @@
 package nl.sogyo.modelr
 
+import nl.sogyo.modelr.data.SelectedOperations
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test

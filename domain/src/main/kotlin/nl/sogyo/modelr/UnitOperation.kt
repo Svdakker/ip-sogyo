@@ -1,5 +1,6 @@
 package nl.sogyo.modelr
 
+import nl.sogyo.modelr.data.OperationOutput
 import java.math.RoundingMode
 
 abstract class UnitOperation {
@@ -10,5 +11,5 @@ abstract class UnitOperation {
 
     val round = { x: Double -> x.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble() }
 
-    abstract fun generateOutput(): OperationOutput
+    abstract fun generateOutput(interval: Double): OperationOutput
 }
