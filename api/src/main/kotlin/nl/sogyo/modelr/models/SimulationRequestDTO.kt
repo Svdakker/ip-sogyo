@@ -6,7 +6,7 @@ data class SimulationRequestDTO (
     @JsonProperty
     var operationType: String,
     @JsonProperty
-    var simulationAccuracy: Double,
+    var accuracy: Double,
     @JsonProperty
     var initialSugarConcentration: Double, //g L-1
     @JsonProperty

@@ -7,4 +7,6 @@ data class SimulationResultDTO(
     var id: Long,
     @JsonProperty("duration")
     var duration: Number,
+    @JsonProperty("model")
+    var model: Map<Double, List<Double>>
 )

@@ -8,7 +8,9 @@ import kotlin.math.ln
 class BatchFermentation(private val input: FermentationInput) : UnitOperation() {
 
     override fun generateOutput(): OperationOutput {
-        return OperationOutput(calculateDuration(), modelOperation())
+        val x = calculateDuration()
+        val y = modelOperation()
+        return OperationOutput(x, y)
     }
 
     fun modelOperation(): Map<Double, List<Double>> {
