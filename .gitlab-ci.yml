@@ -35,6 +35,8 @@ build-frontend-job:
   script:
     - cd client
     - npm ci
+    - npm install react-router-dom@6
+    - npm install chart.js react-chartjs-2
     - npm run build -if--present
     - cd ..
   artifacts:
