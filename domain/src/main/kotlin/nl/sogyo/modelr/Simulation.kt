@@ -1,12 +1,14 @@
 package nl.sogyo.modelr
 
-class Simulation(private val firstUnitOperation: IUnitOperation = BatchFermentation()) : ISimulation {
+import nl.sogyo.modelr.data.OperationOutput
 
-    override fun runSimulation(): Number {
-        return firstUnitOperation.calculateDuration()
+class Simulation(private val firstUnitOperation: UnitOperation) : ISimulation {
+
+    override fun runSimulation(): OperationOutput {
+        return firstUnitOperation.generateOutput()
     }
 
-    override fun getFirstUnitOperation(): IUnitOperation {
+    override fun getFirstUnitOperation(): UnitOperation {
         return firstUnitOperation
     }
 }

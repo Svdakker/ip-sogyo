@@ -2,5 +2,5 @@ package nl.sogyo.modelr
 
 interface ISimulationFactory {
 
-    fun createNewSimulation(): ISimulation
+    fun createNewSimulation(operations: String, settings: String): ISimulation
 }
