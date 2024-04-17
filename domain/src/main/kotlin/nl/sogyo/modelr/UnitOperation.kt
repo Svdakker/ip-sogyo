@@ -11,5 +11,5 @@ abstract class UnitOperation {
 
     val round = { x: Double -> x.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble() }
 
-    abstract fun generateOutput(interval: Double): OperationOutput
+    abstract fun generateOutput(): OperationOutput
 }

@@ -7,20 +7,20 @@ import kotlin.math.ln
 
 class BatchFermentation(private val input: FermentationInput) : UnitOperation() {
 
-    override fun generateOutput(interval: Double): OperationOutput {
-        return OperationOutput(calculateDuration(), modelOperation(interval))
+    override fun generateOutput(): OperationOutput {
+        return OperationOutput(calculateDuration(), modelOperation())
     }
 
-    fun modelOperation(interval: Double): Map<Double, List<Double>> {
+    fun modelOperation(): Map<Double, List<Double>> {
         val model = mutableMapOf<Double, List<Double>>()
-        modelDataPoints(model, interval, 0.0)
+        modelDataPoints(model,0.0)
         return model
     }
 
-    private fun modelDataPoints(model: MutableMap<Double, List<Double>>, interval: Double, datapoint: Double) {
+    private fun modelDataPoints(model: MutableMap<Double, List<Double>>, datapoint: Double) {
         if (calculateSugarConcentration(datapoint) >= 0) {
             model[datapoint] = calculateDataPoint(datapoint)
-            modelDataPoints(model, interval, datapoint + interval)
+            modelDataPoints(model,datapoint + input.accuracy)
         } else {
             model[datapoint] = calculateDataPoint(datapoint)
         }
