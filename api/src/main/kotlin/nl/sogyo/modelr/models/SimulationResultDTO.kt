@@ -1,6 +1,7 @@
 package nl.sogyo.modelr.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import nl.sogyo.modelr.data.DataPoint
 
 data class SimulationResultDTO(
     @JsonProperty("id")
@@ -8,5 +9,5 @@ data class SimulationResultDTO(
     @JsonProperty("duration")
     var duration: Number,
     @JsonProperty("model")
-    var model: Map<Double, List<Double>>
+    var model: List<DataPoint>
 )

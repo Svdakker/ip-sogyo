@@ -1,5 +1,6 @@
 package nl.sogyo.modelr
 
+import nl.sogyo.modelr.data.DataPoint
 import nl.sogyo.modelr.data.FermentationInput
 import nl.sogyo.modelr.data.OperationOutput
 import kotlin.math.exp
@@ -13,23 +14,23 @@ class BatchFermentation(private val input: FermentationInput) : UnitOperation() 
         return OperationOutput(x, y)
     }
 
-    fun modelOperation(): Map<Double, List<Double>> {
-        val model = mutableMapOf<Double, List<Double>>()
+    fun modelOperation(): List<DataPoint> {
+        val model = mutableListOf<DataPoint>()
         modelDataPoints(model,0.0)
         return model
     }
 
-    private fun modelDataPoints(model: MutableMap<Double, List<Double>>, datapoint: Double) {
-        if (calculateSugarConcentration(datapoint) >= 0) {
-            model[datapoint] = calculateDataPoint(datapoint)
-            modelDataPoints(model,datapoint + input.accuracy)
+    private fun modelDataPoints(model: MutableList<DataPoint>, time: Double) {
+        if (calculateSugarConcentration(time) >= 0) {
+            model.add(calculateDataPoint(time))
+            modelDataPoints(model,time + input.accuracy)
         } else {
-            model[datapoint] = calculateDataPoint(datapoint)
+            model.add(calculateDataPoint(time))
         }
     }
 
-    fun calculateDataPoint(timePoint: Double): List<Double> {
-        return listOf(calculateCellDensity(timePoint), calculateSugarConcentration(timePoint))
+    fun calculateDataPoint(timePoint: Double): DataPoint {
+        return DataPoint(timePoint, calculateCellDensity(timePoint), calculateSugarConcentration(timePoint))
     }
 
     fun calculateDuration(): Double {

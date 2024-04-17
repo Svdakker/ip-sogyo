@@ -9,6 +9,7 @@ export async function runSimulation()  {
         },
         body: JSON.stringify({
             operationType: "batch",
+            accuracy: 1.0,
             initialSugarConcentration: 20,
             initialCellDensity: 0.12,
             maxGrowthRate: 0.27,

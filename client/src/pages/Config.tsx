@@ -7,7 +7,7 @@ export const Config = () => {
     return (
         <>
             <UnitOperation name={"Batch fermenter"} icon={batch}/>
-            <button onClick={() => navigate('/result')}>Run simulation!</button>
+            <button onClick={() => navigate('/result')}>Go to simulation!</button>
         </>
     )
 }
