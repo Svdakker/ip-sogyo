@@ -57,6 +57,14 @@ jacoco {
 jacocoTestReport {
     dependsOn test
 
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "nl/sogyo/modelr/data/**"
+            ])
+        }))
+    }
+
     reports {
         html.required = true
         xml.required = true
