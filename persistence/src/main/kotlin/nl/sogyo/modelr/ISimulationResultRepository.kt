@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ISimulationRepository : JpaRepository<SimulationResult, Long> {
+interface ISimulationResultRepository : JpaRepository<SimulationResult, Long> {
 
 }
