@@ -10,8 +10,8 @@ class SimulationFactoryTest {
     @Test
     fun testCreateNewSimulation() {
         val factory = SimulationFactory()
-        val operations = """{"operationType":"batch"}"""
-        val settings = """{"operationType":"batch","initialSugarConcentration":20.0,"initialCellDensity":0.12,"maxGrowthRate":0.27,"maintenance":0.00703,"yield":0.4}"""
+        val operations = """{"operationType":"batch-cultivation"}"""
+        val settings = """{"operationType":"batch-cultivation","initialSugarConcentration":20.0,"initialCellDensity":0.12,"maxGrowthRate":0.27,"maintenance":0.00703,"yield":0.4}"""
 
         val result = factory.createNewSimulation(operations, settings)
 
@@ -21,10 +21,10 @@ class SimulationFactoryTest {
     @Test
     fun testSimulationInputAnalysis() {
         val factory = SimulationFactory()
-        val operations = """{"operationType":"batch"}"""
+        val operations = """{"operationType":"batch-cultivation"}"""
 
         val result: SelectedOperations = factory.analyzeInput(operations)
 
-        assertEquals(result.operationType, "batch")
+        assertEquals(result.operationType, "batch-cultivation")
     }
 }

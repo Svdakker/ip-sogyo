@@ -39,7 +39,7 @@ export const BatchGraph = ( { data }: Model) => {
 
     return (
         <div style={graphStyle}>
-            <Line id={"batch"} options={options} data={canvasData}/>
+            <Line id={"batch-cultivation"} options={options} data={canvasData}/>
         </div>
     )
 }

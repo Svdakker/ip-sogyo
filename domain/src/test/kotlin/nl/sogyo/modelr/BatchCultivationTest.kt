@@ -1,17 +1,17 @@
 package nl.sogyo.modelr
 
 import nl.sogyo.modelr.data.DataPoint
-import nl.sogyo.modelr.data.FermentationInput
+import nl.sogyo.modelr.data.CultivationInput
 import nl.sogyo.modelr.data.OperationOutput
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class BatchFermentationTest {
+class BatchCultivationTest {
 
     @Test
     fun testCalculateDuration() {
-        val input = FermentationInput(1.0,20.00, 0.12, 0.27, 0.00703, 0.4)
-        val operation = BatchFermentation(input)
+        val input = CultivationInput(1.0,20.00, 0.12, 0.27, 0.00703, 0.4)
+        val operation = BatchCultivation(input)
 
         val result = operation.calculateDuration()
 
@@ -20,8 +20,8 @@ class BatchFermentationTest {
 
     @Test
     fun testCalculateCellDensity() {
-        val input = FermentationInput(1.0,20.00, 0.12, 0.27, 0.00703, 0.4)
-        val operation = BatchFermentation(input)
+        val input = CultivationInput(1.0,20.00, 0.12, 0.27, 0.00703, 0.4)
+        val operation = BatchCultivation(input)
         val timePoint = 10.00 //h
 
         val result = operation.calculateCellDensity(timePoint)
@@ -31,8 +31,8 @@ class BatchFermentationTest {
 
     @Test
     fun testCalculateCellDensityAtTime0() {
-        val input = FermentationInput(1.0,20.00, 0.12, 0.27, 0.00703, 0.4)
-        val operation = BatchFermentation(input)
+        val input = CultivationInput(1.0,20.00, 0.12, 0.27, 0.00703, 0.4)
+        val operation = BatchCultivation(input)
         val timePoint = 0.0 //h
 
         val result = operation.calculateCellDensity(timePoint)
@@ -42,8 +42,8 @@ class BatchFermentationTest {
 
     @Test
     fun testCalculateSpecificSugarUptakeRate() {
-        val input = FermentationInput(1.0,20.00, 0.12, 0.27, 0.00703, 0.4)
-        val operation = BatchFermentation(input)
+        val input = CultivationInput(1.0,20.00, 0.12, 0.27, 0.00703, 0.4)
+        val operation = BatchCultivation(input)
 
         val result = operation.calculateSugarUptakeRate()
 
@@ -52,8 +52,8 @@ class BatchFermentationTest {
 
     @Test
     fun testCalculateSugarConcentration() {
-        val input = FermentationInput(1.0,20.00, 0.12, 0.27, 0.00703, 0.4)
-        val operation = BatchFermentation(input)
+        val input = CultivationInput(1.0,20.00, 0.12, 0.27, 0.00703, 0.4)
+        val operation = BatchCultivation(input)
         val timePoint = 10.0
 
         val result = operation.calculateSugarConcentration(timePoint)
@@ -63,8 +63,8 @@ class BatchFermentationTest {
 
     @Test
     fun testCalculateSugarConcentrationAtTime0() {
-        val input = FermentationInput(1.0,20.0, 0.12, 0.27, 0.00703, 0.4)
-        val operation = BatchFermentation(input)
+        val input = CultivationInput(1.0,20.0, 0.12, 0.27, 0.00703, 0.4)
+        val operation = BatchCultivation(input)
         val timePoint = 0.0
 
         val result = operation.calculateSugarConcentration(timePoint)
@@ -74,8 +74,8 @@ class BatchFermentationTest {
 
     @Test
     fun testCalculateModelDataPoint() {
-        val input = FermentationInput(1.0, 20.00, 0.12, 0.27, 0.00703, 0.4)
-        val operation = BatchFermentation(input)
+        val input = CultivationInput(1.0, 20.00, 0.12, 0.27, 0.00703, 0.4)
+        val operation = BatchCultivation(input)
         val timePoint = 10.0
 
         val expected = DataPoint(10.0,1.79, 7.83)
@@ -86,8 +86,8 @@ class BatchFermentationTest {
 
     @Test
     fun testProcessCanBeModeledOverTime() {
-        val input = FermentationInput(1.0, 20.00, 0.12, 0.27, 0.00703, 0.4)
-        val operation = BatchFermentation(input)
+        val input = CultivationInput(1.0, 20.00, 0.12, 0.27, 0.00703, 0.4)
+        val operation = BatchCultivation(input)
 
         val expected = listOf(DataPoint(time=0.0, cellDensity=0.12, sugarConcentration=20.0), DataPoint(time=1.0, cellDensity=0.16,
             sugarConcentration=19.89), DataPoint(time=2.0, cellDensity=0.21, sugarConcentration=19.71),
@@ -104,8 +104,8 @@ class BatchFermentationTest {
 
     @Test
     fun testProcessOutputCanBeGenerated() {
-        val input = FermentationInput(1.0, 20.00, 0.12, 0.27, 0.00703, 0.4)
-        val operation = BatchFermentation(input)
+        val input = CultivationInput(1.0, 20.00, 0.12, 0.27, 0.00703, 0.4)
+        val operation = BatchCultivation(input)
 
         val expected = OperationOutput(duration = 15.57, model = listOf(DataPoint(time=0.0, cellDensity=0.12, sugarConcentration=20.0),
             DataPoint(time=1.0, cellDensity=0.16, sugarConcentration=19.89), DataPoint(time=2.0, cellDensity=0.21, sugarConcentration=19.71),
