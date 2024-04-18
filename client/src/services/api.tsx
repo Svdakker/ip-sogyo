@@ -8,7 +8,7 @@ export async function runSimulation()  {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            operationType: "batch",
+            operationType: "batch-cultivation",
             accuracy: 1.0,
             initialSugarConcentration: 20,
             initialCellDensity: 0.12,

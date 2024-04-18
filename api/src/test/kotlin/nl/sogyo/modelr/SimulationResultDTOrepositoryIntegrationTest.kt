@@ -16,7 +16,7 @@ class SimulationResultDTOrepositoryIntegrationTest(@Autowired var restTemplate: 
 
     @Test
     fun addNewSimulationResult() {
-        val input = SimulationRequestDTO("batch", 1.0,20.00, 0.12,
+        val input = SimulationRequestDTO("batch-cultivation", 1.0,20.00, 0.12,
             0.27, 0.00703, 0.4)
         val result = this.restTemplate.postForEntity("/modelr/api/run", input, SimulationResultDTO::class.java)
         val expectedModel = listOf(

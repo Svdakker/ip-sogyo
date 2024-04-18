@@ -1,12 +1,12 @@
 package nl.sogyo.modelr
 
 import nl.sogyo.modelr.data.DataPoint
-import nl.sogyo.modelr.data.FermentationInput
+import nl.sogyo.modelr.data.CultivationInput
 import nl.sogyo.modelr.data.OperationOutput
 import kotlin.math.exp
 import kotlin.math.ln
 
-class BatchFermentation(private val input: FermentationInput) : UnitOperation() {
+class BatchCultivation(private val input: CultivationInput) : UnitOperation() {
 
     override fun generateOutput(): OperationOutput {
         val x = calculateDuration()
