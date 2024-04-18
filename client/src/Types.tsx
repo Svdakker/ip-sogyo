@@ -8,6 +8,10 @@ export type Model = {
     data: DataPoint[] | undefined
 }
 
+export type TableData = {
+    duration: Number | undefined
+}
+
 export type DataPoint = {
     time: Number,
     cellDensity: Number,
