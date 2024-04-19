@@ -46,7 +46,8 @@ export const Simulation = () => {
             <div id="results-container" className={classNames("hidden w-screen h-screen")}>
                 <div className="flex flex-wrap justify-center">
                         <div id="table-container" className="w-screen flex flex-wrap justify-center">
-                            <ResultTable duration={results?.duration}/>
+                            <ResultTable duration={results?.duration} energyCosts={results?.costEstimation.energy}
+                            energyUsed={results?.powerConsumption.operations}/>
                         </div>
                         <div id="model-container" className="w-screen h-3/4 flex flex-wrap justify-center">
                             <BatchGraph data={results?.model}/>

@@ -1,6 +1,6 @@
 import {TableData} from "../Types.tsx";
 
-export const ResultTable = ( { duration }: TableData) => {
+export const ResultTable = ( { duration, energyCosts, energyUsed }: TableData) => {
     return (
         <>
             <table className="m-3 text-sm text-left rtl:text-right text-gray-400">
@@ -10,7 +10,13 @@ export const ResultTable = ( { duration }: TableData) => {
                         Operation
                     </th>
                     <th scope="col" className="px-6 py-3">
-                        Duration
+                        Duration (h)
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                        Energy costs (€)
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                        Energy Used (kWh)
                     </th>
                 </tr>
                 </thead>
@@ -21,6 +27,12 @@ export const ResultTable = ( { duration }: TableData) => {
                     </th>
                     <td className="px-6 py-4">
                         {String(duration)}
+                    </td>
+                    <td className="px-6 py-4">
+                        {String(energyCosts)}
+                    </td>
+                    <td className="px-6 py-4">
+                        {String(energyUsed)}
                     </td>
                 </tr>
                 </tbody>
