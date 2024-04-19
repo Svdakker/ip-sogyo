@@ -8,7 +8,7 @@ class BatchCultivationTest {
 
     @Test
     fun testCalculateDuration() {
-        val input = BatchCultivationInput(1.0,20.00, 0.12, 0.27, 0.00703, 0.4)
+        val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings())
         val operation = BatchCultivation(input)
 
         val result = operation.calculateDuration()
@@ -18,7 +18,7 @@ class BatchCultivationTest {
 
     @Test
     fun testCalculateCellDensity() {
-        val input = BatchCultivationInput(1.0,20.00, 0.12, 0.27, 0.00703, 0.4)
+        val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings())
         val operation = BatchCultivation(input)
         val timePoint = 10.00 //h
 
@@ -29,7 +29,7 @@ class BatchCultivationTest {
 
     @Test
     fun testCalculateCellDensityAtTime0() {
-        val input = BatchCultivationInput(1.0,20.00, 0.12, 0.27, 0.00703, 0.4)
+        val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings())
         val operation = BatchCultivation(input)
         val timePoint = 0.0 //h
 
@@ -40,7 +40,7 @@ class BatchCultivationTest {
 
     @Test
     fun testCalculateFinalCellDensity() {
-        val input = BatchCultivationInput(1.0,20.00, 0.12, 0.27, 0.00703, 0.4)
+        val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings())
         val operation = BatchCultivation(input)
 
         val result = operation.calculateFinalCellDensity()
@@ -50,7 +50,7 @@ class BatchCultivationTest {
 
     @Test
     fun testCalculateSpecificSugarUptakeRate() {
-        val input = BatchCultivationInput(1.0,20.00, 0.12, 0.27, 0.00703, 0.4)
+        val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings())
         val operation = BatchCultivation(input)
 
         val result = operation.calculateSugarUptakeRate()
@@ -60,7 +60,7 @@ class BatchCultivationTest {
 
     @Test
     fun testCalculateSugarConcentration() {
-        val input = BatchCultivationInput(1.0,20.00, 0.12, 0.27, 0.00703, 0.4)
+        val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings())
         val operation = BatchCultivation(input)
         val timePoint = 10.0
 
@@ -71,7 +71,7 @@ class BatchCultivationTest {
 
     @Test
     fun testCalculateSugarConcentrationAtTime0() {
-        val input = BatchCultivationInput(1.0,20.0, 0.12, 0.27, 0.00703, 0.4)
+        val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings())
         val operation = BatchCultivation(input)
         val timePoint = 0.0
 
@@ -82,7 +82,7 @@ class BatchCultivationTest {
 
     @Test
     fun testProcessCanBeModeledOverTime() {
-        val input = BatchCultivationInput(1.0, 20.00, 0.12, 0.27, 0.00703, 0.4)
+        val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings())
         val operation = BatchCultivation(input)
 
         val expected = listOf(DataPoint(time=0.0, cellDensity=0.12, sugarConcentration=20.0), DataPoint(time=1.0, cellDensity=0.16,
@@ -100,7 +100,7 @@ class BatchCultivationTest {
 
     @Test
     fun testProcessOutputCanBeGenerated() {
-        val input = BatchCultivationInput(1.0, 20.00, 0.12, 0.27, 0.00703, 0.4)
+        val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings())
         val operation = BatchCultivation(input)
 
         val expected = OperationOutput(duration = 15.57, model = listOf(DataPoint(time=0.0, cellDensity=0.12, sugarConcentration=20.0), DataPoint(time=1.0, cellDensity=0.16,
@@ -120,7 +120,7 @@ class BatchCultivationTest {
 
     @Test
     fun testMixingTimeCanBeCalculated() {
-        val input = BatchCultivationInput(1.0, 20.00, 0.12, 0.27, 0.00703, 0.4)
+        val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings())
         val operation = BatchCultivation(input)
 
         val result = operation.calculateMixingTime()
@@ -130,7 +130,7 @@ class BatchCultivationTest {
 
     @Test
     fun testMixingTimeIsCalculatedBasedOnCirculationAtLowVolume() {
-        val input = BatchCultivationInput(1.0, 20.00, 0.12, 0.27, 0.00703, 0.4, 2.5, BioreactorProperties(50.0, 35.0))
+        val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings())
         val operation = BatchCultivation(input)
 
         val result = operation.calculateMixingTime()
@@ -140,7 +140,7 @@ class BatchCultivationTest {
 
     @Test
     fun testRelativePowerConsumptionCanBeCalculated() {
-        val input = BatchCultivationInput(1.0, 20.00, 0.12, 0.27, 0.00703, 0.4)
+        val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings())
         val operation = BatchCultivation(input)
 
         val result = operation.calculatePowerConsumptionWattsPerCube()
@@ -150,7 +150,7 @@ class BatchCultivationTest {
 
     @Test
     fun testTotalPowerConsumptionCanBeCalculated() {
-        val input = BatchCultivationInput(1.0, 20.00, 0.12, 0.27, 0.00703, 0.4)
+        val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings())
         val operation = BatchCultivation(input)
 
         val result = operation.calculatePowerConsumptionKWh()
