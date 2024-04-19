@@ -19,13 +19,13 @@ export const Simulation = () => {
     const reactorRequirements = ["nominalVolume", "workingVolume", "height", "width", "impellerType", "numberOfImpellers"]
 
     const givenInput = () => { return {
-        findCultivationInput,
-        findReactorInput
+        operationType: document.getElementById(batchRequirements[0])?.innerText.toLowerCase(),
+        cultivationSettings: findCultivationInput,
+        reactorSettings: findReactorInput
     } }
 
     const findCultivationInput = () => {
         return {
-            operationType: document.getElementById(batchRequirements[0])?.innerText.toLowerCase(),
             accuracy: (document.getElementById(batchRequirements[1]) as HTMLInputElement).value,
             initialSugarConcentration: (document.getElementById(batchRequirements[2]) as HTMLInputElement).value,
             initialCellDensity: (document.getElementById(batchRequirements[3]) as HTMLInputElement).value,
