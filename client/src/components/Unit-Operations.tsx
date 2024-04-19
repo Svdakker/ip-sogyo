@@ -1,4 +1,6 @@
 import classNames from "classnames";
+import {CultivationSettings} from "./CultivationSettings.tsx";
+import {ReactorSettings} from "./ReactorSettings.tsx";
 
 interface UnitOperation {
     onClick: () => any
@@ -27,37 +29,14 @@ export const BatchCultivation = ({ onClick, icon }: UnitOperation) => {
                 <div>
                     <label className={classNames("block mb-2 text-md font-black text-white")} id="batch-cultivation">BATCH CULTIVATION</label>
                 </div>
-                <div className="grid gap-4 mb-4 md:grid-cols-2">
-                    <div>
-                        <label className={labelStyling}>Accuracy:</label>
-                        <input className={inputStyling} id="accuracy" type="number" placeholder={"Calculation interval (/h)"} required/>
-                    </div>
-                    <div>
-                        <label className={labelStyling}>Initial sugar concentration (Cs0):</label>
-                        <input className={inputStyling} id="initialSugarConcentration" type="number" placeholder={"g/L"} required/>
-                    </div>
-                    <div>
-                        <label className={labelStyling}>Initial cell density (Cx0):</label>
-                        <input className={inputStyling} id="initialCellDensity" type="number" placeholder={"g/L"} required/>
-                    </div>
-                    <div>
-                        <label className={labelStyling}>Maximum growth rate (mu):</label>
-                        <input className={inputStyling} id="maxGrowthRate" type="number" placeholder={"/h"} required/>
-                    </div>
-                    <div>
-                        <label className={labelStyling}>Maintenance coefficient (ms):</label>
-                        <input className={inputStyling} id="maintenance" type="number" placeholder={"g/gx/h"} required/>
-                    </div>
-                    <div>
-                        <label className={labelStyling}>Yield biomass on sugar (Yxs):</label>
-                        <input className={inputStyling} id="yield" type="number" placeholder={"-"} required/>
-                    </div>
-                </div>
+                <CultivationSettings labelStyling={labelStyling} inputStyling={inputStyling}/>
+                <ReactorSettings labelStyling={labelStyling} inputStyling={inputStyling}/>
                 <button onClick={onClick} className={classNames(
                     "bg-cyan-800 ring-4 ring-opacity-25 shadow-2xl",
                     "ring-cyan-700 rounded-full p-3 text-center",
                     "text-sm text-white font-black"
-                )}>RUN!</button>
+                )}>RUN!
+                </button>
             </form>
         </>
     )

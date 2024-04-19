@@ -30,6 +30,11 @@ export type PowerConsumption = {
     operations: Number
 }
 
+export type FormStyling = {
+    labelStyling: string
+    inputStyling: string
+}
+
 export function isOutput(output: unknown): output is Output {
     return (output as Output).id !== undefined
 }
