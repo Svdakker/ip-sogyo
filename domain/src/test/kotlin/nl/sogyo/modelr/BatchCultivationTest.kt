@@ -130,7 +130,7 @@ class BatchCultivationTest {
 
     @Test
     fun testMixingTimeIsCalculatedBasedOnCirculationAtLowVolume() {
-        val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings())
+        val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(workingVolume = 35.0, nominalVolume = 50.0))
         val operation = BatchCultivation(input)
 
         val result = operation.calculateMixingTime()
