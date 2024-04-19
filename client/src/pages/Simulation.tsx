@@ -16,7 +16,7 @@ export const Simulation = () => {
 
     const batchRequirements = ["batch-cultivation", "accuracy", "initialSugarConcentration", "initialCellDensity", "maxGrowthRate", "maintenance", "yield"]
 
-    const reactorRequirements = ["nominalVolume", "workingVolume", "height", "width", "impellerType", "numberOfImpellers"]
+    const reactorRequirements = ["nominalVolume", "workingVolume", "height", "width", "impellerType", "numberOfImpellers", "agitatorSpeed"]
 
     const givenInput = () => { return {
         operationType: document.getElementById(batchRequirements[0])?.innerText.toLowerCase(),
@@ -43,6 +43,7 @@ export const Simulation = () => {
             width: (document.getElementById(reactorRequirements[3]) as HTMLInputElement).value,
             impellerType: (document.getElementById(reactorRequirements[4]) as HTMLInputElement).value.toLowerCase(),
             numberOfImpellers: (document.getElementById(reactorRequirements[5]) as HTMLInputElement).value,
+            agitatorSpeed: (document.getElementById(reactorRequirements[6]) as HTMLInputElement).value,
         }
     }
 

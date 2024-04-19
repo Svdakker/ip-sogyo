@@ -14,5 +14,7 @@ data class ReactorSettingsDTO(
     @JsonProperty
     var impellerType: String, //g gx-1 h-1
     @JsonProperty
-    var numberOfImpellers: Double //-
+    var numberOfImpellers: Double, //-
+    @JsonProperty
+    var agitatorSpeed: Double,
 )

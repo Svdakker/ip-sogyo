@@ -7,7 +7,8 @@ export const ReactorSettings = ( { labelStyling, inputStyling }: FormStyling ) =
             <div className="grid gap-4 mb-4 md:grid-cols-2">
                 <div>
                     <label className={labelStyling}>Nominal volume:</label>
-                    <input className={inputStyling} id="nominalVolume" type="number" placeholder={"Total reactor volume (m3)"} required/>
+                    <input className={inputStyling} id="nominalVolume" type="number"
+                           placeholder={"Total reactor volume (m3)"} required/>
                 </div>
                 <div>
                     <label className={labelStyling}>Working volume:</label>
@@ -24,11 +25,16 @@ export const ReactorSettings = ( { labelStyling, inputStyling }: FormStyling ) =
                 </div>
                 <div>
                     <label className={labelStyling}>Impeller type:</label>
-                    <input className={inputStyling} id="impellerType" type="text" placeholder={"Impeller type"} required/>
+                    <input className={inputStyling} id="impellerType" type="text" placeholder={"Impeller type"}
+                           required/>
                 </div>
                 <div>
                     <label className={labelStyling}>Number of impellers:</label>
                     <input className={inputStyling} id="numberOfImpellers" type="number" placeholder={"-"} required/>
+                </div>
+                <div>
+                    <label className={labelStyling}>Agitator speed:</label>
+                    <input className={inputStyling} id="agitatorSpeed" type="number" placeholder={"/s"} required/>
                 </div>
             </div>
         </>
