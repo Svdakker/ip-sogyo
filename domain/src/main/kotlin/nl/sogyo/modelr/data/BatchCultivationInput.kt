@@ -3,7 +3,7 @@ package nl.sogyo.modelr.data
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class CultivationInput(
+data class BatchCultivationInput(
     val accuracy: Double,
     val initialSugarConcentration: Double, //kg m-3
     val initialCellDensity: Double, //kg m-3

@@ -2,7 +2,7 @@ package nl.sogyo.modelr
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import nl.sogyo.modelr.data.CultivationInput
+import nl.sogyo.modelr.data.BatchCultivationInput
 import nl.sogyo.modelr.data.SelectedOperations
 
 class SimulationFactory : ISimulationFactory {
@@ -21,7 +21,7 @@ class SimulationFactory : ISimulationFactory {
     private fun createFirstUnitOperation(settings: String): Simulation {
         val objectMapper = jacksonObjectMapper()
 
-        val config = objectMapper.readValue<CultivationInput>(settings)
+        val config = objectMapper.readValue<BatchCultivationInput>(settings)
 
         return Simulation(BatchCultivation(config))
     }
