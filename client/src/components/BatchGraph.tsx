@@ -10,11 +10,11 @@ export const BatchGraph = ( { data }: Model) => {
     const canvasData = {
         datasets: [
             {
-                label: "cell density",
+                label: "Cells",
                 data: cellDensities()
             },
             {
-                label: "sugar concentration",
+                label: "Sugar",
                 data: sugarConcentrations()
             }
         ]
@@ -26,8 +26,8 @@ export const BatchGraph = ( { data }: Model) => {
                 title: {
                   display: true,
                   text: "Time (h)",
+                  color: "rgb(255,255,255)",
                   font: {
-                      color: "rgb(255,255,255)",
                       size: 16,
                   },
                 },
@@ -43,6 +43,14 @@ export const BatchGraph = ( { data }: Model) => {
                 },
             },
             y: {
+                title: {
+                    display: true,
+                    text: "Concentration (g/L)",
+                    color: "rgb(255,255,255)",
+                    font: {
+                        size: 16,
+                    },
+                },
                 grid: {
                     color: "rgba(255,255,255,0.1)",
                 },
