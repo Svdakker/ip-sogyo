@@ -8,13 +8,9 @@ import java.math.RoundingMode
 
 abstract class UnitOperation {
 
-    val divide = { x: Double, y: Double -> x / y}
-
-    val multiply = { x: Double, y: Double -> x * y }
-
-    val round = { x: Double -> x.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble() }
-
-    abstract fun generateOutput(): OperationOutput
+    fun generateOutput(): OperationOutput {
+        return OperationOutput(calculateDuration(), modelOperation(), calculateCosts(), calculateEnergyConsumption())
+    }
 
     abstract fun modelOperation(): List<DataPoint>
 
@@ -23,4 +19,10 @@ abstract class UnitOperation {
     abstract fun calculateEnergyConsumption(): PowerConsumption
 
     abstract fun calculateCosts(): CostEstimation
+
+    val divide = { x: Double, y: Double -> x / y}
+
+    val multiply = { x: Double, y: Double -> x * y }
+
+    val round = { x: Double -> x.toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble() }
 }

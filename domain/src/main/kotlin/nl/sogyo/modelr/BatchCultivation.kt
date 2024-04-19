@@ -16,10 +16,6 @@ class BatchCultivation(private val input: CultivationInput, private val costs: C
      * Process taken from: Design of a batch stirred fermenter for ethanol production, Mohammad Emal Qazizada
      */
 
-    override fun generateOutput(): OperationOutput {
-        return OperationOutput(calculateDuration(), modelOperation(), calculateCosts(), calculateEnergyConsumption())
-    }
-
     override fun modelOperation(): List<DataPoint> {
         val model = mutableListOf<DataPoint>()
         modelDataPoints(model,0.0)
