@@ -23,6 +23,14 @@ export const BatchGraph = ( { data }: Model) => {
     const options = {
         scales: {
             x: {
+                title: {
+                  display: true,
+                  text: "Time (h)",
+                  font: {
+                      color: "rgb(255,255,255)",
+                      size: 16,
+                  },
+                },
                 grid: {
                     color: "rgba(255,255,255,0.1)",
                 },
@@ -65,8 +73,8 @@ export const BatchGraph = ( { data }: Model) => {
     }
 
     return (
-        <div>
-            <Line id={"batch-cultivation"} options={options} data={canvasData}/>
-        </div>
+        <>
+            <Line className="" id={"batch-cultivation"} options={options} data={canvasData}/>
+        </>
     )
 }

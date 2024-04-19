@@ -44,11 +44,11 @@ export const Simulation = () => {
                 <BatchCultivation onClick={fetchResult} icon={batch}/>
             </div>
             <div id="results-container" className={classNames("hidden w-screen h-screen")}>
-                <div className="grid">
-                        <div id="table" className="w-screen">
+                <div className="flex flex-wrap justify-center">
+                        <div id="table-container" className="w-screen flex flex-wrap justify-center">
                             <ResultTable duration={results?.duration}/>
                         </div>
-                        <div id="model" className="w-screen">
+                        <div id="model-container" className="w-screen h-3/4 flex flex-wrap justify-center">
                             <BatchGraph data={results?.model}/>
                         </div>
                 </div>

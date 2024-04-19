@@ -2,8 +2,8 @@ import {TableData} from "../Types.tsx";
 
 export const ResultTable = ( { duration }: TableData) => {
     return (
-        <div>
-            <table className="text-sm text-left rtl:text-right text-gray-400">
+        <>
+            <table className="m-3 text-sm text-left rtl:text-right text-gray-400">
                 <thead className="text-xs uppercase bg-gray-700 text-gray-400">
                 <tr>
                     <th scope="col" className="px-6 py-3">
@@ -25,6 +25,6 @@ export const ResultTable = ( { duration }: TableData) => {
                 </tr>
                 </tbody>
             </table>
-        </div>
+        </>
     )
 }
