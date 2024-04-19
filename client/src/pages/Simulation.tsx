@@ -1,11 +1,13 @@
-import {UnitOperation} from "../components/Unit-Operations.tsx";
-import batch from "/src/assets/batch-cultivation.jpg"
+import {BatchCultivation} from "../components/Unit-Operations.tsx";
+import batch from "/src/assets/batch-reactor.png"
 import {runSimulation} from "../services/api.tsx";
 import {BatchGraph} from "../components/BatchGraph.tsx";
+import {ResultTable} from "../components/ResultTable.tsx";
 import {useState} from "react";
 import {isOutput, Output} from "../Types.tsx";
 import Chart from "chart.js/auto";
 import {CategoryScale} from "chart.js";
+import classNames from "classnames";
 
 Chart.register(CategoryScale);
 
@@ -29,17 +31,28 @@ export const Simulation = () => {
         const result = await runSimulation(input)
         if(isOutput(result)) {
             setResults(result)
+            document.getElementById("results-container")!.style.display = 'flex'
+            document.getElementById("config-container")!.style.display = 'none'
         }
     }
 
     return (
-        <>
-            <UnitOperation requiredInput={batchRequirements} icon={batch}/>
-            <div id="results-container">
-                <button onClick={fetchResult}>Run simulation!</button>
-                <div id="duration">{String(results?.duration)}</div>
-                <BatchGraph data={results?.model}/>
+        <div className="relative h-screen w-screen bg-cover bg-center bg-cyan-950 flex justify-center">
+            <div id="config-container" className={classNames(
+                                                    "block",
+                                                    )}>
+                <BatchCultivation onClick={fetchResult} icon={batch}/>
             </div>
-        </>
+            <div id="results-container" className={classNames("hidden w-screen h-screen")}>
+                <div className="flex flex-wrap justify-center">
+                        <div id="table-container" className="w-screen flex flex-wrap justify-center">
+                            <ResultTable duration={results?.duration}/>
+                        </div>
+                        <div id="model-container" className="w-screen h-3/4 flex flex-wrap justify-center">
+                            <BatchGraph data={results?.model}/>
+                        </div>
+                </div>
+            </div>
+        </div>
     )
 }
