@@ -12,29 +12,32 @@ export const ReactorSettings = ( { labelStyling, inputStyling }: FormStyling ) =
                 </div>
                 <div>
                     <label className={labelStyling}>Working volume:</label>
-                    <input className={inputStyling} id="workingVolume" type="number" placeholder={"m3"} required/>
+                    <input className={inputStyling} id="workingVolume" type="number" step="any" min="0"
+                           placeholder={"m3"} required/>
                 </div>
                 <div>
                     <label className={labelStyling}>Height:</label>
-                    <input className={inputStyling} id="height" type="number" placeholder={"m"}
-                           required/>
+                    <input className={inputStyling} id="height" type="number" step="any" min="0"
+                           placeholder={"m"} required/>
                 </div>
                 <div>
                     <label className={labelStyling}>Width:</label>
-                    <input className={inputStyling} id="width" type="number" placeholder={"m"} required/>
+                    <input className={inputStyling} id="width" type="number" step="any" min="0"
+                           placeholder={"m"} required/>
                 </div>
                 <div>
                     <label className={labelStyling}>Impeller type:</label>
-                    <input className={inputStyling} id="impellerType" type="text" placeholder={"Impeller type"}
-                           required/>
+                    <input className={inputStyling} id="impellerType" type="text" placeholder={"Impeller type"} required/>
                 </div>
                 <div>
                     <label className={labelStyling}>Number of impellers:</label>
-                    <input className={inputStyling} id="numberOfImpellers" type="number" placeholder={"-"} required/>
+                    <input className={inputStyling} id="numberOfImpellers" type="number" step="any" min="0"
+                           placeholder={"-"} required/>
                 </div>
                 <div>
                     <label className={labelStyling}>Agitator speed:</label>
-                    <input className={inputStyling} id="agitatorSpeed" type="number" placeholder={"/s"} required/>
+                    <input className={inputStyling} id="agitatorSpeed" type="number" step="any" min="0"
+                           placeholder={"/s"} required/>
                 </div>
             </div>
         </>
