@@ -6,15 +6,7 @@ data class SimulationRequestDTO (
     @JsonProperty
     var operationType: String,
     @JsonProperty
-    var accuracy: Double,
+    var cultivationSettings: CultivationSettingsDTO,
     @JsonProperty
-    var initialSugarConcentration: Double, //g L-1
-    @JsonProperty
-    var initialCellDensity: Double, //g L-1
-    @JsonProperty
-    var maxGrowthRate: Double, //h-1
-    @JsonProperty
-    var maintenance: Double, //g gx-1 h-1
-    @JsonProperty
-    var yield: Double //-
+    var reactorSettings: ReactorSettingsDTO,
 )

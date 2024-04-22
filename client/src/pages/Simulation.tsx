@@ -16,15 +16,36 @@ export const Simulation = () => {
 
     const batchRequirements = ["batch-cultivation", "accuracy", "initialSugarConcentration", "initialCellDensity", "maxGrowthRate", "maintenance", "yield"]
 
+    const reactorRequirements = ["nominalVolume", "workingVolume", "height", "width", "impellerType", "numberOfImpellers", "agitatorSpeed"]
+
     const givenInput = () => { return {
         operationType: document.getElementById(batchRequirements[0])?.innerText.toLowerCase(),
-        accuracy: (document.getElementById(batchRequirements[1]) as HTMLInputElement).value,
-        initialSugarConcentration: (document.getElementById(batchRequirements[2]) as HTMLInputElement).value,
-        initialCellDensity: (document.getElementById(batchRequirements[3]) as HTMLInputElement).value,
-        maxGrowthRate: (document.getElementById(batchRequirements[4]) as HTMLInputElement).value,
-        maintenance: (document.getElementById(batchRequirements[5]) as HTMLInputElement).value,
-        yield: (document.getElementById(batchRequirements[6]) as HTMLInputElement).value,
+        cultivationSettings: findCultivationInput(),
+        reactorSettings: findReactorInput()
     } }
+
+    const findCultivationInput = () => {
+        return {
+            accuracy: (document.getElementById(batchRequirements[1]) as HTMLInputElement).value,
+            initialSugarConcentration: (document.getElementById(batchRequirements[2]) as HTMLInputElement).value,
+            initialCellDensity: (document.getElementById(batchRequirements[3]) as HTMLInputElement).value,
+            maxGrowthRate: (document.getElementById(batchRequirements[4]) as HTMLInputElement).value,
+            maintenance: (document.getElementById(batchRequirements[5]) as HTMLInputElement).value,
+            yield: (document.getElementById(batchRequirements[6]) as HTMLInputElement).value,
+        }
+    }
+
+    const findReactorInput = () => {
+        return {
+            nominalVolume: (document.getElementById(reactorRequirements[0]) as HTMLInputElement).value,
+            workingVolume: (document.getElementById(reactorRequirements[1]) as HTMLInputElement).value,
+            height: (document.getElementById(reactorRequirements[2]) as HTMLInputElement).value,
+            width: (document.getElementById(reactorRequirements[3]) as HTMLInputElement).value,
+            impellerType: (document.getElementById(reactorRequirements[4]) as HTMLInputElement).value.toLowerCase(),
+            numberOfImpellers: (document.getElementById(reactorRequirements[5]) as HTMLInputElement).value,
+            agitatorSpeed: (document.getElementById(reactorRequirements[6]) as HTMLInputElement).value,
+        }
+    }
 
     const fetchResult = async () => {
         const input = givenInput()
