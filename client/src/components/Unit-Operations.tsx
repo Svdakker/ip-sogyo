@@ -25,7 +25,7 @@ export const BatchCultivation = ({ onClick, icon }: UnitOperation) => {
     return (
         <>
             <img className="absolute w-1/6 h-1/4 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden" onClick={toggleSettings} src={icon} alt={"image not found"}/>
-            <form id="settings" className="absolute top-1/4 right-1/5 overflow-visible hidden p-4 rounded-xl bg-gray-900 shadow-2xl">
+            <form onSubmit={event => event.preventDefault()} id="settings" className="absolute top-1/4 right-1/5 overflow-visible hidden p-4 rounded-xl bg-gray-900 shadow-2xl">
                 <div>
                     <label className={classNames("block mb-2 text-md font-black text-white")} id="batch-cultivation">BATCH CULTIVATION</label>
                 </div>

@@ -25,7 +25,7 @@ class ModelrController(var simulationFactory: ISimulationFactory, var simulation
 
         val settings = objectMapper.writeValueAsString(input)
 
-        val simulation: ISimulation = simulationFactory.createNewSimulation(operations, settings)
+        val simulation: ISimulation = simulationFactory.createNewSimulation("""{"operationType":"batch-cultivation"}""", settings)
 
         return simulationResultService.addSimulationResult(simulation)
     }
