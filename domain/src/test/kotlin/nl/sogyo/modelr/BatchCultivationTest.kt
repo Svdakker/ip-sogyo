@@ -120,7 +120,7 @@ class BatchCultivationTest {
 
     @Test
     fun testMixingTimeCanBeCalculated() {
-        val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings())
+        val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5))
         val operation = BatchCultivation(input)
 
         val result = operation.calculateMixingTime()
