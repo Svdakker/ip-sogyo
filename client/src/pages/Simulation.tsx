@@ -20,8 +20,8 @@ export const Simulation = () => {
 
     const givenInput = () => { return {
         operationType: document.getElementById(batchRequirements[0])?.innerText.toLowerCase(),
-        cultivationSettings: findCultivationInput,
-        reactorSettings: findReactorInput
+        cultivationSettings: findCultivationInput(),
+        reactorSettings: findReactorInput()
     } }
 
     const findCultivationInput = () => {
