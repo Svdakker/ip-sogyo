@@ -10,6 +10,25 @@ When designing a (bio)-process, for example to produce a protein powder from agr
 
 # Installation instructions
 
+To use this project, clone the repository:
+
+git@git.sogyo.nl:svdakker/individual-project.git
+
+To build the project, node.js (v20.x) and node package manager (included in node.js installation) should be installed. Following the instructions for your operating system on:
+
+https://nodejs.org/en/learn/getting-started/how-to-install-nodejs
+
+Run the following command(s) in the /client folder to assemble and run the front-end:
+
+- npm install
+- npm run dev
+
+Gradle (v8.7) and SpringBoot (v3.2.4) are used to build and run the backend, the gradle wrapper and Spring dependencies are included in the project. Run the following command(s) on the command line in the root folder of the project:
+
+- ./gradlew clean bootRun
+
+Once the front-end and back-end are assembled, the application should be running at http://localhost:5173/
+
 # Learning goals
 
 ## Technical
@@ -18,4 +37,4 @@ From a technical learning perspective, one of the goals of this project is to pr
 Furthermore, I would like to focus on using proper feature branches in git and a CI/CD pipeline to automatically integrate completed features into the main branch.
 
 ## Personal
-On a personal level, I would like ot apply SCRUM, to work in an organized and structured fashion. 
+On a personal level, I would like to apply SCRUM, to work in an organized and structured fashion. I would like to focus on creating issues for myself and working on only one issue at a time.
