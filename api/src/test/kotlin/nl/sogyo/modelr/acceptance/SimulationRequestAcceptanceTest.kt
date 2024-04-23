@@ -23,13 +23,13 @@ class SimulationRequestAcceptanceTest {
         val payload = File("src/test/resources/payload.json").readText()
 
         val result = mockMvc.perform(
-            post("api/save-request")
+            post("/modelr/api/save-request")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(payload)
         )
             .andExpect(status().isCreated)
             .andReturn()
 
-        assertEquals("{\"id\": \"11111\"", result.response.contentAsString)
+        assertEquals("{\"id\": \"1\"", result.response.contentAsString)
     }
 }
