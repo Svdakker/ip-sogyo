@@ -21,7 +21,7 @@ class ReactorDTOrepositoryIntegrationTest(@Autowired var restTemplate: TestRestT
 
     @Test
     fun addNewSimulationResult() {
-        val input = SimulationRequestDTO("batch-cultivation", CultivationSettingsDTO(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettingsDTO(70.0,52.5,9.29,3.10,"rushton turbine",4.0,2.5))
+        val input = SimulationRequestDTO("batch-cultivation", CultivationSettingsDTO("",1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettingsDTO("",70.0,52.5,9.29,3.10,"rushton turbine",4.0,2.5))
         val result = this.restTemplate.postForEntity("/modelr/api/run", input, SimulationResultDTO::class.java)
         val expectedModel = listOf(DataPoint(time=0.0, cellDensity=0.12, sugarConcentration=20.0), DataPoint(time=1.0, cellDensity=0.16,
             sugarConcentration=19.89), DataPoint(time=2.0, cellDensity=0.21, sugarConcentration=19.71),
