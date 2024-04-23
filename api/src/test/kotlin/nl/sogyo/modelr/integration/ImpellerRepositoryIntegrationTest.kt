@@ -1,11 +1,11 @@
-package nl.sogyo.modelr
+package nl.sogyo.modelr.integration
 
+import nl.sogyo.modelr.ImpellerRepository
+import nl.sogyo.modelr.RealDatabaseTest
 import nl.sogyo.modelr.entities.Impeller
-import nl.sogyo.modelr.entities.Microorganism
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.time.LocalDate
 
 @RealDatabaseTest
 class ImpellerRepositoryIntegrationTest {

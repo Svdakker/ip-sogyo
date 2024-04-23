@@ -1,7 +1,7 @@
-package nl.sogyo.modelr
+package nl.sogyo.modelr.integration
 
+import nl.sogyo.modelr.ModelrApplication
 import nl.sogyo.modelr.data.CostEstimation
-import nl.sogyo.modelr.data.CultivationSettings
 import nl.sogyo.modelr.data.DataPoint
 import nl.sogyo.modelr.data.PowerConsumption
 import nl.sogyo.modelr.models.CultivationSettingsDTO

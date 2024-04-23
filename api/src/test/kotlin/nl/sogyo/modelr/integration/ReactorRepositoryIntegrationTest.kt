@@ -1,5 +1,7 @@
-package nl.sogyo.modelr
+package nl.sogyo.modelr.integration
 
+import nl.sogyo.modelr.ReactorRepository
+import nl.sogyo.modelr.RealDatabaseTest
 import nl.sogyo.modelr.entities.Reactor
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
