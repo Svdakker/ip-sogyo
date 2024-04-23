@@ -13,13 +13,15 @@ class MicroorganismRepositoryIntegrationTest {
     lateinit var microorganismRepository: MicroorganismRepository
 
     @Test
-    fun testGetByOrganismNameIsReturningMatchingOrganism() {
+    fun testFindByOrganismNameIsReturningMatchingOrganism() {
         val creation = LocalDate.now()
         val microorganism = Microorganism(creation, "Saccharomyces cerevisiae", 0.24, 0.4, 0.00703, null)
         microorganismRepository.save(microorganism)
 
         val result = microorganismRepository.findMicroorganismsByName("Saccharomyces cerevisiae")
 
+        assertEquals(microorganism.id, result?.id)
+        assertEquals(microorganism.date, result?.date)
         assertEquals(microorganism.name, result?.name)
         assertEquals(microorganism.maxGrowthRate, result?.maxGrowthRate)
         assertEquals(microorganism.yield, result?.yield)

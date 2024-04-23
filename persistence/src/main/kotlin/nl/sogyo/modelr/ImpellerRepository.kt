@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ImpellerRepository : CrudRepository<Impeller, Long> {
+
+    fun findImpellerByType(string: String): Impeller?
 }

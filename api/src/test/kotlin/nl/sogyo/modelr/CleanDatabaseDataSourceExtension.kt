@@ -17,12 +17,10 @@ class CleanDatabaseDataSourceExtension : BeforeEachCallback {
         }
     }
 
-
     companion object {
         val dataSource = DatabaseContainer.datasource
     }
 }
-
 
 private object DatabaseContainer {
 
