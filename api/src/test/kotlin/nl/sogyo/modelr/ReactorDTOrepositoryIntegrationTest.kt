@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 
 @SpringBootTest(classes = [ModelrApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class SimulationResultDTOrepositoryIntegrationTest(@Autowired var restTemplate: TestRestTemplate) {
+class ReactorDTOrepositoryIntegrationTest(@Autowired var restTemplate: TestRestTemplate) {
 
     var simulationResultId: Long = 0
 
