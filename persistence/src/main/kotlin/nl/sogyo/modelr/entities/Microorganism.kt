@@ -6,7 +6,7 @@ import jakarta.persistence.Id
 import java.time.LocalDate
 
 @Entity
-data class Microorganism (
+class Microorganism (
     @Id @GeneratedValue
     var id: Long?,
     var date: LocalDate,

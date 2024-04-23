@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 
 @Entity
-data class Impeller(
+class Impeller(
     @Id @GeneratedValue
     var id: Long?,
     var type: String,

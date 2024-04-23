@@ -6,7 +6,7 @@ import jakarta.persistence.Id
 import java.time.LocalDate
 
 @Entity
-data class CostFactor(
+class CostFactor(
     @Id @GeneratedValue
     var id: Long?,
     var date: LocalDate,
