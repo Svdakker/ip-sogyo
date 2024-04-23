@@ -30,6 +30,6 @@ class SimulationRequestAcceptanceTest {
             .andExpect(status().isCreated)
             .andReturn()
 
-        assertEquals("{\"simulationId\": \"11111\"", result.response.contentAsString)
+        assertEquals("{\"id\": \"11111\"", result.response.contentAsString)
     }
 }

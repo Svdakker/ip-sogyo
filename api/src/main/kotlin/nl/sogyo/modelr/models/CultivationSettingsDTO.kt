@@ -1,8 +1,11 @@
 package nl.sogyo.modelr.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import nl.sogyo.modelr.entities.Microorganism
 
 data class CultivationSettingsDTO(
+    @JsonProperty
+    var microorganism: String,
     @JsonProperty
     var accuracy: Double,
     @JsonProperty

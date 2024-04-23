@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class ReactorSettingsDTO(
     @JsonProperty
+    var reactorType: String,
+    @JsonProperty
     var nominalVolume: Double,
     @JsonProperty
     var workingVolume: Double, //g L-1
