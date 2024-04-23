@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("modelr/api")
-class ModelrController(var simulationFactory: ISimulationFactory, var simulationResultService: SimulationResultService) {
+class SimulationController(var simulationFactory: ISimulationFactory, var simulationResultService: SimulationResultService) {
 
     @PostMapping("/run")
     fun runSimulation(@RequestBody input: SimulationRequestDTO): SimulationResultDTO {
