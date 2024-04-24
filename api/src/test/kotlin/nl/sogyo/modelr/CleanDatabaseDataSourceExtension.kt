@@ -12,6 +12,7 @@ class CleanDatabaseDataSourceExtension : BeforeEachCallback {
 
     override fun beforeEach(context: ExtensionContext?) {
         dataSource.connection.use {
+            it.createStatement().execute("SET FOREIGN_KEY_CHECKS=0;")
             it.createStatement().execute("DELETE FROM microorganism")
             it.createStatement().execute("ALTER TABLE microorganism AUTO_INCREMENT = 1")
             it.createStatement().execute("DELETE FROM impeller")
@@ -24,6 +25,7 @@ class CleanDatabaseDataSourceExtension : BeforeEachCallback {
             it.createStatement().execute("ALTER TABLE simulation AUTO_INCREMENT = 1")
             it.createStatement().execute("DELETE FROM batch_cultivation")
             it.createStatement().execute("ALTER TABLE batch_cultivation AUTO_INCREMENT = 1")
+            it.createStatement().execute("SET FOREIGN_KEY_CHECKS=1;")
         }
     }
 

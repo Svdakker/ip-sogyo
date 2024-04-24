@@ -45,8 +45,8 @@ class SimulationController(
     @PostMapping("/save-request",
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun saveSimulationRequest(@RequestBody request: SimulationRequestDTO): ResponseEntity<out Any>{
-        return simulationRequestService.saveNewSimulationRequest(request).let { result ->
+    fun saveSimulationRequest(@RequestBody request: SimulationRequestDTO): ResponseEntity<out Any> {
+        return simulationRequestService.saveNewSimulation(request).let { result ->
             when (result) {
                 is Success -> handleSuccess(result)
                 is Failure -> handleFailure(result)

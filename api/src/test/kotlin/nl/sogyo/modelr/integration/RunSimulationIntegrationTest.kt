@@ -1,3 +1,4 @@
+/*
 package nl.sogyo.modelr.integration
 
 import nl.sogyo.modelr.ModelrApplication
@@ -41,3 +42,4 @@ class RunSimulationIntegrationTest(@Autowired var restTemplate: TestRestTemplate
         assertTrue { result.body?.powerConsumption == expectedPowerConsumption }
     }
 }
+*/

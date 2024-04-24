@@ -1,5 +1,6 @@
 package nl.sogyo.modelr.services
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import nl.sogyo.modelr.*
 import nl.sogyo.modelr.models.BatchCultivationRequestDTO
@@ -23,18 +24,13 @@ class SimulationRequestService(
 ) {
 
     @Transactional
-    fun saveNewSimulationRequest(request: SimulationRequestDTO): ApiResult<Any> {
+    fun saveNewSimulation(request: SimulationRequestDTO): ApiResult<Any> {
         try {
             val objectMapper = jacksonObjectMapper()
 
             val operations = OperationsDTO()
 
-            if(request.batchCultivation != null) {
-                val batchRequest = objectMapper.writeValueAsString(request.batchCultivation)
-                val batchCultivation = mapRequestToBatchCultivation(request.batchCultivation!!, batchRequest)
-                batchCultivationRepository.save(batchCultivation)
-                operations.batchCultivation = batchRequest
-            }
+            checkForBatchCultivation(request, objectMapper, operations)
 
             val batch = batchCultivationRepository.findByRequest(operations.batchCultivation)
 
@@ -44,6 +40,19 @@ class SimulationRequestService(
 
         } catch (e: Exception) {
             return Failure(ErrorCode.GENERAL_ERROR, "An unexpected error occurred (${e.message}!")
+        }
+    }
+
+    private fun checkForBatchCultivation(
+        request: SimulationRequestDTO,
+        objectMapper: ObjectMapper,
+        operations: OperationsDTO
+    ) {
+        if (request.batchCultivation != null) {
+            val batchRequest = objectMapper.writeValueAsString(request.batchCultivation)
+            val batchCultivation = mapRequestToBatchCultivation(request.batchCultivation!!, batchRequest)
+            batchCultivationRepository.save(batchCultivation)
+            operations.batchCultivation = batchRequest
         }
     }
 
