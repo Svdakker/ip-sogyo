@@ -7,7 +7,7 @@ class BatchCultivation(
     @Column(nullable = false)
     var position: Int, //Position in the cascade
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "nvarchar(1000)", nullable = false)
     var request: String, //Contains SimulationRequestDTO as Json
 
     @Column(nullable = true)

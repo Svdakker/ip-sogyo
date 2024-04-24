@@ -11,7 +11,7 @@ import java.time.LocalDate
 import java.time.Month
 
 @RealDatabaseTest
-class CostFactorIntegrationTest {
+class CostFactorRepositoryIntegrationTest {
 
     @Autowired
     lateinit var costFactorRepository: CostFactorRepository

@@ -2,11 +2,13 @@ package nl.sogyo.modelr.services
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import nl.sogyo.modelr.*
-import nl.sogyo.modelr.models.SimulationRequestDTO
+import nl.sogyo.modelr.models.BatchCultivationRequestDTO
 import nl.sogyo.modelr.entities.BatchCultivation
 import nl.sogyo.modelr.services.ApiResult.Success
 import nl.sogyo.modelr.services.ApiResult.Failure
 import nl.sogyo.modelr.entities.Simulation
+import nl.sogyo.modelr.models.OperationsDTO
+import nl.sogyo.modelr.models.SimulationRequestDTO
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -25,14 +27,16 @@ class SimulationRequestService(
         try {
             val objectMapper = jacksonObjectMapper()
 
-            val settings = objectMapper.writeValueAsString(request)
+            val operations = OperationsDTO()
 
-            if(request.operationType == "batch-cultivation") {
-                val batchCultivation = mapRequestToBatchCultivation(request, settings)
+            if(request.batchCultivation != null) {
+                val batchRequest = objectMapper.writeValueAsString(request.batchCultivation)
+                val batchCultivation = mapRequestToBatchCultivation(request.batchCultivation!!, batchRequest)
                 batchCultivationRepository.save(batchCultivation)
+                operations.batchCultivation = batchRequest
             }
 
-            val batch = batchCultivationRepository.findByRequest(settings)
+            val batch = batchCultivationRepository.findByRequest(operations.batchCultivation)
 
             val requestedSimulation  = Simulation(batch, null)
 
@@ -43,7 +47,7 @@ class SimulationRequestService(
         }
     }
 
-    private fun mapRequestToBatchCultivation(request: SimulationRequestDTO, settings: String): BatchCultivation {
+    private fun mapRequestToBatchCultivation(request: BatchCultivationRequestDTO, batchRequest: String): BatchCultivation {
         val microorganism = microorganismRepository.findMicroorganismsByName(request.cultivationSettings.microorganism)
 
         val reactor = reactorRepository.findReactorByName(request.reactorSettings.reactorType)
@@ -52,7 +56,7 @@ class SimulationRequestService(
 
         val costFactor = costFactorRepository.findFirstByOrderByDateDesc()
 
-        return BatchCultivation(1, settings, null, costFactor!!, microorganism!!, reactor!!, impeller!!, null)
+        return BatchCultivation(1, batchRequest, null, costFactor!!, microorganism!!, reactor!!, impeller!!, null)
     }
 }
 

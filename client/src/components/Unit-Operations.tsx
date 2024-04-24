@@ -3,7 +3,7 @@ import {CultivationSettings} from "./CultivationSettings.tsx";
 import {ReactorSettings} from "./ReactorSettings.tsx";
 
 interface UnitOperation {
-    onClick: () => any
+    onClick: () => Promise<void>
     icon: string
 }
 

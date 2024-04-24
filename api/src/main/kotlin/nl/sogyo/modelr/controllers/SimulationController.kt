@@ -3,6 +3,7 @@ package nl.sogyo.modelr.controllers
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import nl.sogyo.modelr.ISimulation
 import nl.sogyo.modelr.ISimulationFactory
+import nl.sogyo.modelr.models.BatchCultivationRequestDTO
 import nl.sogyo.modelr.models.SimulationRequestDTO
 import nl.sogyo.modelr.models.SimulationResultDTO
 import nl.sogyo.modelr.services.SimulationRequestService
@@ -28,7 +29,7 @@ class SimulationController(
     ) {
 
     @PostMapping("/run")
-    fun runSimulation(@RequestBody input: SimulationRequestDTO): SimulationResultDTO {
+    fun runSimulation(@RequestBody input: BatchCultivationRequestDTO): SimulationResultDTO {
 
         val objectMapper = jacksonObjectMapper()
 
@@ -72,4 +73,4 @@ class SimulationController(
 
 data class ErrorDto(val errorCode: String, val errorMessage: String)
 
-data class SuccessDto(val customerId: Any)
+data class SuccessDto(val simulationId: Any)

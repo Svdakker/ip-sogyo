@@ -10,5 +10,5 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(propagation = Propagation.REQUIRED)
 interface BatchCultivationRepository : CrudRepository<BatchCultivation, Long> {
 
-    fun findByRequest(request: String): BatchCultivation?
+    fun findByRequest(request: String?): BatchCultivation?
 }
