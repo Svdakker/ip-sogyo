@@ -14,6 +14,16 @@ class CleanDatabaseDataSourceExtension : BeforeEachCallback {
         dataSource.connection.use {
             it.createStatement().execute("DELETE FROM microorganism")
             it.createStatement().execute("ALTER TABLE microorganism AUTO_INCREMENT = 1")
+            it.createStatement().execute("DELETE FROM impeller")
+            it.createStatement().execute("ALTER TABLE impeller AUTO_INCREMENT = 1")
+            it.createStatement().execute("DELETE FROM cost_factor")
+            it.createStatement().execute("ALTER TABLE cost_factor AUTO_INCREMENT = 1")
+            it.createStatement().execute("DELETE FROM reactor")
+            it.createStatement().execute("ALTER TABLE reactor AUTO_INCREMENT = 1")
+            it.createStatement().execute("DELETE FROM simulation")
+            it.createStatement().execute("ALTER TABLE simulation AUTO_INCREMENT = 1")
+            it.createStatement().execute("DELETE FROM batch_cultivation")
+            it.createStatement().execute("ALTER TABLE batch_cultivation AUTO_INCREMENT = 1")
         }
     }
 

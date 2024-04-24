@@ -29,6 +29,6 @@ class BatchCultivation(
     @JoinColumn(name = "impeller_id", nullable = false)
     var impeller: Impeller, //Foreign key to impellerData
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long?,
 )

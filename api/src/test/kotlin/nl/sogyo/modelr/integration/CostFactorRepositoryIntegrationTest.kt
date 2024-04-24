@@ -49,6 +49,8 @@ class CostFactorRepositoryIntegrationTest {
     @Test
     fun testFindCostFactorById() {
         val creation = LocalDate.of(2019, Month.APRIL, 2)
+        val costFactor = CostFactor(creation, 0.15, null)
+        costFactorRepository.save(costFactor)
 
         val result = costFactorRepository.findCostFactorById(1L)
 

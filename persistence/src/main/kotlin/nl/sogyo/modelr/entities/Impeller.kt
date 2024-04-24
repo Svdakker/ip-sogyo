@@ -1,9 +1,6 @@
 package nl.sogyo.modelr.entities
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.Id
+import jakarta.persistence.*
 
 @Entity
 class Impeller(
@@ -19,6 +16,6 @@ class Impeller(
     @Column(nullable = false)
     var impellerPowerNumber: Double,
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long?,
 )
