@@ -6,13 +6,13 @@ data class ReactorSettingsDTO(
     @JsonProperty
     var reactorType: String,
     @JsonProperty
-    var nominalVolume: Double,
+    var nominalVolume: Double? = null,
     @JsonProperty
-    var workingVolume: Double, //g L-1
+    var workingVolume: Double? = null, //g L-1
     @JsonProperty
-    var height: Double, //g L-1
+    var height: Double? = null, //g L-1
     @JsonProperty
-    var width: Double, //h-1
+    var width: Double? = null, //h-1
     @JsonProperty
     var impellerType: String, //g gx-1 h-1
     @JsonProperty

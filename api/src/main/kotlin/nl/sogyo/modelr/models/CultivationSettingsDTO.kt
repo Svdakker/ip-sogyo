@@ -12,9 +12,9 @@ data class CultivationSettingsDTO(
     @JsonProperty
     var initialCellDensity: Double, //g L-1
     @JsonProperty
-    var maxGrowthRate: Double, //h-1
+    var maxGrowthRate: Double? = null, //h-1
     @JsonProperty
-    var maintenance: Double, //g gx-1 h-1
+    var maintenance: Double? = null, //g gx-1 h-1
     @JsonProperty
-    var yield: Double //-
+    var yield: Double? = null //-
 )
