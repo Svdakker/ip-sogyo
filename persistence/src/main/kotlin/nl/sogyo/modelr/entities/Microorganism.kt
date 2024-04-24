@@ -21,5 +21,5 @@ class Microorganism (
     var maintenance: Double,
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long?,
+    var id: Long? = null,
 )

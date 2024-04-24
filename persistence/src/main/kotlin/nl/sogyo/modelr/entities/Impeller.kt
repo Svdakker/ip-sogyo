@@ -17,5 +17,5 @@ class Impeller(
     var impellerPowerNumber: Double,
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long?,
+    var id: Long? = null,
 )

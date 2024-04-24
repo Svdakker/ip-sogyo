@@ -39,10 +39,10 @@ class SimulationRequestAcceptanceTest {
     fun `scenario save simulation request is successful`() {
         //Setup
         val payload = File("src/test/resources/payload.json").readText()
-        impellerRepository.save(Impeller("rushton turbine", 0.97, 0.72, 5.2, null))
-        microorganismRepository.save(Microorganism(LocalDate.now(), "saccharomyces cerevisiae", 0.24,0.4,0.00703,null))
-        reactorRepository.save(Reactor(LocalDate.now(), "example", 70.0,52.5, 9.29,3.10,null))
-        costFactorRepository.save(CostFactor(LocalDate.now(), 0.15, null))
+        impellerRepository.save(Impeller("rushton turbine", 0.97, 0.72, 5.2))
+        microorganismRepository.save(Microorganism(LocalDate.now(), "saccharomyces cerevisiae", 0.24,0.4,0.00703))
+        reactorRepository.save(Reactor(LocalDate.now(), "example", 70.0,52.5, 9.29,3.10))
+        costFactorRepository.save(CostFactor(LocalDate.now(), 0.15))
 
         //Act
         val result = mockMvc.perform(

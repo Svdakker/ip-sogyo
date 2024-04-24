@@ -30,5 +30,5 @@ class BatchCultivation(
     var impeller: Impeller, //Foreign key to impellerData
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long?,
+    var id: Long? = null,
 )

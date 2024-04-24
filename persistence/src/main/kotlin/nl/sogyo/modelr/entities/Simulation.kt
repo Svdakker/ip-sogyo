@@ -9,5 +9,5 @@ class Simulation(
     var batchCultivation: BatchCultivation?, //foreign key to possible BatchCultivation
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long?,
+    var id: Long? = null,
 )
