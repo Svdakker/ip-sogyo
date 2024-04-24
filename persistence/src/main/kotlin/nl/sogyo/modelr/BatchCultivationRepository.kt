@@ -11,4 +11,5 @@ import org.springframework.transaction.annotation.Transactional
 interface BatchCultivationRepository : CrudRepository<BatchCultivation, Long> {
 
     fun findByRequest(request: String?): BatchCultivation?
+
 }

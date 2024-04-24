@@ -6,7 +6,7 @@ import nl.sogyo.modelr.ISimulationFactory
 import nl.sogyo.modelr.models.BatchCultivationRequestDTO
 import nl.sogyo.modelr.models.SimulationRequestDTO
 import nl.sogyo.modelr.models.SimulationResultDTO
-import nl.sogyo.modelr.services.SimulationRequestService
+import nl.sogyo.modelr.services.SimulationService
 import nl.sogyo.modelr.services.SimulationResultService
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 class SimulationController(
     private val simulationFactory: ISimulationFactory,
     private val simulationResultService: SimulationResultService,
-    private val simulationRequestService: SimulationRequestService,
+    private val simulationService: SimulationService,
     ) {
 
     @PostMapping("/run")
@@ -46,7 +46,7 @@ class SimulationController(
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE])
     fun saveSimulationRequest(@RequestBody request: SimulationRequestDTO): ResponseEntity<out Any> {
-        return simulationRequestService.saveNewSimulation(request).let { result ->
+        return simulationService.saveNewSimulation(request).let { result ->
             when (result) {
                 is Success -> handleSuccess(result)
                 is Failure -> handleFailure(result)
@@ -65,6 +65,7 @@ class SimulationController(
         val code = result.errorCode
         val status = when (code) {
             ErrorCode.GENERAL_ERROR -> INTERNAL_SERVER_ERROR
+            ErrorCode.OPERATION_NOT_FOUND -> INTERNAL_SERVER_ERROR
         }
         val errorDto = ErrorDto(code.name, result.errorMessage)
         return ResponseEntity.status(status).body(errorDto)

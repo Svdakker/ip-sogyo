@@ -8,13 +8,12 @@ import nl.sogyo.modelr.entities.BatchCultivation
 import nl.sogyo.modelr.services.ApiResult.Success
 import nl.sogyo.modelr.services.ApiResult.Failure
 import nl.sogyo.modelr.entities.Simulation
-import nl.sogyo.modelr.models.OperationsDTO
 import nl.sogyo.modelr.models.SimulationRequestDTO
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class SimulationRequestService(
+class SimulationService(
     private val simulationRepository: SimulationRepository,
     private val batchCultivationRepository: BatchCultivationRepository,
     private val microorganismRepository: MicroorganismRepository,
@@ -28,35 +27,41 @@ class SimulationRequestService(
         try {
             val objectMapper = jacksonObjectMapper()
 
-            val operations = OperationsDTO()
+            val operations = request.order.map { operationType -> saveUnitOperation(operationType, request, request.order.indexOf(operationType), objectMapper)}
 
-            checkForBatchCultivation(request, objectMapper, operations)
+            val simulation = createSimulation(operations)
 
-            val batch = batchCultivationRepository.findByRequest(operations.batchCultivation)
-
-            val requestedSimulation  = Simulation(batch, null)
-
-            return Success(simulationRepository.save(requestedSimulation).id!!)
-
-        } catch (e: Exception) {
+            return Success(simulationRepository.save(simulation).id!!)
+        }
+        catch (e: IllegalArgumentException){
+            return Failure(ErrorCode.OPERATION_NOT_FOUND, "${e.message}")
+        }
+        catch (e: Exception) {
             return Failure(ErrorCode.GENERAL_ERROR, "An unexpected error occurred (${e.message}!")
         }
     }
 
-    private fun checkForBatchCultivation(
-        request: SimulationRequestDTO,
-        objectMapper: ObjectMapper,
-        operations: OperationsDTO
-    ) {
-        if (request.batchCultivation != null) {
-            val batchRequest = objectMapper.writeValueAsString(request.batchCultivation)
-            val batchCultivation = mapRequestToBatchCultivation(request.batchCultivation!!, batchRequest)
-            batchCultivationRepository.save(batchCultivation)
-            operations.batchCultivation = batchRequest
+    private fun createSimulation(operations: List<UnitOperation>): Simulation {
+        var batch: BatchCultivation? = null
+        operations.map {operation ->
+            when (operation.type) {
+                "batch-cultivation" -> { batch = batchCultivationRepository.findById(operation.id).get() }
+                else -> throw IllegalArgumentException("Unexpected operation type $operation")
+            }
+        }
+        return Simulation(batchCultivation = batch)
+    }
+
+    private fun saveUnitOperation(operation: String, request: SimulationRequestDTO, position: Int, objectMapper: ObjectMapper): UnitOperation {
+        return when (operation) {
+            "batch-cultivation" -> saveBatchCultivation(request.batchCultivation!!, position, objectMapper)
+            else -> throw IllegalArgumentException("Unit operation not found ($operation)")
         }
     }
 
-    private fun mapRequestToBatchCultivation(request: BatchCultivationRequestDTO, batchRequest: String): BatchCultivation {
+    private fun saveBatchCultivation(request: BatchCultivationRequestDTO, position: Int, objectMapper: ObjectMapper): UnitOperation {
+        val batchRequest = objectMapper.writeValueAsString(request)
+
         val microorganism = microorganismRepository.findMicroorganismsByName(request.cultivationSettings.microorganism)
 
         val reactor = reactorRepository.findReactorByName(request.reactorSettings.reactorType)
@@ -65,8 +70,11 @@ class SimulationRequestService(
 
         val costFactor = costFactorRepository.findFirstByOrderByDateDesc()
 
-        return BatchCultivation(1, batchRequest, null, costFactor!!, microorganism!!, reactor!!, impeller!!, null)
+        val batchCultivation = BatchCultivation(position, batchRequest, null, costFactor!!, microorganism!!, reactor!!, impeller!!)
+
+        return UnitOperation("batch-cultivation", batchCultivationRepository.save(batchCultivation).id!!)
     }
+
 }
 
 sealed class ApiResult<out T> {
@@ -74,7 +82,9 @@ sealed class ApiResult<out T> {
     internal data class Success<T>(val value: T) : ApiResult<T>()
 }
 
+internal data class UnitOperation(val type: String, val id: Long)
 
 enum class ErrorCode {
     GENERAL_ERROR,
+    OPERATION_NOT_FOUND
 }
