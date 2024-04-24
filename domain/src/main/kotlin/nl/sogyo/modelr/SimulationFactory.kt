@@ -2,16 +2,19 @@ package nl.sogyo.modelr
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import nl.sogyo.modelr.data.BatchCultivationInput
-import nl.sogyo.modelr.data.CultivationSettings
-import nl.sogyo.modelr.data.ReactorSettings
-import nl.sogyo.modelr.data.SelectedOperations
+import nl.sogyo.modelr.data.*
 
 class SimulationFactory : ISimulationFactory {
 
-    override fun createNewSimulation(operations: String, settings: String): Simulation {
+    override fun createNewSimulation(operations: List<String>, settings: String): Simulation {
+        val objectMapper = jacksonObjectMapper()
 
-        return createFirstUnitOperation(settings)
+        val simulationInput = objectMapper.readValue<SimulationInput>(settings)
+
+        return when (operations[0]) {
+            "batch-cultivation" -> createBatchCultivation(simulationInput.batchCultivationInput!!)
+            else -> throw IllegalArgumentException("Unsupported operation")
+        }
     }
 
     fun analyzeInput(operations: String): SelectedOperations {
@@ -20,11 +23,7 @@ class SimulationFactory : ISimulationFactory {
         return objectMapper.readValue<SelectedOperations>(operations)
     }
 
-    private fun createFirstUnitOperation(settings: String): Simulation {
-        val objectMapper = jacksonObjectMapper()
-
-        val config = objectMapper.readValue<BatchCultivationInput>(settings)
-
+    private fun createBatchCultivation(config: BatchCultivationInput): Simulation {
         val validInputCheck = isValidInput(config)
 
         if (validInputCheck != "valid") {

@@ -1,11 +1,7 @@
 package nl.sogyo.modelr.controllers
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import nl.sogyo.modelr.ISimulation
 import nl.sogyo.modelr.ISimulationFactory
-import nl.sogyo.modelr.models.BatchCultivationRequestDTO
 import nl.sogyo.modelr.models.SimulationRequestDTO
-import nl.sogyo.modelr.models.SimulationResultDTO
 import nl.sogyo.modelr.services.SimulationService
 import nl.sogyo.modelr.services.SimulationResultService
 import org.springframework.http.MediaType
@@ -28,7 +24,7 @@ class SimulationController(
     private val simulationService: SimulationService,
     ) {
 
-    @PostMapping("/run")
+/*    @PostMapping("/run")
     fun runSimulation(@RequestBody input: BatchCultivationRequestDTO): SimulationResultDTO {
 
         val objectMapper = jacksonObjectMapper()
@@ -40,13 +36,13 @@ class SimulationController(
         val simulation: ISimulation = simulationFactory.createNewSimulation(operations, settings)
 
         return simulationResultService.addSimulationResult(simulation)
-    }
+    }*/
 
     @PostMapping("/save-request",
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE])
     fun saveSimulationRequest(@RequestBody request: SimulationRequestDTO): ResponseEntity<out Any> {
-        return simulationService.saveNewSimulation(request).let { result ->
+        return simulationService.runNewSimulation(request, simulationFactory).let { result ->
             when (result) {
                 is Success -> handleSuccess(result)
                 is Failure -> handleFailure(result)

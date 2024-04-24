@@ -9,6 +9,8 @@ import nl.sogyo.modelr.services.ApiResult.Success
 import nl.sogyo.modelr.services.ApiResult.Failure
 import nl.sogyo.modelr.entities.Simulation
 import nl.sogyo.modelr.models.SimulationRequestDTO
+import nl.sogyo.modelr.models.OperationResultDTO
+import nl.sogyo.modelr.models.SimulationResultDTO
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -23,15 +25,23 @@ class SimulationService(
 ) {
 
     @Transactional
-    fun saveNewSimulation(request: SimulationRequestDTO): ApiResult<Any> {
+    fun runNewSimulation(request: SimulationRequestDTO, factory: ISimulationFactory): ApiResult<Any> {
         try {
             val objectMapper = jacksonObjectMapper()
 
-            val operations = request.order.map { operationType -> saveUnitOperation(operationType, request, request.order.indexOf(operationType), objectMapper)}
+            val simulationId = saveNewSimulation(request)
 
-            val simulation = createSimulation(operations)
+            val operations = request.order
 
-            return Success(simulationRepository.save(simulation).id!!)
+            val settings = objectMapper.writeValueAsString(simulationRepository.findById(simulationId).get())
+
+            val simulation: ISimulation = factory.createNewSimulation(operations, settings)
+
+            val result = simulation.runSimulation()
+
+            val resultDTO = bundleResult(result)
+
+            return Success(resultDTO)
         }
         catch (e: IllegalArgumentException){
             return Failure(ErrorCode.OPERATION_NOT_FOUND, "${e.message}")
@@ -39,6 +49,18 @@ class SimulationService(
         catch (e: Exception) {
             return Failure(ErrorCode.GENERAL_ERROR, "An unexpected error occurred (${e.message}!")
         }
+    }
+
+    fun saveNewSimulation(request: SimulationRequestDTO): Long {
+        val objectMapper = jacksonObjectMapper()
+
+        val operations = request.order.map { operationType ->
+            saveUnitOperation(operationType, request, request.order.indexOf(operationType), objectMapper)
+        }
+
+        val simulation = createSimulation(operations)
+
+        return simulationRepository.save(simulation).id!!
     }
 
     private fun createSimulation(operations: List<UnitOperation>): Simulation {
