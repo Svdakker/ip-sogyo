@@ -5,9 +5,11 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import nl.sogyo.modelr.*
 import nl.sogyo.modelr.data.OperationOutput
-import nl.sogyo.modelr.entities.BatchCultivation
+import nl.sogyo.modelr.entities.*
 import nl.sogyo.modelr.entities.Simulation
 import nl.sogyo.modelr.models.BatchCultivationRequestDTO
+import nl.sogyo.modelr.models.CultivationSettingsDTO
+import nl.sogyo.modelr.models.ReactorSettingsDTO
 import nl.sogyo.modelr.models.SimulationRequestDTO
 import nl.sogyo.modelr.services.ApiResult.Failure
 import nl.sogyo.modelr.services.ApiResult.Success
@@ -21,7 +23,10 @@ class SimulationService(
     private val microorganismRepository: MicroorganismRepository,
     private val reactorRepository: ReactorRepository,
     private val impellerRepository: ImpellerRepository,
-    private val costFactorRepository: CostFactorRepository
+    private val costFactorRepository: CostFactorRepository,
+    private val requestRepository: RequestRepository,
+    private val cultivationSettingsRepository: CultivationSettingsRepository,
+    private val reactorSettingsRepository: ReactorSettingsRepository,
 ) {
 
     @Transactional
@@ -53,10 +58,8 @@ class SimulationService(
     }
 
     fun saveNewSimulation(request: SimulationRequestDTO): Long {
-        val objectMapper = jacksonObjectMapper()
-
         val operations = request.order.map { operationType ->
-            saveUnitOperation(operationType, request, request.order.indexOf(operationType), objectMapper)
+            saveUnitOperation(operationType, request, request.order.indexOf(operationType))
         }
 
         val simulation = createSimulation(operations)
@@ -75,15 +78,17 @@ class SimulationService(
         return Simulation(batchCultivation = batch)
     }
 
-    private fun saveUnitOperation(operation: String, request: SimulationRequestDTO, position: Int, objectMapper: ObjectMapper): UnitOperation {
+    private fun saveUnitOperation(operation: String, request: SimulationRequestDTO, position: Int): UnitOperation {
         return when (operation) {
-            "batch-cultivation" -> saveBatchCultivation(request.batchCultivation!!, position, objectMapper)
+            "batch-cultivation" -> saveBatchCultivation(request.batchCultivation!!, position)
             else -> throw IllegalArgumentException("Unit operation not found ($operation)")
         }
     }
 
-    private fun saveBatchCultivation(request: BatchCultivationRequestDTO, position: Int, objectMapper: ObjectMapper): UnitOperation {
-        val batchRequest = objectMapper.writeValueAsString(request)
+    private fun saveBatchCultivation(request: BatchCultivationRequestDTO, position: Int): UnitOperation {
+        val requestId = saveRequest(request)
+
+        val savedRequest = requestRepository.findById(requestId)
 
         val microorganism = microorganismRepository.findMicroorganismsByName(request.cultivationSettings.microorganism)
 
@@ -93,16 +98,60 @@ class SimulationService(
 
         val costFactor = costFactorRepository.findFirstByOrderByDateDesc()
 
-        val batchCultivation = BatchCultivation(position, batchRequest, null, costFactor!!, microorganism!!, reactor!!, impeller!!)
+        val batchCultivation = BatchCultivation(position, savedRequest.get(), null, costFactor!!, microorganism!!, reactor!!, impeller!!)
 
         return UnitOperation("batch-cultivation", batchCultivationRepository.save(batchCultivation).id!!)
+    }
+
+    private fun saveRequest(request: BatchCultivationRequestDTO): Long {
+        val operationType = request.operationType
+
+        val cultivationSettingsId = saveCultivationSettings(request.cultivationSettings)
+
+        val reactorSettingsId = saveReactorSettings(request.reactorSettings)
+
+        val cultivationSettings = cultivationSettingsRepository.findById(cultivationSettingsId)
+
+        val reactorSettings = reactorSettingsRepository.findById(reactorSettingsId)
+
+        return requestRepository.save(Request(operationType, reactorSettings.get(), cultivationSettings.get())).id!!
+    }
+
+    private fun saveCultivationSettings(request: CultivationSettingsDTO): Long {
+        return cultivationSettingsRepository.save(
+            CultivationSettings(
+                request.microorganism,
+                request.accuracy,
+                request.initialSugarConcentration,
+                request.initialCellDensity,
+                request.maxGrowthRate,
+                request.maintenance,
+                request.yield
+            )
+        ).id!!
+    }
+
+    private fun saveReactorSettings(request: ReactorSettingsDTO): Long {
+        return reactorSettingsRepository.save(
+            ReactorSettings(
+                request.reactorType,
+                request.nominalVolume,
+                request.workingVolume,
+                request.height,
+                request.width,
+                request.impellerType,
+                request.numberOfImpellers,
+                request.agitatorSpeed
+            )
+        ).id!!
     }
 
     private fun saveResult(result: OperationOutput, objectMapper: ObjectMapper, simulationId: Long) {
         val simulation = simulationRepository.findById(simulationId).get()
 
         if (simulation.batchCultivation != null) {
-            batchCultivationRepository.setResultForBatchCultivation(simulation.batchCultivation!!.id!!, objectMapper.writeValueAsString(result))
+            val resultString = objectMapper.writeValueAsString(result)
+            batchCultivationRepository.setResultForBatchCultivation(simulation.batchCultivation!!.id!!, resultString)
         }
     }
 }

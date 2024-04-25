@@ -24,21 +24,7 @@ class SimulationController(
     private val simulationService: SimulationService,
     ) {
 
-/*    @PostMapping("/run")
-    fun runSimulation(@RequestBody input: BatchCultivationRequestDTO): SimulationResultDTO {
-
-        val objectMapper = jacksonObjectMapper()
-
-        val operations = objectMapper.writeValueAsString(input.operationType)
-
-        val settings = objectMapper.writeValueAsString(input)
-
-        val simulation: ISimulation = simulationFactory.createNewSimulation(operations, settings)
-
-        return simulationResultService.addSimulationResult(simulation)
-    }*/
-
-    @PostMapping("/save-request",
+    @PostMapping("/run-simulation",
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE])
     fun saveSimulationRequest(@RequestBody request: SimulationRequestDTO): ResponseEntity<out Any> {

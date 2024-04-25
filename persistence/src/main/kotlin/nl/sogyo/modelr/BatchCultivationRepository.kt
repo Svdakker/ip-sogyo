@@ -1,6 +1,7 @@
 package nl.sogyo.modelr
 
 import nl.sogyo.modelr.entities.BatchCultivation
+import nl.sogyo.modelr.entities.Request
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(propagation = Propagation.REQUIRED)
 interface BatchCultivationRepository : CrudRepository<BatchCultivation, Long> {
 
-    fun findByRequest(request: String?): BatchCultivation?
+    fun findByRequest(request: Request): BatchCultivation?
 
     @Modifying
     @Query("update BatchCultivation b set b.result = :result where b.id = :id")

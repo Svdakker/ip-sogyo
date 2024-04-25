@@ -18,23 +18,23 @@ class BatchCultivationCalc(private val input: BatchCultivationInput, private val
      * Process taken from: Design of a batch stirred fermenter for ethanol production, Mohammad Emal Qazizada
      */
 
-    override fun modelOperation(): List<DataPoint> {
-        val model = mutableListOf<DataPoint>()
+    override fun modelOperation(): List<List<Double>> {
+        val model = mutableListOf<List<Double>>()
         modelDataPoints(model,0.0)
         return model
     }
 
-    private fun modelDataPoints(model: MutableList<DataPoint>, time: Double) {
+    private fun modelDataPoints(model: MutableList<List<Double>>, time: Double) {
         if (calculateSugarConcentration(time) >= 0) {
             model.add(calculateDataPoint(time))
-            modelDataPoints(model,time + input.cultivationSettings.accuracy)
+            modelDataPoints(model,round(time + input.cultivationSettings.accuracy))
         } else {
             model.add(calculateDataPoint(time))
         }
     }
 
-    private fun calculateDataPoint(timePoint: Double): DataPoint {
-        return DataPoint(timePoint, calculateCellDensity(timePoint), calculateSugarConcentration(timePoint))
+    private fun calculateDataPoint(timePoint: Double): List<Double> {
+        return listOf(timePoint, calculateCellDensity(timePoint), calculateSugarConcentration(timePoint))
     }
 
     override fun calculateEnergyConsumption(): PowerConsumption {

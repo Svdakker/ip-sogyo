@@ -88,13 +88,12 @@ class BatchCultivationCalcTest {
         val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5, impellerDiameter = 0.97, impellerFlowNumber = 0.72, impellerPowerNumber = 5.2))
         val operation = BatchCultivationCalc(input)
 
-        val expected = listOf(DataPoint(time=0.0, cellDensity=0.12, sugarConcentration=20.0), DataPoint(time=1.0, cellDensity=0.16,
-            sugarConcentration=19.89), DataPoint(time=2.0, cellDensity=0.21, sugarConcentration=19.71),
-            DataPoint(time=3.0, cellDensity=0.27, sugarConcentration=19.45), DataPoint(time=4.0, cellDensity=0.35, sugarConcentration=19.05),
-            DataPoint(time=5.0, cellDensity=0.46, sugarConcentration=18.43), DataPoint(time=6.0, cellDensity=0.61, sugarConcentration=17.5),
-            DataPoint(time=7.0, cellDensity=0.79, sugarConcentration=16.23), DataPoint(time=8.0, cellDensity=1.04, sugarConcentration=14.33),
-            DataPoint(time=9.0, cellDensity=1.36, sugarConcentration=11.65), DataPoint(time=10.0, cellDensity=1.79, sugarConcentration=7.79),
-            DataPoint(time=11.0, cellDensity=2.34, sugarConcentration=2.44), DataPoint(time=12.0, cellDensity=3.06, sugarConcentration=-5.04))
+        val expected = listOf(
+            listOf(0.0, 0.12, 20.0), listOf(1.0, .16, 19.89), listOf(2.0, 0.21, 19.71), listOf(3.0, 0.27, 19.45),
+            listOf(4.0, 0.35, 19.05), listOf(5.0, 0.46, 18.43), listOf(6.0, 0.61, 17.5), listOf(7.0, 0.79, 16.23),
+            listOf(8.0, 1.04, 14.33), listOf(9.0, 1.36, 11.65), listOf(10.0, 1.79, 7.79), listOf(11.0, 2.34, 2.44),
+            listOf(12.0, 3.06, -5.04)
+        )
 
         val result = operation.modelOperation()
 
@@ -106,13 +105,11 @@ class BatchCultivationCalcTest {
         val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5, impellerDiameter = 0.97, impellerFlowNumber = 0.72, impellerPowerNumber = 5.2))
         val operation = BatchCultivationCalc(input)
 
-        val expected = OperationOutput(duration = 15.57, model = listOf(DataPoint(time=0.0, cellDensity=0.12, sugarConcentration=20.0), DataPoint(time=1.0, cellDensity=0.16,
-            sugarConcentration=19.89), DataPoint(time=2.0, cellDensity=0.21, sugarConcentration=19.71),
-            DataPoint(time=3.0, cellDensity=0.27, sugarConcentration=19.45), DataPoint(time=4.0, cellDensity=0.35, sugarConcentration=19.05),
-            DataPoint(time=5.0, cellDensity=0.46, sugarConcentration=18.43), DataPoint(time=6.0, cellDensity=0.61, sugarConcentration=17.5),
-            DataPoint(time=7.0, cellDensity=0.79, sugarConcentration=16.23), DataPoint(time=8.0, cellDensity=1.04, sugarConcentration=14.33),
-            DataPoint(time=9.0, cellDensity=1.36, sugarConcentration=11.65), DataPoint(time=10.0, cellDensity=1.79, sugarConcentration=7.79),
-            DataPoint(time=11.0, cellDensity=2.34, sugarConcentration=2.44), DataPoint(time=12.0, cellDensity=3.06, sugarConcentration=-5.04)),
+        val expected = OperationOutput(duration = 15.57, model = listOf(
+            listOf(0.0, 0.12, 20.0), listOf(1.0, .16, 19.89), listOf(2.0, 0.21, 19.71), listOf(3.0, 0.27, 19.45),
+            listOf(4.0, 0.35, 19.05), listOf(5.0, 0.46, 18.43), listOf(6.0, 0.61, 17.5), listOf(7.0, 0.79, 16.23),
+            listOf(8.0, 1.04, 14.33), listOf(9.0, 1.36, 11.65), listOf(10.0, 1.79, 7.79), listOf(11.0, 2.34, 2.44),
+            listOf(12.0, 3.06, -5.04)),
             costEstimation = CostEstimation(651.81), powerConsumption = PowerConsumption(4345.41)
         )
 

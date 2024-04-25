@@ -2,7 +2,6 @@ package nl.sogyo.modelr.models
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import nl.sogyo.modelr.data.CostEstimation
-import nl.sogyo.modelr.data.DataPoint
 import nl.sogyo.modelr.data.PowerConsumption
 
 data class OperationResultDTO(
@@ -11,7 +10,7 @@ data class OperationResultDTO(
     @JsonProperty("duration")
     var duration: Number,
     @JsonProperty("model")
-    var model: List<DataPoint>,
+    var model: List<List<Double>>,
     @JsonProperty("costEstimation")
     var costEstimation: CostEstimation,
     @JsonProperty("powerConsumption")

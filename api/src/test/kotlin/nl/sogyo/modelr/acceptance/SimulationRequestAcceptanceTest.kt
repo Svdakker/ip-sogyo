@@ -46,7 +46,7 @@ class SimulationRequestAcceptanceTest {
 
         //Act
         val result = mockMvc.perform(
-            post("/modelr/api/save-request")
+            post("/modelr/api/run-simulation")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(payload)
         )

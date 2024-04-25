@@ -1,7 +1,6 @@
 package nl.sogyo.modelr
 
 import nl.sogyo.modelr.data.CostEstimation
-import nl.sogyo.modelr.data.DataPoint
 import nl.sogyo.modelr.data.OperationOutput
 import nl.sogyo.modelr.data.PowerConsumption
 import java.math.RoundingMode
@@ -12,7 +11,7 @@ abstract class UnitOperation {
         return OperationOutput(calculateDuration(), modelOperation(), calculateCosts(), calculateEnergyConsumption())
     }
 
-    abstract fun modelOperation(): List<DataPoint>
+    abstract fun modelOperation(): List<List<Double>>
 
     abstract fun calculateDuration(): Double
 

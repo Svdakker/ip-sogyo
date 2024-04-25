@@ -7,10 +7,11 @@ class BatchCultivation(
     @Column(nullable = false)
     var position: Int, //Position in the cascade
 
-    @Column(columnDefinition = "nvarchar(2000)", nullable = false)
-    var request: String, //Contains SimulationRequestDTO as Json
+    @OneToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "request_id", nullable = false)
+    var request: Request, //Contains SimulationRequestDTO as Json
 
-    @Column(columnDefinition = "nvarchar(2000)", nullable = true)
+    @Column(columnDefinition = "TEXT", nullable = true)
     var result: String? = null, //Contains SimulationResultDTO as Json
 
     @OneToOne(cascade = [CascadeType.ALL])
