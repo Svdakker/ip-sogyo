@@ -1,6 +1,9 @@
 package nl.sogyo.modelr
 
 import nl.sogyo.modelr.data.*
+import nl.sogyo.modelr.data.batchCultivationRequest.BatchCultivationInput
+import nl.sogyo.modelr.data.batchCultivationRequest.CultivationSettings
+import nl.sogyo.modelr.data.batchCultivationRequest.ReactorSettings
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

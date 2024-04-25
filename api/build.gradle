@@ -17,6 +17,7 @@ dependencies {
 
     //Kotlin dependencies
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.9'
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
 
     // Reference the domain and persistence subprojects.

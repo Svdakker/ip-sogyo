@@ -10,7 +10,7 @@ class SimulationFactoryTest {
     fun testCreateNewSimulation() {
         val factory = SimulationFactory()
         val operations = listOf("batch-cultivation")
-        val settings = File("src/test/resources/simulationSettings.json").readText()
+        val settings = File("src/test/resources/realSettings.json").readText()
 
         val result = factory.createNewSimulation(operations, settings)
 

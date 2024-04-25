@@ -1,8 +1,8 @@
 package nl.sogyo.modelr
 
-import nl.sogyo.modelr.data.BatchCultivationInput
-import nl.sogyo.modelr.data.CultivationSettings
-import nl.sogyo.modelr.data.ReactorSettings
+import nl.sogyo.modelr.data.batchCultivationRequest.BatchCultivationInput
+import nl.sogyo.modelr.data.batchCultivationRequest.CultivationSettings
+import nl.sogyo.modelr.data.batchCultivationRequest.ReactorSettings
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.io.File

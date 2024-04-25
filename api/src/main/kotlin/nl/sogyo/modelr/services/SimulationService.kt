@@ -1,16 +1,16 @@
 package nl.sogyo.modelr.services
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import nl.sogyo.modelr.*
-import nl.sogyo.modelr.models.BatchCultivationRequestDTO
+import nl.sogyo.modelr.data.OperationOutput
 import nl.sogyo.modelr.entities.BatchCultivation
-import nl.sogyo.modelr.services.ApiResult.Success
-import nl.sogyo.modelr.services.ApiResult.Failure
 import nl.sogyo.modelr.entities.Simulation
+import nl.sogyo.modelr.models.BatchCultivationRequestDTO
 import nl.sogyo.modelr.models.SimulationRequestDTO
-import nl.sogyo.modelr.models.OperationResultDTO
-import nl.sogyo.modelr.models.SimulationResultDTO
+import nl.sogyo.modelr.services.ApiResult.Failure
+import nl.sogyo.modelr.services.ApiResult.Success
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -28,6 +28,7 @@ class SimulationService(
     fun runNewSimulation(request: SimulationRequestDTO, factory: ISimulationFactory): ApiResult<Any> {
         try {
             val objectMapper = jacksonObjectMapper()
+            objectMapper.registerModule(JavaTimeModule())
 
             val simulationId = saveNewSimulation(request)
 
@@ -39,9 +40,9 @@ class SimulationService(
 
             val result = simulation.runSimulation()
 
-            val resultDTO = bundleResult(result)
+            saveResult(result, objectMapper, simulationId)
 
-            return Success(resultDTO)
+            return Success(simulationId)
         }
         catch (e: IllegalArgumentException){
             return Failure(ErrorCode.OPERATION_NOT_FOUND, "${e.message}")
@@ -97,6 +98,13 @@ class SimulationService(
         return UnitOperation("batch-cultivation", batchCultivationRepository.save(batchCultivation).id!!)
     }
 
+    private fun saveResult(result: OperationOutput, objectMapper: ObjectMapper, simulationId: Long) {
+        val simulation = simulationRepository.findById(simulationId).get()
+
+        if (simulation.batchCultivation != null) {
+            batchCultivationRepository.setResultForBatchCultivation(simulation.batchCultivation!!.id!!, objectMapper.writeValueAsString(result))
+        }
+    }
 }
 
 sealed class ApiResult<out T> {

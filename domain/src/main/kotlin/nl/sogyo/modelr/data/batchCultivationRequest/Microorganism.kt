@@ -1,4 +1,4 @@
-package nl.sogyo.modelr.data
+package nl.sogyo.modelr.data.batchCultivationRequest
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 

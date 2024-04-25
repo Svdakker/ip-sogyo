@@ -1,6 +1,8 @@
 package nl.sogyo.modelr
 
 import nl.sogyo.modelr.data.*
+import nl.sogyo.modelr.data.batchCultivationRequest.BatchCultivationInput
+import nl.sogyo.modelr.data.batchCultivationRequest.CostFactors
 import kotlin.math.exp
 import kotlin.math.ln
 import kotlin.math.log

@@ -20,6 +20,7 @@ dependencies {
     //Kotlin dependencies
     implementation 'org.jetbrains.kotlin:kotlin-reflect'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.9'
 
     // Use JUnit Jupiter API for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
