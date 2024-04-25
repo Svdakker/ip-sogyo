@@ -33,4 +33,21 @@ class SimulationTest {
 
         assertEquals(17.51, result)
     }
+
+    @Test
+    fun testUserInputHasPriorityOverDefault() {
+        val factory = SimulationFactory()
+        val operations = listOf("batch-cultivation")
+        val settings = File("src/test/resources/simulationSettings2.json").readText()
+        val simulation = factory.createNewSimulation(operations,settings)
+        val expectedModel = listOf(listOf(0.0, 0.12, 20.0), listOf(1.0, 0.2, 19.87), listOf(2.0, 0.33, 19.55), listOf(3.0, 0.54, 18.91),
+            listOf(4.0, 0.89, 17.6), listOf(5.0, 1.46, 15.07), listOf(6.0, 2.41, 10.24), listOf(7.0, 3.97, 1.24), listOf(8.0, 6.55, -15.37))
+
+        val result = simulation.runSimulation()
+
+        assertEquals(9.65, result.duration)
+        assertEquals(403.98, result.costEstimation.energy)
+        assertEquals(2693.2, result.powerConsumption.operations)
+        assertEquals(expectedModel, result.model)
+    }
 }
