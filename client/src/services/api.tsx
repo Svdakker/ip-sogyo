@@ -1,7 +1,7 @@
 import {Output} from "../Types.tsx";
 
-export async function runSimulation(input: Object)  {
-    const response: Response = await fetch("modelr/api/run", {
+export async function runSimulation(input: object)  {
+    const response: Response = await fetch("modelr/api/run-simulation", {
         method: 'POST',
         headers: {
             Accept: "application/json",

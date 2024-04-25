@@ -1,6 +1,6 @@
 export type Output = {
-    id: Number
-    duration: Number
+    id: number
+    duration: number
     model: DataPoint[]
     costEstimation: CostEstimation
     powerConsumption: PowerConsumption
@@ -11,23 +11,23 @@ export type Model = {
 }
 
 export type TableData = {
-    duration: Number | undefined
-    energyCosts: Number | undefined
-    energyUsed: Number | undefined
+    duration: number | undefined
+    energyCosts: number | undefined
+    energyUsed: number | undefined
 }
 
 export type DataPoint = {
-    time: Number,
-    cellDensity: Number,
-    sugarConcentration: Number,
+    time: number,
+    cellDensity: number,
+    sugarConcentration: number,
 }
 
 export type CostEstimation = {
-    energy: Number
+    energy: number
 }
 
 export type PowerConsumption = {
-    operations: Number
+    operations: number
 }
 
 export type FormStyling = {

@@ -48,7 +48,11 @@ export const Simulation = () => {
     }
 
     const fetchResult = async () => {
-        const input = givenInput()
+        const operation = givenInput()
+        const input = {
+            order: [operation.operationType!],
+            batchCultivation: operation
+        }
         const result = await runSimulation(input)
         if(isOutput(result)) {
             setResults(result)
