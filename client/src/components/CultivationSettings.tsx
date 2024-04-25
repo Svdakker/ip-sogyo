@@ -6,13 +6,18 @@ export const CultivationSettings = ( { labelStyling, inputStyling }: FormStyling
         <>
             <div className="grid gap-4 mb-4 md:grid-cols-2">
                 <div>
+                    <label className={labelStyling}>Microorganism:</label>
+                    <input className={inputStyling} id="microorganism" type="text"
+                           placeholder={"Choose a microorganism"} required/>
+                </div>
+                <div>
                     <label className={labelStyling}>Accuracy:</label>
                     <input className={inputStyling} id="accuracy" type="number" step="any" min="0.001"
                            placeholder={"Calculation interval (/h)"} required/>
                 </div>
                 <div>
                     <label className={labelStyling}>Initial sugar concentration (Cs0):</label>
-                    <input className={inputStyling} id="initialSugarConcentration" type="number"  step="any" min="0"
+                    <input className={inputStyling} id="initialSugarConcentration" type="number" step="any" min="0"
                            placeholder={"kg/m3"} required/>
                 </div>
                 <div>

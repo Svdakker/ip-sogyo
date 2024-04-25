@@ -3,7 +3,6 @@ package nl.sogyo.modelr.controllers
 import nl.sogyo.modelr.ISimulationFactory
 import nl.sogyo.modelr.models.SimulationRequestDTO
 import nl.sogyo.modelr.services.SimulationService
-import nl.sogyo.modelr.services.SimulationResultService
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -20,7 +19,6 @@ import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 @RequestMapping("modelr/api")
 class SimulationController(
     private val simulationFactory: ISimulationFactory,
-    private val simulationResultService: SimulationResultService,
     private val simulationService: SimulationService,
     ) {
 
