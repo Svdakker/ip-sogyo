@@ -8,6 +8,7 @@ import nl.sogyo.modelr.data.ReactorSettings
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import java.io.File
 
 class DataHandlingTest {
 
@@ -25,22 +26,22 @@ class DataHandlingTest {
 
     @Test
     fun testRunSimulationWithJson() {
-        val settings = """{"operationType":"batch-cultivation","cultivationSettings":{"accuracy":"1.0","initialSugarConcentration":"20.0","initialCellDensity":"0.12","maxGrowthRate":"0.27","maintenance":"0.00703","yield":"0.4"},"reactorSettings":{"nominalVolume":"70.0","workingVolume":"52.5","height":"9.29","width":"3.10","impellerType":"rushton turbine","numberOfImpellers":"4","agitatorSpeed":"2.5"}}"""
+        val settings = File("src/test/resources/simulationSettings.json").readText()
         val factory = SimulationFactory()
-        val simulation = factory.createNewSimulation("""{"operationType":"batch-cultivation"}""", settings)
+        val simulation = factory.createNewSimulation(listOf("batch-cultivation"), settings)
 
         val result = simulation.runSimulation().duration
 
-        assertEquals(15.57, result)
+        assertEquals(17.51, result)
     }
 
     @Test
     fun testCreatingCultivationSettingsWithNegativeValuesThrowsIllegalArgumentException() {
         val factory = SimulationFactory()
-        val settings = """{"operationType":"batch-cultivation","cultivationSettings":{"accuracy":"1.0","initialSugarConcentration":"-20.0","initialCellDensity":"0.12","maxGrowthRate":"0.27","maintenance":"0.00703","yield":"0.4"},"reactorSettings":{"nominalVolume":"70.0","workingVolume":"52.5","height":"9.29","width":"3.10","impellerType":"rushton turbine","numberOfImpellers":"4","agitatorSpeed":"2.5"}}"""
+        val settings = File("src/test/resources/simulationSettingsNeg.json").readText()
 
         assertThrows<IllegalArgumentException> {
-            factory.createNewSimulation("""{"operationType":"batch-cultivation"}""", settings)
+            factory.createNewSimulation(listOf("batch-cultivation"), settings)
         }
     }
 }

@@ -6,7 +6,7 @@ import kotlin.math.ln
 import kotlin.math.log
 import kotlin.math.pow
 
-class BatchCultivation(private val input: BatchCultivationInput, private val costs: CostFactors = CostFactors()) : UnitOperation() {
+class BatchCultivationCalc(private val input: BatchCultivationInput, private val costs: CostFactors = CostFactors()) : UnitOperation() {
 
     /**
      * Calculations to model a batch cultivation over time
@@ -52,18 +52,18 @@ class BatchCultivation(private val input: BatchCultivationInput, private val cos
      */
 
     override fun calculateDuration(): Double {
-        return round(divide(ln(divide(calculateFinalCellDensity(), input.cultivationSettings.initialCellDensity)), input.cultivationSettings.maxGrowthRate))
+        return round(divide(ln(divide(calculateFinalCellDensity(), input.cultivationSettings.initialCellDensity)), input.cultivationSettings.maxGrowthRate!!))
     }
 
     fun calculateFinalCellDensity(): Double {
         return (input.cultivationSettings.initialCellDensity + divide(
-            multiply(input.cultivationSettings.initialSugarConcentration, input.cultivationSettings.yield),
-            (1 + divide(multiply(input.cultivationSettings.maintenance, input.cultivationSettings.yield), input.cultivationSettings.maxGrowthRate))
+            multiply(input.cultivationSettings.initialSugarConcentration, input.cultivationSettings.yield!!),
+            (1 + divide(multiply(input.cultivationSettings.maintenance!!, input.cultivationSettings.yield), input.cultivationSettings.maxGrowthRate!!))
         ))
     }
 
     fun calculateCellDensity(timePoint: Double): Double {
-        return round(multiply(input.cultivationSettings.initialCellDensity, exp(multiply(input.cultivationSettings.maxGrowthRate, timePoint))))
+        return round(multiply(input.cultivationSettings.initialCellDensity, exp(multiply(input.cultivationSettings.maxGrowthRate!!, timePoint))))
     }
 
     fun calculateSugarConcentration(timePoint: Double): Double {
@@ -78,7 +78,7 @@ class BatchCultivation(private val input: BatchCultivationInput, private val cos
     }
 
     fun calculateSugarUptakeRate(): Double {
-        return (divide(input.cultivationSettings.maxGrowthRate, input.cultivationSettings.yield) + input.cultivationSettings.maintenance)
+        return (divide(input.cultivationSettings.maxGrowthRate!!, input.cultivationSettings.yield!!) + input.cultivationSettings.maintenance!!)
     }
 
     /**
@@ -88,21 +88,21 @@ class BatchCultivation(private val input: BatchCultivationInput, private val cos
      */
 
     fun calculateMixingTime(): Double {
-        return if (input.reactorSettings.nominalVolume < 60) {
+        return if (input.reactorSettings.nominalVolume!! < 60) {
             round(multiply(4.toDouble(), calculateCirculationTime()))
         } else {
-            round(multiply(223.5, log(multiply(input.reactorSettings.workingVolume, 1000.toDouble()), 10.0)) - 1004.6)
+            round(multiply(223.5, log(multiply(input.reactorSettings.workingVolume!!, 1000.toDouble()), 10.0)) - 1004.6)
         }
     }
 
     private fun calculateCirculationTime(): Double {
-        return divide(input.reactorSettings.workingVolume, calculatePumpingCapacity())
+        return divide(input.reactorSettings.workingVolume!!, calculatePumpingCapacity())
     }
 
     private fun calculatePumpingCapacity(): Double {
         return (multiply(
-            multiply(input.reactorSettings.impellerFlowNumber, input.reactorSettings.agitatorSpeed),
-            input.reactorSettings.impellerDiameter.pow(3)
+            multiply(input.reactorSettings.impellerFlowNumber!!, input.reactorSettings.agitatorSpeed),
+            input.reactorSettings.impellerDiameter!!.pow(3)
         ))
     }
 
@@ -116,16 +116,16 @@ class BatchCultivation(private val input: BatchCultivationInput, private val cos
                 multiply(
                     multiply(
                         (input.reactorSettings.numberOfImpellers).toDouble(),
-                        input.reactorSettings.impellerPowerNumber
+                        input.reactorSettings.impellerPowerNumber!!
                     ), input.reaction.liquidDensity
                 ), (input.reactorSettings.agitatorSpeed).pow(3)
-            ), (input.reactorSettings.impellerDiameter).pow(5)
+            ), (input.reactorSettings.impellerDiameter)!!.pow(5)
         ))
     }
 
     fun calculatePowerConsumptionWattsPerCube(): Double {
         val x = calculatePowerConsumptionWatts()
-        return round(divide(x, input.reactorSettings.workingVolume))
+        return round(divide(x, input.reactorSettings.workingVolume!!))
     }
 
     /**
