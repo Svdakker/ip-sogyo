@@ -1,6 +1,15 @@
 import {FormStyling} from "../Types.tsx";
+import classNames from "classnames";
 
 export const CultivationSettings = ( { labelStyling, inputStyling }: FormStyling ) => {
+
+    const toggleAdvancedCultivationSettings = () => {
+        if (document.getElementById("cultivationadvanced")!.style.display == "block") {
+            document.getElementById("cultivationadvanced")!.style.display = "none"
+        } else {
+            document.getElementById("cultivationadvanced")!.style.display = "block"
+        }
+    }
 
     return (
         <>
@@ -25,20 +34,25 @@ export const CultivationSettings = ( { labelStyling, inputStyling }: FormStyling
                     <input className={inputStyling} id="initialCellDensity" type="number" step="any" min="0"
                            placeholder={"kg/m3"} required/>
                 </div>
-                <div>
-                    <label className={labelStyling}>Maximum growth rate (mu):</label>
-                    <input className={inputStyling} id="maxGrowthRate" type="number" step="any" min="0"
-                           placeholder={"/h"} required/>
-                </div>
-                <div>
-                    <label className={labelStyling}>Maintenance coefficient (ms):</label>
-                    <input className={inputStyling} id="maintenance" type="number" step="any" min="0"
-                           placeholder={"kg/kgx/h"} required/>
-                </div>
-                <div>
-                    <label className={labelStyling}>Yield biomass on sugar (Yxs):</label>
-                    <input className={inputStyling} id="yield" type="number" step="any" min="0"
-                           placeholder={"-"} required/>
+                <button onClick={toggleAdvancedCultivationSettings} className={classNames("text-left text-xs italic text-white font-bold")}>
+                    Advanced cultivation settings
+                </button>
+                <div className="hidden" id="cultivationadvanced">
+                    <div>
+                        <label className={labelStyling}>Maximum growth rate (mu):</label>
+                        <input className={inputStyling} id="maxGrowthRate" type="number" step="any" min="0"
+                               placeholder={"/h"}/>
+                    </div>
+                    <div>
+                        <label className={labelStyling}>Maintenance coefficient (ms):</label>
+                        <input className={inputStyling} id="maintenance" type="number" step="any" min="0"
+                               placeholder={"kg/kgx/h"}/>
+                    </div>
+                    <div>
+                        <label className={labelStyling}>Yield biomass on sugar (Yxs):</label>
+                        <input className={inputStyling} id="yield" type="number" step="any" min="0"
+                               placeholder={"-"}/>
+                    </div>
                 </div>
             </div>
         </>
