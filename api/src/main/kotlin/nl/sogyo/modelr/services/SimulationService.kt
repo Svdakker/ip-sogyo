@@ -202,8 +202,19 @@ class SimulationService(
 
             val impellers = impellerRepository.findAllTypes()
 
-            return Success(KnownConstantsDTO(microorganisms, reactors, impellers))
-        } catch (e: Exception) {
+            val constants = KnownConstantsDTO(microorganisms, reactors, impellers)
+
+            when {
+                constants.microorganisms.isEmpty() -> throw NoConstantsFoundException("No microorganisms found in DB")
+                constants.impellers.isEmpty() -> throw NoConstantsFoundException("No impellers found in DB")
+                constants.reactors.isEmpty() -> throw NoConstantsFoundException("No reactors found in DB")
+                else -> return Success(constants)
+            }
+        }
+        catch (e: NoConstantsFoundException) {
+            return Failure(ErrorCode.NO_CONSTANTS_FOUND, "${e.message}")
+        }
+        catch (e: Exception) {
             return Failure(ErrorCode.GENERAL_ERROR, "An unexpected error occurred (${e.message}!")
 
         }
@@ -219,8 +230,11 @@ internal data class UnitOperation(val type: String, val id: Long)
 
 internal class NoSimulationFoundException(msg: String): Exception(msg)
 
+internal class NoConstantsFoundException(msg: String): Exception(msg)
+
 enum class ErrorCode {
     GENERAL_ERROR,
     OPERATION_NOT_FOUND,
-    NO_SIMULATION_FOUND
+    NO_SIMULATION_FOUND,
+    NO_CONSTANTS_FOUND,
 }
