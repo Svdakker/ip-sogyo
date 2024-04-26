@@ -54,7 +54,7 @@ class SimulationResultAcceptanceTest {
         val result = mockMvc.perform(
             get("/modelr/api/simulation-result")
         )
-            .andExpect(status().isCreated)
+            .andExpect(status().isOk)
             .andReturn()
 
         //Assert

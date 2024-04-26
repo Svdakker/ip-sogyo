@@ -1,18 +1,16 @@
 import {BatchCultivation} from "../components/Unit-Operations.tsx";
 import batch from "/src/assets/batch-reactor.png"
 import {runSimulation} from "../services/api.tsx";
-import {BatchGraph} from "../components/BatchGraph.tsx";
-import {ResultTable} from "../components/ResultTable.tsx";
-import {useState} from "react";
-import {isOutput, Output} from "../Types.tsx";
+import {isSaved} from "../Types.tsx";
 import Chart from "chart.js/auto";
 import {CategoryScale} from "chart.js";
 import classNames from "classnames";
+import {useNavigate} from "react-router-dom";
 
 Chart.register(CategoryScale);
 
 export const Simulation = () => {
-    const [results, setResults] = useState<Output | null>(null)
+    const navigate = useNavigate()
 
     const batchRequirements = ["batch-cultivation", "microorganism", "accuracy", "initialSugarConcentration", "initialCellDensity", "maxGrowthRate", "maintenance", "yield"]
 
@@ -49,37 +47,22 @@ export const Simulation = () => {
         }
     }
 
-    const fetchResult = async () => {
+    const requestSimulation = async () => {
         const operation = givenInput()
         const input = {
             order: [operation.operationType!],
             batchCultivation: operation
         }
         const result = await runSimulation(input)
-        if(isOutput(result)) {
-            setResults(result)
-            document.getElementById("results-container")!.style.display = 'flex'
-            document.getElementById("config-container")!.style.display = 'none'
+        if(isSaved(result)) {
+            navigate("/result")
         }
     }
 
     return (
         <div className="relative h-screen w-screen bg-cover bg-center bg-cyan-950 flex justify-center">
-            <div id="config-container" className={classNames(
-                                                    "block",
-                                                    )}>
-                <BatchCultivation onClick={fetchResult} icon={batch}/>
-            </div>
-            <div id="results-container" className={classNames("hidden w-screen h-screen")}>
-                <div className="flex flex-wrap justify-center">
-                        <div id="table-container" className="w-screen flex flex-wrap justify-center">
-                            <ResultTable duration={results?.duration} energyCosts={results?.costEstimation.energy}
-                            energyUsed={results?.powerConsumption.operations}/>
-                        </div>
-                        <div id="model-container" className="w-screen h-3/4 flex flex-wrap justify-center">
-                            <BatchGraph data={results?.model}/>
-                        </div>
-                </div>
+            <div id="config-container" className={classNames("block")}>
+                <BatchCultivation onClick={requestSimulation} icon={batch}/>
             </div>
         </div>
     )

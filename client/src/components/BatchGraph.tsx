@@ -3,9 +3,9 @@ import {Line} from "react-chartjs-2";
 
 export const BatchGraph = ( { data }: Model) => {
 
-    const timePoints = () => data?.map(dataPoint => dataPoint.time)
-    const cellDensities = () => data?.map(dataPoint => dataPoint.cellDensity)
-    const sugarConcentrations = () => data?.map(dataPoint => dataPoint.sugarConcentration)
+    const timePoints = () => data?.map(dataPoint => dataPoint[0])
+    const cellDensities = () => data?.map(dataPoint => dataPoint[1])
+    const sugarConcentrations = () => data?.map(dataPoint => dataPoint[2])
 
     const canvasData = {
         datasets: [

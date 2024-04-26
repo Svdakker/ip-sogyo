@@ -1,0 +1,27 @@
+{
+  "batchCultivation": {
+    "cultivationSettings": {
+      "accuracy": "0.1",
+      "initialCellDensity": "0.24",
+      "initialSugarConcentration": "15",
+      "maintenance": "0.00905",
+      "maxGrowthRate": "0.27",
+      "microorganism": "saccharomyces cerevisiae",
+      "yield": "0.5"
+    },
+    "operationType": "batch-cultivation",
+    "reactorSettings": {
+      "agitatorSpeed": "3.5",
+      "height": "6.15",
+      "impellerType": "rushton turbine",
+      "nominalVolume": "50.0",
+      "numberOfImpellers": "4",
+      "reactorType": "example",
+      "width": "2.5",
+      "workingVolume": "35.4"
+    }
+  },
+  "order": [
+    "batch-cultivation"
+  ]
+}

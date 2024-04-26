@@ -38,11 +38,11 @@ class SimulationRequestAcceptanceTest {
     @Test
     fun `scenario save simulation request is successful`() {
         //Setup
-        val payload = File("src/test/resources/payload.json").readText()
+        val payload = File("src/test/resources/payload2.json").readText()
         impellerRepository.save(Impeller("rushton turbine", 0.97, 0.72, 5.2))
-        microorganismRepository.save(Microorganism(LocalDate.now(), "saccharomyces cerevisiae", 0.24,0.4,0.00703))
-        reactorRepository.save(Reactor(LocalDate.now(), "example", 70.0,52.5, 9.29,3.10))
-        costFactorRepository.save(CostFactor(LocalDate.now(), 0.15))
+        microorganismRepository.save(Microorganism(LocalDate.of(2024,4,25), "saccharomyces cerevisiae", 0.24,0.4,0.00703))
+        reactorRepository.save(Reactor(LocalDate.of(2024,4,25), "example", 70.0,52.5, 9.29,3.10))
+        costFactorRepository.save(CostFactor(LocalDate.of(2024,4,25), 0.15))
 
         //Act
         val result = mockMvc.perform(
@@ -50,7 +50,7 @@ class SimulationRequestAcceptanceTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(payload)
         )
-            .andExpect(status().isCreated)
+            .andExpect(status().isOk)
             .andReturn()
 
         //Assert

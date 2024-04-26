@@ -1,25 +1,28 @@
 export type Output = {
-    id: number
+    value: {
+        batchCultivation: BatchCultivation | undefined
+    }
+}
+
+export type Saved = {
+    value: number
+}
+
+export type BatchCultivation = {
     duration: number
-    model: DataPoint[]
+    model: number[][]
     costEstimation: CostEstimation
     powerConsumption: PowerConsumption
 }
 
 export type Model = {
-    data: DataPoint[] | undefined
+    data: number[][] | undefined
 }
 
 export type TableData = {
     duration: number | undefined
     energyCosts: number | undefined
     energyUsed: number | undefined
-}
-
-export type DataPoint = {
-    time: number,
-    cellDensity: number,
-    sugarConcentration: number,
 }
 
 export type CostEstimation = {
@@ -36,5 +39,9 @@ export type FormStyling = {
 }
 
 export function isOutput(output: unknown): output is Output {
-    return (output as Output).id !== undefined
+    return (output as Output).value !== undefined
+}
+
+export function isSaved(response: unknown): response is Saved {
+    return (response as Saved).value !== undefined
 }
