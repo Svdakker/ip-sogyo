@@ -1,7 +1,7 @@
-import {FormStyling} from "../Types.tsx";
+import {FormProps} from "../Types.tsx";
 import classNames from "classnames";
 
-export const ReactorSettings = ( { labelStyling, inputStyling }: FormStyling ) => {
+export const ReactorSettings = ( { labelStyling, inputStyling, constants }: FormProps ) => {
 
     const toggleAdvancedReactorSettings = () => {
         if (document.getElementById("reactoradvanced")!.style.display == "block") {
@@ -11,18 +11,32 @@ export const ReactorSettings = ( { labelStyling, inputStyling }: FormStyling ) =
         }
     }
 
+    const setPossibleReactors = () => {
+        return constants?.reactors.map(function(val) {
+            return <option>{val}</option>
+        })
+    }
+
+    const setPossibleImpellers = () => {
+        return constants?.impellers.map(function(val) {
+            return <option>{val}</option>
+        })
+    }
+
     return (
         <>
             <div className="grid gap-4 mb-4 md:grid-cols-2">
                 <div>
-                    <label className={labelStyling}>Nominal volume:</label>
-                    <input className={inputStyling} id="type" type="text"
-                           placeholder={"Type of reactor"} required/>
+                    <label className={labelStyling}>Reactor:</label>
+                    <select className={inputStyling} id="reactorType">
+                        {setPossibleReactors()}
+                    </select>
                 </div>
                 <div>
-                    <label className={labelStyling}>Impeller type:</label>
-                    <input className={inputStyling} id="impellerType" type="text" placeholder={"Impeller type"}
-                           required/>
+                    <label className={labelStyling}>Impeller:</label>
+                    <select className={inputStyling} id="impellerType">
+                        {setPossibleImpellers()}
+                    </select>
                 </div>
                 <div>
                     <label className={labelStyling}>Number of impellers:</label>

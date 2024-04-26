@@ -1,6 +1,7 @@
 package nl.sogyo.modelr
 
 import nl.sogyo.modelr.entities.Impeller
+import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Propagation
@@ -11,4 +12,7 @@ import org.springframework.transaction.annotation.Transactional
 interface ImpellerRepository : CrudRepository<Impeller, Long> {
 
     fun findImpellerByType(string: String): Impeller?
+
+    @Query("select i.type from Impeller i")
+    fun findAllTypes(): List<String?>
 }

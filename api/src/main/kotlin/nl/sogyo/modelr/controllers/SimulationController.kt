@@ -45,6 +45,16 @@ class SimulationController(
         }
     }
 
+    @GetMapping("/constants", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getKnownSettings(): ResponseEntity<out Any> {
+        return simulationService.getKnownSettingsFromDb().let { result ->
+            when (result) {
+                is Success -> handleSuccess(result)
+                is Failure -> handleFailure(result)
+            }
+        }
+    }
+
     private fun handleSuccess(result: Success<Any>): ResponseEntity<SuccessDto> {
         return ResponseEntity.status(OK).body(SuccessDto(result.value))
     }

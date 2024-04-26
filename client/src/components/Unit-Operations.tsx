@@ -1,6 +1,9 @@
 import classNames from "classnames";
 import {CultivationSettings} from "./CultivationSettings.tsx";
 import {ReactorSettings} from "./ReactorSettings.tsx";
+import {useEffect, useState} from "react";
+import {fetchConstants} from "../services/api.tsx";
+import {Constants, isConstants} from "../Types.tsx";
 
 interface UnitOperation {
     onClick: () => Promise<void>
@@ -8,6 +11,18 @@ interface UnitOperation {
 }
 
 export const BatchCultivation = ({ onClick, icon }: UnitOperation) => {
+    const [constants, setConstants] = useState<Constants | null>(null)
+
+    useEffect(() => {
+        retrieveConstants()
+    }, []);
+
+    async function retrieveConstants() {
+        const constants = await fetchConstants()
+        if(isConstants(constants)) {
+            setConstants(constants)
+        }
+    }
 
     const toggleSettings = () => {
         if (document.getElementById("settings")!.style.display == "block") {
@@ -29,8 +44,8 @@ export const BatchCultivation = ({ onClick, icon }: UnitOperation) => {
                 <div>
                     <label className={classNames("block mb-2 text-md font-black text-white")} id="batch-cultivation">BATCH-CULTIVATION</label>
                 </div>
-                <CultivationSettings labelStyling={labelStyling} inputStyling={inputStyling}/>
-                <ReactorSettings labelStyling={labelStyling} inputStyling={inputStyling}/>
+                <CultivationSettings labelStyling={labelStyling} inputStyling={inputStyling} constants={constants?.value}/>
+                <ReactorSettings labelStyling={labelStyling} inputStyling={inputStyling} constants={constants?.value}/>
                 <button onClick={onClick} className={classNames(
                     "bg-cyan-800 ring-4 ring-opacity-25 shadow-2xl",
                     "ring-cyan-700 rounded-full p-3 text-center",

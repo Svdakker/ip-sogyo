@@ -14,7 +14,7 @@ export const Simulation = () => {
 
     const batchRequirements = ["batch-cultivation", "microorganism", "accuracy", "initialSugarConcentration", "initialCellDensity", "maxGrowthRate", "maintenance", "yield"]
 
-    const reactorRequirements = ["type","nominalVolume", "workingVolume", "height", "width", "impellerType", "numberOfImpellers", "agitatorSpeed"]
+    const reactorRequirements = ["reactorType","nominalVolume", "workingVolume", "height", "width", "impellerType", "numberOfImpellers", "agitatorSpeed"]
 
     const givenInput = () => { return {
         operationType: document.getElementById(batchRequirements[0])?.innerText.toLowerCase(),
@@ -24,7 +24,7 @@ export const Simulation = () => {
 
     const findCultivationInput = () => {
         return {
-            microorganism: (document.getElementById(batchRequirements[1]) as HTMLInputElement).value,
+            microorganism: (document.getElementById(batchRequirements[1]) as HTMLInputElement).value.toLowerCase(),
             accuracy: (document.getElementById(batchRequirements[2]) as HTMLInputElement).value,
             initialSugarConcentration: (document.getElementById(batchRequirements[3]) as HTMLInputElement).value,
             initialCellDensity: (document.getElementById(batchRequirements[4]) as HTMLInputElement).value,

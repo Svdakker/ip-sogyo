@@ -1,7 +1,7 @@
-import {FormStyling} from "../Types.tsx";
+import {FormProps} from "../Types.tsx";
 import classNames from "classnames";
 
-export const CultivationSettings = ( { labelStyling, inputStyling }: FormStyling ) => {
+export const CultivationSettings = ( { labelStyling, inputStyling, constants }: FormProps ) => {
 
     const toggleAdvancedCultivationSettings = () => {
         if (document.getElementById("cultivationadvanced")!.style.display == "block") {
@@ -11,13 +11,20 @@ export const CultivationSettings = ( { labelStyling, inputStyling }: FormStyling
         }
     }
 
+    const setPossibleMicroorganisms = () => {
+        return constants?.microorganisms.map(function(val) {
+            return <option>{val}</option>
+        })
+    }
+
     return (
         <>
             <div className="grid gap-4 mb-4 md:grid-cols-2">
                 <div>
                     <label className={labelStyling}>Microorganism:</label>
-                    <input className={inputStyling} id="microorganism" type="text"
-                           placeholder={"Choose a microorganism"} required/>
+                    <select className={inputStyling} id="microorganism">
+                        {setPossibleMicroorganisms()}
+                    </select>
                 </div>
                 <div>
                     <label className={labelStyling}>Accuracy:</label>

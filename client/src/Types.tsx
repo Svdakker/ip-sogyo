@@ -8,6 +8,14 @@ export type Saved = {
     value: number
 }
 
+export type Constants = {
+    value: {
+        microorganisms: string[]
+        reactors: string[]
+        impellers: string[]
+    }
+}
+
 export type BatchCultivation = {
     duration: number
     model: number[][]
@@ -33,9 +41,14 @@ export type PowerConsumption = {
     operations: number
 }
 
-export type FormStyling = {
+export type FormProps = {
     labelStyling: string
     inputStyling: string
+    constants: {
+        microorganisms: string[]
+        reactors: string[]
+        impellers: string[]
+    } | undefined
 }
 
 export function isOutput(output: unknown): output is Output {
@@ -44,4 +57,8 @@ export function isOutput(output: unknown): output is Output {
 
 export function isSaved(response: unknown): response is Saved {
     return (response as Saved).value !== undefined
+}
+
+export function isConstants(constants: unknown): constants is Constants {
+    return (constants as Constants).value !== undefined
 }

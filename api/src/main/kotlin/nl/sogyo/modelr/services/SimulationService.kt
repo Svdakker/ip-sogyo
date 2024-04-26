@@ -192,6 +192,22 @@ class SimulationService(
             return objectMapper.readValue<OperationResultDTO>(batchResult!!)
         }
     }
+
+    @Transactional
+    fun getKnownSettingsFromDb(): ApiResult<Any> {
+        try {
+            val microorganisms = microorganismRepository.findAllNames()
+
+            val reactors = reactorRepository.findAllTypes()
+
+            val impellers = impellerRepository.findAllTypes()
+
+            return Success(KnownConstantsDTO(microorganisms, reactors, impellers))
+        } catch (e: Exception) {
+            return Failure(ErrorCode.GENERAL_ERROR, "An unexpected error occurred (${e.message}!")
+
+        }
+    }
 }
 
 sealed class ApiResult<out T> {

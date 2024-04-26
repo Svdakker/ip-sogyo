@@ -1,4 +1,4 @@
-import {Output, Saved} from "../Types.tsx";
+import {Constants, Output, Saved} from "../Types.tsx";
 
 export async function runSimulation(input: object)  {
     const response: Response = await fetch("modelr/api/run-simulation", {
@@ -33,6 +33,26 @@ export async function fetchResult() {
     if (response.ok) {
         const result = await response.json()
         return result as Output
+    } else {
+        return {
+            statusCode: response.status,
+            statusTest: response.statusText
+        }
+    }
+}
+
+export async function fetchConstants() {
+    const response = await fetch("modelr/api/constants", {
+        method: 'GET',
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        }
+    })
+
+    if (response.ok) {
+        const result = await response.json()
+        return result as Constants
     } else {
         return {
             statusCode: response.status,
