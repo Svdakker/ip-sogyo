@@ -60,4 +60,26 @@ class SimulationResultAcceptanceTest {
         //Assert
         assertEquals(expected, result.response.contentAsString)
     }
+
+    @Test
+    fun `scenario retrieve simulation returns bad gateway when no simulations in db`() {
+        //Setup
+        val expectedStatus = 502
+        val expectedResponse = "{\"errorCode\":\"NO_SIMULATION_FOUND\",\"errorMessage\":\"No simulation found in DB\"}"
+        impellerRepository.save(Impeller("rushton turbine", 0.97, 0.72, 5.2))
+        microorganismRepository.save(Microorganism(LocalDate.now(), "saccharomyces cerevisiae", 0.24,0.4,0.00703))
+        reactorRepository.save(Reactor(LocalDate.now(), "example", 70.0,52.5, 9.29,3.10))
+        costFactorRepository.save(CostFactor(LocalDate.now(), 0.15))
+
+        //Act
+        val result = mockMvc.perform(
+            get("/modelr/api/simulation-result")
+        )
+            .andExpect(status().isBadGateway)
+            .andReturn()
+
+        //Assert
+        assertEquals(expectedStatus, result.response.status)
+        assertEquals(expectedResponse, result.response.contentAsString)
+    }
 }

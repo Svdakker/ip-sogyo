@@ -33,7 +33,7 @@ class GetKnownSettingsAcceptanceTest {
     private lateinit var reactorRepository: ReactorRepository
 
     @Test
-    fun `scenario retrieve simulation result is successful`() {
+    fun `scenario retrieve constants is successful`() {
         //Setup
         val expected = """{"value":{"microorganisms":["saccharomyces cerevisiae"],"reactors":["example"],"impellers":["rushton turbine"]}}"""
         impellerRepository.save(Impeller("rushton turbine", 0.97, 0.72, 5.2))
@@ -49,5 +49,23 @@ class GetKnownSettingsAcceptanceTest {
 
         //Assert
         assertEquals(expected, result.response.contentAsString)
+    }
+
+    @Test
+    fun `scenario retrieve constants returns bad gateway when repos are empty`() {
+        //Setup
+        val expectedStatus = 502
+        val expectedResponse = "{\"errorCode\":\"NO_CONSTANTS_FOUND\",\"errorMessage\":\"No microorganisms found in DB\"}"
+
+        //Act
+        val result = mockMvc.perform(
+            get("/modelr/api/constants")
+        )
+            .andExpect(status().isBadGateway)
+            .andReturn()
+
+        //Assert
+        assertEquals(expectedStatus, result.response.status)
+        assertEquals(expectedResponse, result.response.contentAsString)
     }
 }

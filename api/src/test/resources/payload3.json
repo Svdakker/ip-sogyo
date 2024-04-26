@@ -1,0 +1,18 @@
+{
+  "order": ["random-operation"],
+  "batchCultivation" : {
+    "operationType": "batch-cultivation",
+    "cultivationSettings": {
+      "accuracy": 0.01,
+      "initialSugarConcentration": 20,
+      "initialCellDensity": 0.12,
+      "microorganism": "saccharomyces cerevisiae"
+    },
+    "reactorSettings": {
+      "reactorType": "example",
+      "impellerType": "rushton turbine",
+      "numberOfImpellers": 4,
+      "agitatorSpeed": 2.5
+    }
+  }
+}

@@ -14,6 +14,7 @@ import nl.sogyo.modelr.services.ApiResult.Failure
 import nl.sogyo.modelr.services.ErrorCode
 import org.springframework.http.HttpStatus.OK
 import org.springframework.http.HttpStatus.BAD_GATEWAY
+import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import org.springframework.web.bind.annotation.GetMapping
 
@@ -67,7 +68,7 @@ class SimulationController(
         val code = result.errorCode
         val status = when (code) {
             ErrorCode.GENERAL_ERROR -> INTERNAL_SERVER_ERROR
-            ErrorCode.OPERATION_NOT_FOUND -> BAD_GATEWAY
+            ErrorCode.OPERATION_NOT_FOUND -> BAD_REQUEST
             ErrorCode.NO_SIMULATION_FOUND -> BAD_GATEWAY
             ErrorCode.NO_CONSTANTS_FOUND -> BAD_GATEWAY
         }
