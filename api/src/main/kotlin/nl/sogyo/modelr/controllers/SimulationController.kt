@@ -14,6 +14,7 @@ import nl.sogyo.modelr.services.ApiResult.Failure
 import nl.sogyo.modelr.services.ErrorCode
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
+import org.springframework.web.bind.annotation.GetMapping
 
 @RestController
 @RequestMapping("modelr/api")
@@ -25,8 +26,18 @@ class SimulationController(
     @PostMapping("/run-simulation",
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun saveSimulationRequest(@RequestBody request: SimulationRequestDTO): ResponseEntity<out Any> {
+    fun runSimulationRequest(@RequestBody request: SimulationRequestDTO): ResponseEntity<out Any> {
         return simulationService.runNewSimulation(request, simulationFactory).let { result ->
+            when (result) {
+                is Success -> handleSuccess(result)
+                is Failure -> handleFailure(result)
+            }
+        }
+    }
+
+    @GetMapping("/simulation-result", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getSimulationResult(): ResponseEntity<out Any> {
+        return simulationService.getLatestSimulationResult().let { result ->
             when (result) {
                 is Success -> handleSuccess(result)
                 is Failure -> handleFailure(result)
@@ -46,6 +57,7 @@ class SimulationController(
         val status = when (code) {
             ErrorCode.GENERAL_ERROR -> INTERNAL_SERVER_ERROR
             ErrorCode.OPERATION_NOT_FOUND -> INTERNAL_SERVER_ERROR
+            ErrorCode.NO_SIMULATION_FOUND -> INTERNAL_SERVER_ERROR
         }
         val errorDto = ErrorDto(code.name, result.errorMessage)
         return ResponseEntity.status(status).body(errorDto)
@@ -54,4 +66,4 @@ class SimulationController(
 
 data class ErrorDto(val errorCode: String, val errorMessage: String)
 
-data class SuccessDto(val simulationId: Any)
+data class SuccessDto(val value: Any)

@@ -3,14 +3,12 @@ package nl.sogyo.modelr.services
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import nl.sogyo.modelr.*
 import nl.sogyo.modelr.data.OperationOutput
 import nl.sogyo.modelr.entities.*
 import nl.sogyo.modelr.entities.Simulation
-import nl.sogyo.modelr.models.BatchCultivationRequestDTO
-import nl.sogyo.modelr.models.CultivationSettingsDTO
-import nl.sogyo.modelr.models.ReactorSettingsDTO
-import nl.sogyo.modelr.models.SimulationRequestDTO
+import nl.sogyo.modelr.models.*
 import nl.sogyo.modelr.services.ApiResult.Failure
 import nl.sogyo.modelr.services.ApiResult.Success
 import org.springframework.stereotype.Service
@@ -154,6 +152,46 @@ class SimulationService(
             batchCultivationRepository.setResultForBatchCultivation(simulation.batchCultivation!!.id!!, resultString)
         }
     }
+
+    @Transactional
+    fun getLatestSimulationResult(): ApiResult<Any> {
+        try {
+            val objectMapper = jacksonObjectMapper()
+            objectMapper.registerModule(JavaTimeModule())
+
+            val simulation = simulationRepository.findLatest()
+
+            val result = bundleResult(simulation, objectMapper)
+
+            return Success(result)
+        }
+        catch (e: NoSimulationFoundException) {
+            return Failure(ErrorCode.NO_SIMULATION_FOUND, "No simulation found in DB")
+        }
+        catch (e: Exception) {
+            return Failure(ErrorCode.GENERAL_ERROR, "An unexpected error occurred (${e.message}!")
+        }
+    }
+
+    private fun bundleResult(simulation: Simulation?, objectMapper: ObjectMapper): SimulationResultDTO {
+        if (simulation == null) {
+            throw NoSimulationFoundException("No simulation found in DB")
+        } else {
+            val batchCultivationResult = checkForBatchCultivationResult(simulation, objectMapper)
+
+            return SimulationResultDTO(batchCultivationResult)
+        }
+    }
+
+    private fun checkForBatchCultivationResult(simulation: Simulation, objectMapper: ObjectMapper): OperationResultDTO? {
+        if (simulation.batchCultivation == null) {
+            return null
+        } else {
+            val batchCultivation = simulation.batchCultivation!!
+            val batchResult = batchCultivation.result
+            return objectMapper.readValue<OperationResultDTO>(batchResult!!)
+        }
+    }
 }
 
 sealed class ApiResult<out T> {
@@ -163,7 +201,10 @@ sealed class ApiResult<out T> {
 
 internal data class UnitOperation(val type: String, val id: Long)
 
+internal class NoSimulationFoundException(msg: String): Exception(msg)
+
 enum class ErrorCode {
     GENERAL_ERROR,
-    OPERATION_NOT_FOUND
+    OPERATION_NOT_FOUND,
+    NO_SIMULATION_FOUND
 }

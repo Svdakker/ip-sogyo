@@ -54,6 +54,6 @@ class SimulationRequestAcceptanceTest {
             .andReturn()
 
         //Assert
-        assertEquals("{\"simulationId\":1}", result.response.contentAsString)
+        assertEquals("{\"value\":1}", result.response.contentAsString)
     }
 }

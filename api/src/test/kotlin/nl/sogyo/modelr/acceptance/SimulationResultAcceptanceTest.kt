@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.io.File
 import java.time.LocalDate
@@ -36,7 +37,7 @@ class SimulationResultAcceptanceTest {
     private lateinit var costFactorRepository: CostFactorRepository
 
     @Test
-    fun `scenario save simulation request is successful`() {
+    fun `scenario retrieve simulation result is successful`() {
         //Setup
         val expected = File("src/test/resources/result.json").readText()
         val payload = File("src/test/resources/payload.json").readText()
@@ -45,24 +46,18 @@ class SimulationResultAcceptanceTest {
         reactorRepository.save(Reactor(LocalDate.now(), "example", 70.0,52.5, 9.29,3.10))
         costFactorRepository.save(CostFactor(LocalDate.now(), 0.15))
 
-        val id = mockMvc.perform(
-            post("/modelr/api/run-simulation")
+        mockMvc.perform(post("/modelr/api/run-simulation")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(payload)
-        )
-            .andExpect(status().isCreated)
-            .andReturn()
+                .content(payload))
 
         //Act
         val result = mockMvc.perform(
-            post("/modelr/api/simulation/{id}")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(id.response.contentAsString)
+            get("/modelr/api/simulation-result")
         )
             .andExpect(status().isCreated)
             .andReturn()
 
         //Assert
-        assertEquals(expected, result.response)
+        assertEquals(expected, result.response.contentAsString)
     }
 }
