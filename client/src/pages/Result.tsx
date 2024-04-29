@@ -13,14 +13,15 @@ export const Result = () => {
     const [results, setResults] = useState<Output | null>(null)
 
     async function retrieveResult() {
-        const result = await fetchResult()
-        if(isOutput(result)) {
-            setResults(result)
-        }
+        return await fetchResult()
     }
 
     useEffect(() => {
-        retrieveResult();
+        retrieveResult().then(result => {
+            if (isOutput(result)) {
+                setResults(result)
+            }
+        });
     }, []);
 
     return (

@@ -8,7 +8,7 @@ import kotlin.math.ln
 import kotlin.math.log
 import kotlin.math.pow
 
-class BatchCultivationCalc(private val input: BatchCultivationInput, private val costs: CostFactors = CostFactors()) : UnitOperation() {
+class BatchCultivationOperation(private val input: BatchCultivationInput, private val costs: CostFactors = CostFactors()) : UnitOperation() {
 
     /**
      * Calculations to model a batch cultivation over time
@@ -129,13 +129,5 @@ class BatchCultivationCalc(private val input: BatchCultivationInput, private val
         val x = calculatePowerConsumptionWatts()
         return round(divide(x, input.reactorSettings.workingVolume!!))
     }
-
-    /**
-     * Calculations to model the heat production inside the reactor and thus required cooling
-     *
-     * Heating up before the process is not accounted for
-     * Constants used assume an ethanol production process by S.cerevisiae from glucose
-     */
-
 
 }

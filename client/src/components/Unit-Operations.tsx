@@ -14,14 +14,15 @@ export const BatchCultivation = ({ onClick, icon }: UnitOperation) => {
     const [constants, setConstants] = useState<Constants | null>(null)
 
     useEffect(() => {
-        retrieveConstants()
+        retrieveConstants().then(constants => {
+            if(isConstants(constants)) {
+                setConstants(constants)
+            }
+        })
     }, []);
 
     async function retrieveConstants() {
-        const constants = await fetchConstants()
-        if(isConstants(constants)) {
-            setConstants(constants)
-        }
+        return await fetchConstants()
     }
 
     const toggleSettings = () => {

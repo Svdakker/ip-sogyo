@@ -32,7 +32,7 @@ class SimulationFactory : ISimulationFactory {
             throw IllegalArgumentException("Invalid input, $validInput contains negative numbers")
         }
 
-        val batchCultivation = BatchCultivationCalc(batchCultivationInput)
+        val batchCultivation = BatchCultivationOperation(batchCultivationInput)
 
         return Simulation(batchCultivation)
     }
