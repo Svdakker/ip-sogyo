@@ -50,6 +50,9 @@ class SimulationService(
         catch (e: IllegalArgumentException){
             return Failure(ErrorCode.OPERATION_NOT_FOUND, "${e.message}")
         }
+        catch (e: EmptyStringException) {
+            return Failure(ErrorCode.EMPTY_STRING_INPUT, "${e.message}")
+        }
         catch (e: Exception) {
             return Failure(ErrorCode.GENERAL_ERROR, "An unexpected error occurred (${e.message}!")
         }
@@ -116,32 +119,40 @@ class SimulationService(
     }
 
     private fun saveCultivationSettings(request: CultivationSettingsDTO): Long {
-        return cultivationSettingsRepository.save(
-            CultivationSettings(
-                request.microorganism,
-                request.accuracy,
-                request.initialSugarConcentration,
-                request.initialCellDensity,
-                request.maxGrowthRate,
-                request.maintenance,
-                request.yield
-            )
-        ).id!!
+        if (request.microorganism == "") {
+            throw EmptyStringException("Microorganism input is empty string!")
+        } else {
+            return cultivationSettingsRepository.save(
+                CultivationSettings(
+                    request.microorganism,
+                    request.accuracy,
+                    request.initialSugarConcentration,
+                    request.initialCellDensity,
+                    request.maxGrowthRate,
+                    request.maintenance,
+                    request.yield
+                )
+            ).id!!
+        }
     }
 
     private fun saveReactorSettings(request: ReactorSettingsDTO): Long {
-        return reactorSettingsRepository.save(
-            ReactorSettings(
-                request.reactorType,
-                request.nominalVolume,
-                request.workingVolume,
-                request.height,
-                request.width,
-                request.impellerType,
-                request.numberOfImpellers,
-                request.agitatorSpeed
-            )
-        ).id!!
+        if (request.reactorType == "" || request.impellerType == "") {
+            throw EmptyStringException("Request reactor settings contains empty string (ReactorType or ImpellerType)")
+        } else {
+            return reactorSettingsRepository.save(
+                ReactorSettings(
+                    request.reactorType,
+                    request.nominalVolume,
+                    request.workingVolume,
+                    request.height,
+                    request.width,
+                    request.impellerType,
+                    request.numberOfImpellers,
+                    request.agitatorSpeed
+                )
+            ).id!!
+        }
     }
 
     private fun saveResult(result: OperationOutput, objectMapper: ObjectMapper, simulationId: Long) {
@@ -228,12 +239,15 @@ sealed class ApiResult<out T> {
 
 internal data class UnitOperation(val type: String, val id: Long)
 
+internal class EmptyStringException(msg: String): Exception(msg)
+
 internal class NoSimulationFoundException(msg: String): Exception(msg)
 
 internal class NoConstantsFoundException(msg: String): Exception(msg)
 
 enum class ErrorCode {
     GENERAL_ERROR,
+    EMPTY_STRING_INPUT,
     OPERATION_NOT_FOUND,
     NO_SIMULATION_FOUND,
     NO_CONSTANTS_FOUND,

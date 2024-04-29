@@ -69,6 +69,7 @@ class SimulationController(
         val status = when (code) {
             ErrorCode.GENERAL_ERROR -> INTERNAL_SERVER_ERROR
             ErrorCode.OPERATION_NOT_FOUND -> BAD_REQUEST
+            ErrorCode.EMPTY_STRING_INPUT -> BAD_REQUEST
             ErrorCode.NO_SIMULATION_FOUND -> BAD_GATEWAY
             ErrorCode.NO_CONSTANTS_FOUND -> BAD_GATEWAY
         }
