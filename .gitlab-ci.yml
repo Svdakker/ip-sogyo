@@ -6,6 +6,15 @@ stages:
 default:
   image: gradle:8.7-jdk21
 
+services:
+  - name: docker:dind
+    command: ["--tls=false"]
+
+variables:
+  DOCKER_HOST: "tcp://docker:2375"
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_DRIVER: overlay2
+
 .standard-rules:
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'

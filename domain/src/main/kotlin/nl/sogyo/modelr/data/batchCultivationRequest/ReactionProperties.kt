@@ -1,4 +1,4 @@
-package nl.sogyo.modelr.data
+package nl.sogyo.modelr.data.batchCultivationRequest
 
 data class ReactionProperties(
     val reactionHeat: Double = 45.1, //KJ mol-1
