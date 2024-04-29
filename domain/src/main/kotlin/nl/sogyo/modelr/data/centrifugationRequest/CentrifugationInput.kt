@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class CentrifugationInput(
-    val brothProperties: BrothProperties,
-    val centrifugeProperties: CentrifugeProperties,
-    val centrifugationSettings: CentrifugationSettings,
+    val brothProperties: BrothProperties = BrothProperties(),
+    val centrifugeProperties: CentrifugeProperties = CentrifugeProperties(),
+    val centrifugationSettings: CentrifugationSettings = CentrifugationSettings(),
 )
