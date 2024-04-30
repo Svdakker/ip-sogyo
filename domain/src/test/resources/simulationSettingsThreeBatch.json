@@ -1,0 +1,216 @@
+{
+  "batchCultivation": [{
+    "costFactor": {
+      "date": [
+        2024,
+        4,
+        25
+      ],
+      "energy": 0.15,
+      "id": 1
+    },
+    "id": 1,
+    "impeller": {
+      "id": 1,
+      "impellerDiameter": 0.97,
+      "impellerFlowNumber": 0.72,
+      "impellerPowerNumber": 5.2,
+      "type": "rushton turbine"
+    },
+    "microorganism": {
+      "date": [
+        2024,
+        4,
+        25
+      ],
+      "id": 1,
+      "maintenance": 0.00703,
+      "maxGrowthRate": 0.24,
+      "name": "saccharomyces cerevisiae",
+      "yield": 0.4
+    },
+    "position": 0,
+    "reactor": {
+      "date": [
+        2024,
+        4,
+        25
+      ],
+      "height": 9.29,
+      "id": 1,
+      "name": "example",
+      "nominalVolume": 70.0,
+      "width": 3.1,
+      "workingVolume": 52.5
+    },
+    "request": {
+      "cultivationSettings": {
+        "accuracy": 5,
+        "id": 1,
+        "initialCellDensity": 0.12,
+        "initialSugarConcentration": 20.0,
+        "maintenance": null,
+        "maxGrowthRate": null,
+        "microorganism": "saccharomyces cerevisiae",
+        "yield": null
+      },
+      "id": 1,
+      "operationType": "batch-cultivation",
+      "reactorSettings": {
+        "agitatorSpeed": 2.5,
+        "height": null,
+        "id": 1,
+        "impellerType": "rushton turbine",
+        "nominalVolume": null,
+        "numberOfImpellers": 4,
+        "reactorType": "example",
+        "width": null,
+        "workingVolume": null
+      }
+    },
+    "result": null
+  },
+    {
+      "costFactor": {
+        "date": [
+          2024,
+          4,
+          25
+        ],
+        "energy": 0.15,
+        "id": 1
+      },
+      "id": 1,
+      "impeller": {
+        "id": 1,
+        "impellerDiameter": 0.97,
+        "impellerFlowNumber": 0.72,
+        "impellerPowerNumber": 5.2,
+        "type": "rushton turbine"
+      },
+      "microorganism": {
+        "date": [
+          2024,
+          4,
+          25
+        ],
+        "id": 1,
+        "maintenance": 0.00703,
+        "maxGrowthRate": 0.24,
+        "name": "saccharomyces cerevisiae",
+        "yield": 0.4
+      },
+      "position": 1,
+      "reactor": {
+        "date": [
+          2024,
+          4,
+          25
+        ],
+        "height": 9.29,
+        "id": 1,
+        "name": "example",
+        "nominalVolume": 70.0,
+        "width": 3.1,
+        "workingVolume": 52.5
+      },
+      "request": {
+        "cultivationSettings": {
+          "accuracy": 5,
+          "id": 1,
+          "initialCellDensity": 0.12,
+          "initialSugarConcentration": 20.0,
+          "maintenance": 0.05,
+          "maxGrowthRate": 0.5,
+          "microorganism": "saccharomyces cerevisiae",
+          "yield": 0.8
+        },
+        "id": 1,
+        "operationType": "batch-cultivation",
+        "reactorSettings": {
+          "agitatorSpeed": 2.5,
+          "height": 200.0,
+          "id": 1,
+          "impellerType": "rushton turbine",
+          "nominalVolume": 295.5,
+          "numberOfImpellers": 4,
+          "reactorType": "example",
+          "width": 35.6,
+          "workingVolume": 250.4
+        }
+      },
+      "result": null
+    },
+    {
+      "costFactor": {
+        "date": [
+          2024,
+          4,
+          25
+        ],
+        "energy": 0.15,
+        "id": 1
+      },
+      "id": 1,
+      "impeller": {
+        "id": 1,
+        "impellerDiameter": 0.97,
+        "impellerFlowNumber": 0.72,
+        "impellerPowerNumber": 5.2,
+        "type": "rushton turbine"
+      },
+      "microorganism": {
+        "date": [
+          2024,
+          4,
+          25
+        ],
+        "id": 1,
+        "maintenance": 0.00703,
+        "maxGrowthRate": 0.24,
+        "name": "saccharomyces cerevisiae",
+        "yield": 0.4
+      },
+      "position": 2,
+      "reactor": {
+        "date": [
+          2024,
+          4,
+          25
+        ],
+        "height": 9.29,
+        "id": 1,
+        "name": "example",
+        "nominalVolume": 70.0,
+        "width": 3.1,
+        "workingVolume": 52.5
+      },
+      "request": {
+        "cultivationSettings": {
+          "accuracy": 5,
+          "id": 1,
+          "initialCellDensity": 0.32,
+          "initialSugarConcentration": 10.0,
+          "maintenance": 0.05,
+          "maxGrowthRate": 0.5,
+          "microorganism": "saccharomyces cerevisiae",
+          "yield": 0.8
+        },
+        "id": 1,
+        "operationType": "batch-cultivation",
+        "reactorSettings": {
+          "agitatorSpeed": 2.5,
+          "height": 200.0,
+          "id": 1,
+          "impellerType": "rushton turbine",
+          "nominalVolume": 295.5,
+          "numberOfImpellers": 4,
+          "reactorType": "example",
+          "width": 35.6,
+          "workingVolume": 250.4
+        }
+      },
+      "result": null
+    }],
+  "id": 1
+}

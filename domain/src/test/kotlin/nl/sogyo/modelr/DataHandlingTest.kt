@@ -30,7 +30,7 @@ class DataHandlingTest {
         val factory = SimulationFactory()
         val simulation = factory.createNewSimulation(listOf("batch-cultivation"), settings)
 
-        val result = simulation.runSimulation().duration
+        val result = simulation.runSimulation().output[0]!!.duration
 
         assertEquals(17.51, result)
     }

@@ -24,20 +24,20 @@ class SimulationFactory : ISimulationFactory {
         return when (operations[0]) {
             "batch-cultivation" -> {
                 Simulation(BatchCultivationOperation(checkBatchCultivationInput(input.batchCultivation[0]!!),
-                    nextOperation = createNextOperation(operations, input, 1)))
+                    nextOperation = createNextOperation(operations, input, listOf(1))))
             }
             else -> throw IllegalArgumentException("Unsupported operation")
         }
     }
 
-    private fun createNextOperation(operations: List<String>, input: SimulationInput, accumulator: Int): UnitOperation? {
-        return if (operations.size == accumulator) {
+    private fun createNextOperation(operations: List<String>, input: SimulationInput, accumulator: List<Int>): UnitOperation? {
+        return if (operations.size == accumulator.sum()) {
             null
         } else {
-            when (operations[accumulator]) {
+            when (operations[accumulator.sum()]) {
                 "batch-cultivation" -> {
-                    BatchCultivationOperation(checkBatchCultivationInput(input.batchCultivation[1]!!),
-                        nextOperation = createNextOperation(operations, input, accumulator + 1))
+                    BatchCultivationOperation(checkBatchCultivationInput(input.batchCultivation[accumulator[0]]!!),
+                        nextOperation = createNextOperation(operations, input, listOf(accumulator[0] + 1)))
                 }
                 else -> throw IllegalArgumentException("Unsupported operation")
             }
