@@ -8,7 +8,14 @@ import kotlin.math.ln
 import kotlin.math.log
 import kotlin.math.pow
 
-class BatchCultivationOperation(private val input: BatchCultivationInput, private val costs: CostFactors = CostFactors()) : UnitOperation() {
+class BatchCultivationOperation(private val input: BatchCultivationInput,
+                                private val costs: CostFactors = CostFactors(),
+                                private val nextOperation: UnitOperation? = null) :
+    UnitOperation() {
+
+    override fun getNextOperation(): UnitOperation? {
+        return this.nextOperation
+    }
 
     /**
      * Calculations to model a batch cultivation over time

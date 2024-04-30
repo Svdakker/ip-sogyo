@@ -50,4 +50,30 @@ class SimulationTest {
         assertEquals(2693.2, result.powerConsumption.operations)
         assertEquals(expectedModel, result.model)
     }
+
+    @Test
+    fun testBatchCultivationCanHaveNextOperation() {
+        val factory = SimulationFactory()
+        val operations = listOf("batch-cultivation", "batch-cultivation")
+        val settings = File("src/test/resources/simulationSettings.json").readText()
+        val simulation = factory.createNewSimulation(operations,settings)
+
+        val result = simulation.getFirstUnitOperation().getNextOperation()
+
+        assertNotNull(result)
+    }
+
+    @Test
+    fun testSimulationCanHaveTwoDifferentBatchCultivations() {
+        val factory = SimulationFactory()
+        val operations = listOf("batch-cultivation", "batch-cultivation")
+
+        val settings = File("src/test/resources/simulationSettingsTwoBatch.json").readText()
+        val simulation = factory.createNewSimulation(operations,settings)
+
+        val firstBatch = simulation.getFirstUnitOperation()
+        val secondBatch = simulation.getFirstUnitOperation().getNextOperation()
+
+        assertNotEquals(firstBatch.generateOutput(), secondBatch!!.generateOutput())
+    }
 }

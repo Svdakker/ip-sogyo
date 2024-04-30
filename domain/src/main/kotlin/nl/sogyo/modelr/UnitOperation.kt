@@ -11,6 +11,8 @@ abstract class UnitOperation {
         return OperationOutput(calculateDuration(), modelOperation(), calculateCosts(), calculateEnergyConsumption())
     }
 
+    abstract fun getNextOperation(): UnitOperation?
+
     abstract fun modelOperation(): List<List<Double>>
 
     abstract fun calculateDuration(): Double

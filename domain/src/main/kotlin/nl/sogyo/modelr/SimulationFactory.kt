@@ -17,24 +17,43 @@ class SimulationFactory : ISimulationFactory {
 
         val simulationInput = objectMapper.readValue<SimulationInput>(settings)
 
+        return setFirstUnitOperation(operations, simulationInput)
+    }
+
+    private fun setFirstUnitOperation(operations: List<String>, input: SimulationInput): Simulation {
         return when (operations[0]) {
-            "batch-cultivation" -> createBatchCultivation(simulationInput.batchCultivation!!)
+            "batch-cultivation" -> {
+                Simulation(BatchCultivationOperation(checkBatchCultivationInput(input.batchCultivation[0]!!),
+                    nextOperation = createNextOperation(operations, input, 1)))
+            }
             else -> throw IllegalArgumentException("Unsupported operation")
         }
     }
 
-    private fun createBatchCultivation(request: BatchCultivation): Simulation {
+    private fun createNextOperation(operations: List<String>, input: SimulationInput, accumulator: Int): UnitOperation? {
+        return if (operations.size == accumulator) {
+            null
+        } else {
+            when (operations[accumulator]) {
+                "batch-cultivation" -> {
+                    BatchCultivationOperation(checkBatchCultivationInput(input.batchCultivation[1]!!),
+                        nextOperation = createNextOperation(operations, input, accumulator + 1))
+                }
+                else -> throw IllegalArgumentException("Unsupported operation")
+            }
+        }
+    }
+
+    private fun checkBatchCultivationInput(request: BatchCultivation): BatchCultivationInput {
         val batchCultivationInput = selectInput(request)
 
-        val validInput = isValidInput(batchCultivationInput)
+        val validInput = isValidBatchCultivationInput(batchCultivationInput)
 
         if (validInput != "valid") {
             throw IllegalArgumentException("Invalid input, $validInput contains negative numbers")
+        } else {
+            return batchCultivationInput
         }
-
-        val batchCultivation = BatchCultivationOperation(batchCultivationInput)
-
-        return Simulation(batchCultivation)
     }
 
     private fun selectInput(request: BatchCultivation): BatchCultivationInput {
@@ -85,7 +104,7 @@ class SimulationFactory : ISimulationFactory {
     }
 
 
-    private fun isValidInput(config: BatchCultivationInput): String {
+    private fun isValidBatchCultivationInput(config: BatchCultivationInput): String {
         val cultivationSettings = config.cultivationSettings
         val reactorSettings = config.reactorSettings
         return when {

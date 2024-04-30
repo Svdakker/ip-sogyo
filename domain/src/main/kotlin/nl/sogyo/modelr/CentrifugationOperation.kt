@@ -8,7 +8,14 @@ import kotlin.math.PI
 import kotlin.math.pow
 import kotlin.math.tan
 
-class CentrifugationOperation(private val input: CentrifugationInput, private val costs: CostFactors = CostFactors()) : UnitOperation() {
+class CentrifugationOperation(private val input: CentrifugationInput,
+                              private val costs: CostFactors = CostFactors(),
+                              private val nextOperation: UnitOperation? = null
+) : UnitOperation() {
+
+    override fun getNextOperation(): UnitOperation? {
+        return this.nextOperation
+    }
 
     /**
      * Calculations to model a centrifugation operation. Separation efficiency is modelled against chosen flow rate
