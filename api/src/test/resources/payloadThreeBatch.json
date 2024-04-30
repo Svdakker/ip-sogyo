@@ -1,0 +1,52 @@
+{
+  "order": ["batch-cultivation", "batch-cultivation", "batch-cultivation"],
+  "batchCultivation" : [{
+    "operationType": "batch-cultivation",
+    "cultivationSettings": {
+      "accuracy": 0.01,
+      "initialSugarConcentration": 20,
+      "initialCellDensity": 0.12,
+      "microorganism": "saccharomyces cerevisiae"
+    },
+    "reactorSettings": {
+      "reactorType": "example",
+      "impellerType": "rushton turbine",
+      "numberOfImpellers": 4,
+      "agitatorSpeed": 2.5
+    }
+  },
+    {
+      "operationType": "batch-cultivation",
+      "cultivationSettings": {
+        "accuracy": 0.01,
+        "initialSugarConcentration": 20,
+        "initialCellDensity": 0.12,
+        "microorganism": "saccharomyces cerevisiae"
+      },
+      "reactorSettings": {
+        "reactorType": "example",
+        "impellerType": "rushton turbine",
+        "numberOfImpellers": 4,
+        "agitatorSpeed": 2.5,
+        "nominalVolume": "120.0",
+        "workingVolume": "100.0"
+      }
+    },
+    {
+      "operationType": "batch-cultivation",
+      "cultivationSettings": {
+        "accuracy": 0.01,
+        "initialSugarConcentration": 20,
+        "initialCellDensity": 0.12,
+        "microorganism": "saccharomyces cerevisiae"
+      },
+      "reactorSettings": {
+        "reactorType": "example",
+        "impellerType": "rushton turbine",
+        "numberOfImpellers": 4,
+        "agitatorSpeed": 2.5,
+        "nominalVolume": "240.0",
+        "workingVolume": "200.0"
+      }
+    }]
+}
