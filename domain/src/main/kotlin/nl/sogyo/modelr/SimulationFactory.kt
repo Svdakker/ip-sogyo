@@ -17,31 +17,28 @@ class SimulationFactory : ISimulationFactory {
 
         val simulationInput = objectMapper.readValue<SimulationInput>(settings)
 
-        return setFirstUnitOperation(operations, simulationInput)
-    }
-
-    private fun setFirstUnitOperation(operations: List<String>, input: SimulationInput): Simulation {
-        return when (operations[0]) {
-            "batch-cultivation" -> {
-                Simulation(BatchCultivationOperation(checkBatchCultivationInput(input.batchCultivation[0]!!),
-                    nextOperation = createNextOperation(operations, input, listOf(1))))
-            }
-            else -> throw IllegalArgumentException("Unsupported operation")
+        return if (operations.isEmpty()) {
+            throw IllegalArgumentException("No operations found")
+        } else {
+            Simulation(checkNextOperation(operations, simulationInput, listOf(0))!!)
         }
     }
 
-    private fun createNextOperation(operations: List<String>, input: SimulationInput, accumulator: List<Int>): UnitOperation? {
+    private fun checkNextOperation(operations: List<String>, input: SimulationInput, accumulator: List<Int>): UnitOperation? {
         return if (operations.size == accumulator.sum()) {
             null
         } else {
-            when (operations[accumulator.sum()]) {
-                "batch-cultivation" -> {
-                    BatchCultivationOperation(checkBatchCultivationInput(input.batchCultivation[accumulator[0]]!!),
-                        nextOperation = createNextOperation(operations, input, listOf(accumulator[0] + 1)))
-                }
-                else -> throw IllegalArgumentException("Unsupported operation")
-            }
+            createNextOperation(operations, accumulator, input)
         }
+    }
+
+    private fun createNextOperation(operations: List<String>, accumulator: List<Int>, input: SimulationInput) =
+        when (operations[accumulator.sum()]) {
+        "batch-cultivation" -> {
+            BatchCultivationOperation(checkBatchCultivationInput(input.batchCultivation[accumulator[0]]!!),
+                nextOperation = checkNextOperation(operations, input, listOf(accumulator[0] + 1)))
+        }
+        else -> throw IllegalArgumentException("Unsupported operation")
     }
 
     private fun checkBatchCultivationInput(request: BatchCultivation): BatchCultivationInput {
