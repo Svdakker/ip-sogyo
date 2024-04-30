@@ -85,15 +85,14 @@ class SimulationTest {
     }
 
     @Test
-    fun testRunSimulationGeneratesOutputForAllUnitOperations() {
+    fun testSubsequentCultivationsUseOutputFromPreviousCultivations() {
         val factory = SimulationFactory()
         val operations = listOf("batch-cultivation", "batch-cultivation", "batch-cultivation")
         val settings = File("src/test/resources/simulationSettingsThreeBatch.json").readText()
         val simulation = factory.createNewSimulation(operations,settings)
         val expected = SimulationOutput(listOf(OperationOutput(17.51, listOf(listOf(0.0, 0.12, 20.0), listOf(5.0, 0.4, 18.79), listOf(10.0, 1.32, 11.99), listOf(15.0, 4.39, -19.97)), CostEstimation(733.03), PowerConsumption(4886.84)),
-            OperationOutput(9.65, listOf(listOf(0.0, 0.12, 20.0), listOf(5.0, 1.46, 15.07), listOf(10.0, 17.81, -100.22)), CostEstimation(403.98), PowerConsumption(2693.2)),
-            OperationOutput(6.37, listOf(listOf(0.0, 0.32, 10.0), listOf(5.0, 3.9, -3.16)), CostEstimation(266.67), PowerConsumption(1777.79))))
-
+            OperationOutput(8.0, listOf(listOf(0.0, 0.28, 20.0), listOf(5.0, 3.37, 8.63), listOf(10.0, 41.07, -257.22)), CostEstimation(334.91), PowerConsumption(2232.71)),
+            OperationOutput(2.33, listOf(listOf(0.0, 3.37, 10.0), listOf(5.0, 41.06, -128.58)), CostEstimation(97.54), PowerConsumption(650.28))))
 
         val result = simulation.runSimulation()
 

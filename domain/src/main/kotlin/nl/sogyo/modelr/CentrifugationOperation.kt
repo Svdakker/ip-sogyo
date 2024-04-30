@@ -1,6 +1,7 @@
 package nl.sogyo.modelr
 
 import nl.sogyo.modelr.data.CostEstimation
+import nl.sogyo.modelr.data.OperationOutput
 import nl.sogyo.modelr.data.PowerConsumption
 import nl.sogyo.modelr.data.batchCultivationRequest.CostFactors
 import nl.sogyo.modelr.data.centrifugationRequest.CentrifugationInput
@@ -15,6 +16,10 @@ class CentrifugationOperation(private val input: CentrifugationInput,
 
     override fun getNextOperation(): UnitOperation? {
         return this.nextOperation
+    }
+
+    override fun generateOutput(previousResult: OperationOutput?, previousOperation: UnitOperation?): OperationOutput {
+        return OperationOutput(calculateDuration(), modelOperation(), calculateCosts(), calculateEnergyConsumption())
     }
 
     /**

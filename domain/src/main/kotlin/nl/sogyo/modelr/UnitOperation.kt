@@ -7,9 +7,7 @@ import java.math.RoundingMode
 
 abstract class UnitOperation {
 
-    fun generateOutput(): OperationOutput {
-        return OperationOutput(calculateDuration(), modelOperation(), calculateCosts(), calculateEnergyConsumption())
-    }
+    abstract fun generateOutput(previousResult: OperationOutput? = null, previousOperation: UnitOperation? = null): OperationOutput
 
     abstract fun getNextOperation(): UnitOperation?
 

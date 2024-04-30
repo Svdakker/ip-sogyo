@@ -14,11 +14,13 @@ class Simulation(private val firstUnitOperation: UnitOperation) : ISimulation {
         return runNextOperations(output, this.firstUnitOperation)
     }
 
-    private fun runNextOperations(output: List<OperationOutput>, accumulator: UnitOperation?): List<OperationOutput> {
-        return if (accumulator!!.getNextOperation() != null) {
-            runNextOperations(output + accumulator.getNextOperation()!!.generateOutput(), accumulator.getNextOperation())
+    private fun runNextOperations(accumulator: List<OperationOutput>, previousOperation: UnitOperation?): List<OperationOutput> {
+        return if (previousOperation!!.getNextOperation() != null) {
+            val currentOperation = previousOperation.getNextOperation()
+            val output = currentOperation!!.generateOutput(accumulator.last(), previousOperation)
+            runNextOperations(accumulator + output, currentOperation)
         } else {
-            output
+            accumulator
         }
     }
 

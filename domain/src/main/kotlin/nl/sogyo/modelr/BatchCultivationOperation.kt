@@ -13,8 +13,43 @@ class BatchCultivationOperation(private val input: BatchCultivationInput,
                                 private val nextOperation: UnitOperation? = null) :
     UnitOperation() {
 
+    private var initialCellDensity = input.cultivationSettings.initialCellDensity
+
+    override fun generateOutput(previousResult: OperationOutput?, previousOperation: UnitOperation?): OperationOutput {
+        if (previousResult != null && previousOperation != null) {
+            setInitialCellDensity(findInitialCellDensity(previousResult, previousOperation))
+        }
+        return OperationOutput(calculateDuration(), modelOperation(), calculateCosts(), calculateEnergyConsumption())
+    }
+
     override fun getNextOperation(): UnitOperation? {
         return this.nextOperation
+    }
+
+    private fun getInitialCellDensity(): Double {
+        return this.initialCellDensity
+    }
+
+    private fun setInitialCellDensity(initialCellDensity: Double) {
+        this.initialCellDensity = initialCellDensity
+    }
+
+    private fun getCultivationInput(): BatchCultivationInput {
+        return this.input
+    }
+
+    private fun findInitialCellDensity(previousResult: OperationOutput, previousOperation: UnitOperation): Double {
+        return when (previousOperation::class) {
+            BatchCultivationOperation::class -> calculateInitialCellDensity(previousResult, previousOperation as BatchCultivationOperation)
+            else -> throw IllegalArgumentException("Operation not supported as previous operation (${previousOperation::class.simpleName})")
+        }
+    }
+
+    private fun calculateInitialCellDensity(previousResult: OperationOutput, previousOperation: BatchCultivationOperation): Double {
+        val previousModel = previousResult.model
+        val finalCellDensity = previousModel[previousModel.size - 2][1]
+        val finalCellMass = multiply(finalCellDensity, previousOperation.getCultivationInput().reactorSettings.workingVolume!!)
+        return divide(finalCellMass, input.reactorSettings.workingVolume!!)
     }
 
     /**
@@ -61,18 +96,18 @@ class BatchCultivationOperation(private val input: BatchCultivationInput,
      */
 
     override fun calculateDuration(): Double {
-        return round(divide(ln(divide(calculateFinalCellDensity(), input.cultivationSettings.initialCellDensity)), input.cultivationSettings.maxGrowthRate!!))
+        return round(divide(ln(divide(calculateFinalCellDensity(), getInitialCellDensity())), input.cultivationSettings.maxGrowthRate!!))
     }
 
     fun calculateFinalCellDensity(): Double {
-        return (input.cultivationSettings.initialCellDensity + divide(
+        return (getInitialCellDensity() + divide(
             multiply(input.cultivationSettings.initialSugarConcentration, input.cultivationSettings.yield!!),
             (1 + divide(multiply(input.cultivationSettings.maintenance!!, input.cultivationSettings.yield), input.cultivationSettings.maxGrowthRate!!))
         ))
     }
 
     fun calculateCellDensity(timePoint: Double): Double {
-        return round(multiply(input.cultivationSettings.initialCellDensity, exp(multiply(input.cultivationSettings.maxGrowthRate!!, timePoint))))
+        return round(multiply(getInitialCellDensity(), exp(multiply(input.cultivationSettings.maxGrowthRate!!, timePoint))))
     }
 
     fun calculateSugarConcentration(timePoint: Double): Double {
