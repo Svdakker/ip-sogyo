@@ -21,11 +21,26 @@ class CentrifugationOperation(private val input: CentrifugationInput, private va
      */
 
     override fun modelOperation(): List<List<Double>> {
-        TODO("Not yet implemented")
+        val model = mutableListOf<List<Double>>()
+        modelDataPoints(model, input.centrifugationSettings.minLiquidFlowRate)
+        return model
     }
 
-    fun calculateEfficiencyOfSeparation(): Double {
-        return round(divide(multiply(calculateSettlingVelocity(), calculateSigmaFactor()), input.centrifugationSettings.liquidFlowRate))
+    private fun modelDataPoints(model: MutableList<List<Double>>, flowRate: Double) {
+        if (flowRate < input.centrifugationSettings.maxLiquidFlowRate) {
+            model.add(calculateDataPoint(flowRate))
+            modelDataPoints(model,flowRate + multiply(0.20, flowRate))
+        } else {
+            model.add(calculateDataPoint(input.centrifugationSettings.maxLiquidFlowRate))
+        }
+    }
+
+    private fun calculateDataPoint(flowRate: Double): List<Double> {
+        return listOf(flowRate, calculateEfficiencyOfSeparation(flowRate))
+    }
+
+    fun calculateEfficiencyOfSeparation(flowRate: Double): Double {
+        return round(divide(multiply(calculateSettlingVelocity(), calculateSigmaFactor()), flowRate))
     }
 
     private fun calculateSettlingVelocity(): Double {
@@ -41,7 +56,7 @@ class CentrifugationOperation(private val input: CentrifugationInput, private va
 
     private fun calculateRelativeGravitationalVelocity(): Double {
         val centrifugeProperties = input.centrifugeProperties
-        return divide(multiply(calculateAngularVelocity().pow(2), (centrifugeProperties.outerRadius - centrifugeProperties.innerRadius)), 9.81)
+        return multiply(calculateAngularVelocity().pow(2), (centrifugeProperties.outerRadius - centrifugeProperties.innerRadius))
     }
 
     private fun calculateSigmaFactor(): Double {
@@ -64,18 +79,34 @@ class CentrifugationOperation(private val input: CentrifugationInput, private va
     }
 
     private fun calculateAngularVelocity(): Double {
-        return divide(multiply(multiply(input.centrifugationSettings.frequencyOfRotation, PI), 2.0), 60.0)
+        val centrifugationSettings = input.centrifugationSettings
+        return multiply(multiply(2.0, PI), divide(centrifugationSettings.frequencyOfRotation, 60.0))
     }
+
+    /**
+     * Calculations to find the duration of a centrifugation operation
+     *
+     */
 
     override fun calculateDuration(): Double {
-        TODO("Not yet implemented")
+        return 100.0
     }
+
+    /**
+     * Calculations to find the energy consumption in a centrifugation operation
+     *
+     */
 
     override fun calculateEnergyConsumption(): PowerConsumption {
-        TODO("Not yet implemented")
+        return PowerConsumption(100.0)
     }
 
+    /**
+     * Calculations to find the costs related to running a centrifugation operation
+     *
+     */
+
     override fun calculateCosts(): CostEstimation {
-        TODO("Not yet implemented")
+        return CostEstimation(100.0)
     }
 }
