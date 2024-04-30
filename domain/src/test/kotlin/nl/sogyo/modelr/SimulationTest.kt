@@ -91,9 +91,8 @@ class SimulationTest {
         val settings = File("src/test/resources/simulationSettingsThreeBatch.json").readText()
         val simulation = factory.createNewSimulation(operations,settings)
         val expected = SimulationOutput(listOf(OperationOutput(17.51, listOf(listOf(0.0, 0.12, 20.0), listOf(5.0, 0.4, 18.79), listOf(10.0, 1.32, 11.99), listOf(15.0, 4.39, -19.97)), CostEstimation(733.03), PowerConsumption(4886.84)),
-            OperationOutput(8.0, listOf(listOf(0.0, 0.28, 20.0), listOf(5.0, 3.37, 8.63), listOf(10.0, 41.07, -257.22)), CostEstimation(334.91), PowerConsumption(2232.71)),
-            OperationOutput(2.33, listOf(listOf(0.0, 3.37, 10.0), listOf(5.0, 41.06, -128.58)), CostEstimation(97.54), PowerConsumption(650.28))))
-
+            OperationOutput(8.23, listOf(listOf(0.0, 0.28, 22.51), listOf(5.0, 3.37, 11.14), listOf(10.0, 41.07, -254.71)), CostEstimation(344.54), PowerConsumption(2296.9)),
+            OperationOutput(3.46, listOf(listOf(0.0, 3.37, 21.14), listOf(5.0, 41.06, -117.44)), CostEstimation(energy=144.85), PowerConsumption(operations=965.65))))
         val result = simulation.runSimulation()
 
         assertEquals(expected, result)

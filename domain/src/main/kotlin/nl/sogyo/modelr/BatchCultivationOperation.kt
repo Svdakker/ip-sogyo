@@ -14,10 +14,11 @@ class BatchCultivationOperation(private val input: BatchCultivationInput,
     UnitOperation() {
 
     private var initialCellDensity = input.cultivationSettings.initialCellDensity
+    private var initialSugarConcentration = input.cultivationSettings.initialSugarConcentration
 
     override fun generateOutput(previousResult: OperationOutput?, previousOperation: UnitOperation?): OperationOutput {
         if (previousResult != null && previousOperation != null) {
-            setInitialCellDensity(findInitialCellDensity(previousResult, previousOperation))
+            correctForPreviousResult(previousResult, previousOperation)
         }
         return OperationOutput(calculateDuration(), modelOperation(), calculateCosts(), calculateEnergyConsumption())
     }
@@ -34,22 +35,37 @@ class BatchCultivationOperation(private val input: BatchCultivationInput,
         this.initialCellDensity = initialCellDensity
     }
 
+    private fun getInitialSugarConcentration(): Double {
+        return this.initialSugarConcentration
+    }
+
+    private fun setInitialSugarConcentration(initialSugarConcentration: Double) {
+        this.initialSugarConcentration = initialSugarConcentration
+    }
+
     private fun getCultivationInput(): BatchCultivationInput {
         return this.input
     }
 
-    private fun findInitialCellDensity(previousResult: OperationOutput, previousOperation: UnitOperation): Double {
+    private fun correctForPreviousResult(previousResult: OperationOutput, previousOperation: UnitOperation) {
         return when (previousOperation::class) {
-            BatchCultivationOperation::class -> calculateInitialCellDensity(previousResult, previousOperation as BatchCultivationOperation)
+            BatchCultivationOperation::class -> setCorrection(previousResult, previousOperation as BatchCultivationOperation)
             else -> throw IllegalArgumentException("Operation not supported as previous operation (${previousOperation::class.simpleName})")
         }
     }
 
-    private fun calculateInitialCellDensity(previousResult: OperationOutput, previousOperation: BatchCultivationOperation): Double {
+    private fun setCorrection(previousResult: OperationOutput, previousOperation: BatchCultivationOperation) {
         val previousModel = previousResult.model
-        val finalCellDensity = previousModel[previousModel.size - 2][1]
-        val finalCellMass = multiply(finalCellDensity, previousOperation.getCultivationInput().reactorSettings.workingVolume!!)
-        return divide(finalCellMass, input.reactorSettings.workingVolume!!)
+        val previousVolume = previousOperation.getCultivationInput().reactorSettings.workingVolume
+        val currentVolume = input.reactorSettings.workingVolume
+
+        val finalDataPoint = previousModel[previousModel.size - 2]
+
+        val finalCellMass = multiply(finalDataPoint[1], previousVolume!!)
+        val finalSugarMass = multiply(finalDataPoint[2], previousVolume)
+
+        setInitialCellDensity(divide(finalCellMass, currentVolume!!))
+        setInitialSugarConcentration(divide(finalSugarMass, currentVolume) + getInitialSugarConcentration())
     }
 
     /**
@@ -101,7 +117,7 @@ class BatchCultivationOperation(private val input: BatchCultivationInput,
 
     fun calculateFinalCellDensity(): Double {
         return (getInitialCellDensity() + divide(
-            multiply(input.cultivationSettings.initialSugarConcentration, input.cultivationSettings.yield!!),
+            multiply(getInitialSugarConcentration(), input.cultivationSettings.yield!!),
             (1 + divide(multiply(input.cultivationSettings.maintenance!!, input.cultivationSettings.yield), input.cultivationSettings.maxGrowthRate!!))
         ))
     }
@@ -112,7 +128,7 @@ class BatchCultivationOperation(private val input: BatchCultivationInput,
 
     fun calculateSugarConcentration(timePoint: Double): Double {
         return round(
-            input.cultivationSettings.initialSugarConcentration - multiply(
+            getInitialSugarConcentration() - multiply(
                 multiply(
                     calculateSugarUptakeRate(),
                     calculateCellDensity(timePoint)
