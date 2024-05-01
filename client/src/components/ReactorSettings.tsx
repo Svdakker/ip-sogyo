@@ -1,7 +1,16 @@
 import {FormProps} from "../Types.tsx";
 import classNames from "classnames";
+import {useState} from "react";
 
-export const ReactorSettings = ( { labelStyling, inputStyling, constants }: FormProps ) => {
+export const ReactorSettings = ( { update, labelStyling, inputStyling, constants }: FormProps ) => {
+    const[reactorTypeInput, setReactorTypeInput] = useState<string | undefined>(undefined)
+    const[nominalVolumeInput, setNominalVolumeInput] = useState<number | undefined>(undefined)
+    const[workingVolumeInput, setWorkingVolumeInput] = useState<number | undefined>(undefined)
+    const[heightInput, setHeightInput] = useState<number | undefined>(undefined)
+    const[widthInput, setWidthInput] = useState<number | undefined>(undefined)
+    const[impellerTypeInput, setImpellerTypeInput] = useState<string | undefined>(undefined)
+    const[numberOfImpellersInput, setNumberOfImpellersInput] = useState<number | undefined>(undefined)
+    const[agitatorSpeedInput, setAgitatorSpeedInput] = useState<number | undefined>(undefined)
 
     const toggleAdvancedReactorSettings = () => {
         if (document.getElementById("reactoradvanced")!.style.display == "block") {
@@ -23,30 +32,50 @@ export const ReactorSettings = ( { labelStyling, inputStyling, constants }: Form
         })
     }
 
+    const updateReactorSettings = (e: Event) => {
+        e.preventDefault()
+        const reactorSettings = {
+            reactorType: reactorTypeInput,
+            nominalVolume: nominalVolumeInput,
+            workingVolume: workingVolumeInput,
+            height: heightInput,
+            width: widthInput,
+            impellerType: impellerTypeInput,
+            numberOfImpellers: numberOfImpellersInput,
+            agitatorSpeed: agitatorSpeedInput,
+        }
+        update("reactor", reactorSettings)
+    }
+
+
     return (
         <>
-            <div className="grid gap-4 mb-4 md:grid-cols-2">
+            <form onSubmit={(e) => e.preventDefault()} onChange={() => updateReactorSettings} className="grid gap-4 mb-4 md:grid-cols-2">
                 <div>
                     <label className={labelStyling}>Reactor:</label>
-                    <select className={inputStyling} id="reactorType">
+                    <select className={inputStyling} id="reactorType"
+                            onChange={(e) => setReactorTypeInput(e.target.value)}>
                         {setPossibleReactors()}
                     </select>
                 </div>
                 <div>
                     <label className={labelStyling}>Impeller:</label>
-                    <select className={inputStyling} id="impellerType">
+                    <select className={inputStyling} id="impellerType"
+                            onChange={(e) => setImpellerTypeInput(e.target.value)}>
                         {setPossibleImpellers()}
                     </select>
                 </div>
                 <div>
                     <label className={labelStyling}>Number of impellers:</label>
                     <input className={inputStyling} id="numberOfImpellers" type="number" step="any" min="0"
-                           placeholder={"-"} required/>
+                           placeholder={"-"} required
+                           onChange={(e) => setNumberOfImpellersInput(Number(e.target.value))}/>
                 </div>
                 <div>
                     <label className={labelStyling}>Agitator speed:</label>
                     <input className={inputStyling} id="agitatorSpeed" type="number" step="any" min="0"
-                           placeholder={"/s"} required/>
+                           placeholder={"/s"} required
+                           onChange={(e) => setAgitatorSpeedInput(Number(e.target.value))}/>
                 </div>
                 <button onClick={toggleAdvancedReactorSettings} className={classNames("text-left text-xs italic text-white font-bold")}>
                     Advanced reactor settings
@@ -55,25 +84,29 @@ export const ReactorSettings = ( { labelStyling, inputStyling, constants }: Form
                     <div>
                         <label className={labelStyling}>Nominal volume:</label>
                         <input className={inputStyling} id="nominalVolume" type="number"
-                               placeholder={"Total reactor volume (m3)"}/>
+                               placeholder={"Total reactor volume (m3)"}
+                               onChange={(e) => setNominalVolumeInput(Number(e.target.value))}/>
                     </div>
                     <div>
                         <label className={labelStyling}>Working volume:</label>
                         <input className={inputStyling} id="workingVolume" type="number" step="any" min="0"
-                               placeholder={"m3"}/>
+                               placeholder={"m3"}
+                               onChange={(e) => setWorkingVolumeInput(Number(e.target.value))}/>
                     </div>
                     <div>
                         <label className={labelStyling}>Height:</label>
                         <input className={inputStyling} id="height" type="number" step="any" min="0"
-                               placeholder={"m"}/>
+                               placeholder={"m"}
+                               onChange={(e) => setHeightInput(Number(e.target.value))}/>
                     </div>
                     <div>
                         <label className={labelStyling}>Width:</label>
                         <input className={inputStyling} id="width" type="number" step="any" min="0"
-                               placeholder={"m"}/>
+                               placeholder={"m"}
+                               onChange={(e) => setWidthInput(Number(e.target.value))}/>
                     </div>
                 </div>
-            </div>
+            </form>
         </>
     )
 }

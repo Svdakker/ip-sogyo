@@ -6,52 +6,22 @@ import Chart from "chart.js/auto";
 import {CategoryScale} from "chart.js";
 import classNames from "classnames";
 import {useNavigate} from "react-router-dom";
+import {useSimulationRequest} from "../contexts/simulationRequestContext.tsx";
 
 Chart.register(CategoryScale);
 
 export const Simulation = () => {
+    const { simulationRequest } = useSimulationRequest()
+
     const navigate = useNavigate()
 
-    const batchRequirements = ["batch-cultivation", "microorganism", "accuracy", "initialSugarConcentration", "initialCellDensity", "maxGrowthRate", "maintenance", "yield"]
-
-    const reactorRequirements = ["reactorType","nominalVolume", "workingVolume", "height", "width", "impellerType", "numberOfImpellers", "agitatorSpeed"]
-
-    const givenInput = () => { return {
-        operationType: document.getElementById(batchRequirements[0])?.innerText.toLowerCase(),
-        cultivationSettings: findCultivationInput(),
-        reactorSettings: findReactorInput()
-    } }
-
-    const findCultivationInput = () => {
-        return {
-            microorganism: (document.getElementById(batchRequirements[1]) as HTMLInputElement).value.toLowerCase(),
-            accuracy: (document.getElementById(batchRequirements[2]) as HTMLInputElement).value,
-            initialSugarConcentration: (document.getElementById(batchRequirements[3]) as HTMLInputElement).value,
-            initialCellDensity: (document.getElementById(batchRequirements[4]) as HTMLInputElement).value,
-            maxGrowthRate: (document.getElementById(batchRequirements[5]) as HTMLInputElement).value,
-            maintenance: (document.getElementById(batchRequirements[6]) as HTMLInputElement).value,
-            yield: (document.getElementById(batchRequirements[7]) as HTMLInputElement).value,
-        }
-    }
-
-    const findReactorInput = () => {
-        return {
-            reactorType: (document.getElementById(reactorRequirements[0]) as HTMLInputElement).value.toLowerCase(),
-            nominalVolume: (document.getElementById(reactorRequirements[1]) as HTMLInputElement).value,
-            workingVolume: (document.getElementById(reactorRequirements[2]) as HTMLInputElement).value,
-            height: (document.getElementById(reactorRequirements[3]) as HTMLInputElement).value,
-            width: (document.getElementById(reactorRequirements[4]) as HTMLInputElement).value,
-            impellerType: (document.getElementById(reactorRequirements[5]) as HTMLInputElement).value.toLowerCase(),
-            numberOfImpellers: (document.getElementById(reactorRequirements[6]) as HTMLInputElement).value,
-            agitatorSpeed: (document.getElementById(reactorRequirements[7]) as HTMLInputElement).value,
-        }
-    }
-
     const requestSimulation = async () => {
-        const operation = givenInput()
-        const input = {
-            order: [operation.operationType!],
-            batchCultivation: operation
+        const input = () => {
+            if (simulationRequest != undefined) {
+                return simulationRequest
+            } else {
+                alert("There is no simulation request to run")
+            }
         }
         const result = await runSimulation(input)
         if(isSaved(result)) {
@@ -62,8 +32,15 @@ export const Simulation = () => {
     return (
         <div className="relative h-screen w-screen bg-cover bg-center bg-cyan-950 flex justify-center">
             <div id="config-container" className={classNames("block")}>
-                <BatchCultivation onClick={requestSimulation} icon={batch}/>
+                <BatchCultivation icon={batch}/>
             </div>
+            <button onClick={requestSimulation} className={classNames(
+                "bg-cyan-800 ring-4 ring-opacity-25 shadow-2xl",
+                "ring-cyan-700 rounded-full p-3 text-center",
+                "text-sm text-white font-black"
+            )}>
+                RUN!
+            </button>
         </div>
     )
 }

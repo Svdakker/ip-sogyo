@@ -1,3 +1,5 @@
+import {CultivationSettingsRequest, ReactorSettingsRequest} from "./RequestTypes.tsx";
+
 export type Output = {
     value: {
         batchCultivation: BatchCultivation | undefined
@@ -42,6 +44,7 @@ export type PowerConsumption = {
 }
 
 export type FormProps = {
+    update: (type: string, settings: CultivationSettingsRequest | ReactorSettingsRequest) => void
     labelStyling: string
     inputStyling: string
     constants: {
