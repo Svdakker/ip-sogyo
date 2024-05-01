@@ -82,4 +82,29 @@ class SimulationResultAcceptanceTest {
         assertEquals(expectedStatus, result.response.status)
         assertEquals(expectedResponse, result.response.contentAsString)
     }
+
+    @Test
+    fun `scenario retrieve simulation result is successful for three subsequent batch cultivations`() {
+        //Setup
+        val expected = File("src/test/resources/resultThreeBatch.json").readText()
+        val payload = File("src/test/resources/payloadThreeBatch.json").readText()
+        impellerRepository.save(Impeller("rushton turbine", 0.97, 0.72, 5.2))
+        microorganismRepository.save(Microorganism(LocalDate.now(), "saccharomyces cerevisiae", 0.24,0.4,0.00703))
+        reactorRepository.save(Reactor(LocalDate.now(), "example", 70.0,52.5, 9.29,3.10))
+        costFactorRepository.save(CostFactor(LocalDate.now(), 0.15))
+
+        mockMvc.perform(post("/modelr/api/run-simulation")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(payload))
+
+        //Act
+        val result = mockMvc.perform(
+            get("/modelr/api/simulation-result")
+        )
+            .andExpect(status().isOk)
+            .andReturn()
+
+        //Assert
+        assertEquals(expected, result.response.contentAsString)
+    }
 }

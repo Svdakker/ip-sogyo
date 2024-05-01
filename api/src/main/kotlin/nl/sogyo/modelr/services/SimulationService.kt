@@ -40,7 +40,7 @@ class SimulationService(
 
             val simulation: ISimulation = factory.createNewSimulation(operations, settings)
 
-            val result = SimulationResultDTO(simulation.runSimulation().output)
+            val result = objectMapper.readValue<SimulationResultDTO>(objectMapper.writeValueAsString(simulation.runSimulation()))
 
             saveResults(result, objectMapper, simulationId)
 
@@ -66,10 +66,10 @@ class SimulationService(
     }
 
     private fun createSimulation(operations: List<UnitOperation>): Simulation {
-        var batch: BatchCultivation? = null
+        val batch: MutableList<BatchCultivation?> = mutableListOf()
         operations.map {operation ->
             when (operation.type) {
-                "batch-cultivation" -> { batch = batchCultivationRepository.findById(operation.id).get() }
+                "batch-cultivation" -> { batch.add(batchCultivationRepository.findById(operation.id).get()) }
                 else -> throw IllegalArgumentException("Unexpected operation type $operation")
             }
         }
@@ -172,9 +172,17 @@ class SimulationService(
     private fun saveResults(result: SimulationResultDTO, objectMapper: ObjectMapper, simulationId: Long) {
         val simulation = simulationRepository.findById(simulationId).get()
 
-        if (simulation.batchCultivation != null) {
-            val resultString = objectMapper.writeValueAsString(result)
-            batchCultivationRepository.setResultForBatchCultivation(simulation.batchCultivation!!.id!!, resultString)
+        val resultStrings = result.output.map { operationResultDTO -> objectMapper.writeValueAsString(operationResultDTO) }
+
+        saveBatchCultivations(simulation, resultStrings)
+    }
+
+    private fun saveBatchCultivations(simulation: Simulation, resultStrings: List<String>) {
+        simulation.batchCultivation.forEach {
+            batch -> if (batch != null) {
+                val position = batch.position
+                batchCultivationRepository.setResultForBatchCultivation(batch.id!!, resultStrings[position])
+            }
         }
     }
 
@@ -202,20 +210,33 @@ class SimulationService(
         if (simulation == null) {
             throw NoSimulationFoundException("No simulation found in DB")
         } else {
-            val batchCultivationResult = checkForBatchCultivationResult(simulation, objectMapper)
+            val batchCultivationResult = bundleBatchCultivationResults(simulation, objectMapper)
 
-            return SimulationResultDTO(batchCultivationResult)
+            return orderResults(batchCultivationResult)
         }
     }
 
-    private fun checkForBatchCultivationResult(simulation: Simulation, objectMapper: ObjectMapper): OperationResultDTO? {
-        if (simulation.batchCultivation == null) {
-            return null
-        } else {
-            val batchCultivation = simulation.batchCultivation!!
-            val batchResult = batchCultivation.result
-            return objectMapper.readValue<OperationResultDTO>(batchResult!!)
+    private fun bundleBatchCultivationResults(simulation: Simulation, objectMapper: ObjectMapper): MutableMap<Int, OperationResultDTO> {
+        val batchCultivations: MutableMap<Int, OperationResultDTO> = mutableMapOf()
+        simulation.batchCultivation.forEach { batch -> run {
+                val position = batch?.position!!
+                batchCultivations[position] = objectMapper.readValue<OperationResultDTO>(batch.result!!)
+            }
         }
+        return batchCultivations
+    }
+
+    private fun orderResults(batchCultivations: MutableMap<Int, OperationResultDTO>): SimulationResultDTO {
+        val output: MutableList<OperationResultDTO> = mutableListOf()
+        val order: MutableList<String> = mutableListOf()
+
+        batchCultivations.forEach { batch -> run {
+                output.add(batch.key, batch.value)
+                order.add(batch.key, "batch-cultivation")
+            }
+        }
+
+        return SimulationResultDTO(order, output)
     }
 
     @Transactional

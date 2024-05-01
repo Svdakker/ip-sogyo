@@ -4,9 +4,9 @@ import jakarta.persistence.*
 
 @Entity
 class Simulation(
-    @OneToOne(cascade = [CascadeType.ALL])
+    @OneToMany(cascade = [CascadeType.ALL])
     @JoinColumn(name = "batch_id", nullable = true)
-    var batchCultivation: BatchCultivation? = null, //foreign key to possible BatchCultivation
+    var batchCultivation: List<BatchCultivation?> = emptyList(), //foreign key to possible BatchCultivations
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
