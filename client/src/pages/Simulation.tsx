@@ -16,16 +16,12 @@ export const Simulation = () => {
     const navigate = useNavigate()
 
     const requestSimulation = async () => {
-        const input = () => {
-            if (simulationRequest != undefined) {
-                return simulationRequest
-            } else {
-                alert("There is no simulation request to run")
+        const input = findInput()
+        if (input) {
+            const result = await runSimulation(input)
+            if (isSaved(result)) {
+                navigate("/result")
             }
-        }
-        const result = await runSimulation(input)
-        if(isSaved(result)) {
-            navigate("/result")
         }
     }
 
@@ -43,4 +39,12 @@ export const Simulation = () => {
             </button>
         </div>
     )
+
+    function findInput() {
+        if (simulationRequest != undefined) {
+            return simulationRequest
+        } else {
+            alert("There is no simulation request to run")
+        }
+    }
 }
