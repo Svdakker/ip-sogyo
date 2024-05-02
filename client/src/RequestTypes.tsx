@@ -33,6 +33,7 @@ export type ReactorSettingsRequest = {
 }
 
 export type FormProps = {
+    position: number,
     labelStyling: string
     inputStyling: string
     constants: {

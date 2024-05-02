@@ -1,7 +1,7 @@
 import {FormProps, UpdateCultivationSettings} from "../RequestTypes.tsx";
 import classNames from "classnames";
 
-export const CultivationSettings = ( { labelStyling, inputStyling, constants, stateUpdaters }: FormProps ) => {
+export const CultivationSettings = ( { position, labelStyling, inputStyling, constants, stateUpdaters }: FormProps ) => {
 
     const toggleAdvancedCultivationSettings = () => {
         if (document.getElementById("cultivationadvanced")!.style.display == "block") {
@@ -43,7 +43,7 @@ export const CultivationSettings = ( { labelStyling, inputStyling, constants, st
                 <div>
                     <label className={labelStyling}>Initial cell density (Cx0):</label>
                     <input className={inputStyling} id="initialCellDensity" type="number" step="any" min="0"
-                           placeholder={"kg/m3"} required
+                           placeholder={"kg/m3"} disabled={checkDisabled()}
                            onChange={(e) => (stateUpdaters as UpdateCultivationSettings).updateInitialCellDensity(Number(e.target.value))}/>
                 </div>
                 <button onClick={toggleAdvancedCultivationSettings} className={classNames("text-left text-xs italic text-white font-bold")}>
@@ -72,4 +72,8 @@ export const CultivationSettings = ( { labelStyling, inputStyling, constants, st
             </div>
         </>
     )
+
+    function checkDisabled(): boolean {
+        return position > 0;
+    }
 }

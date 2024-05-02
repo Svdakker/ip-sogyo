@@ -9,10 +9,13 @@ import {BatchCultivationRequest, UpdateCultivationSettings, UpdateReactorSetting
 
 interface UnitOperation {
     icon: string
+    position: number
 }
 
-export const BatchCultivation = ({ icon }: UnitOperation) => {
+export const BatchCultivation = ({ icon, position }: UnitOperation) => {
     const { simulationRequest, setSimulationRequest } = useSimulationRequest()
+
+    const [openSettings, setOpenSettings] = useState(false)
 
     const [ constants, setConstants] = useState<Constants | undefined>(undefined)
 
@@ -92,7 +95,15 @@ export const BatchCultivation = ({ icon }: UnitOperation) => {
 
     const missingCultivationSettings = (): Boolean => {
         return ( microorganismInput == undefined || accuracyInput == undefined || initialSugarConcentrationInput == undefined
-            || initialCellDensityInput == undefined )
+            || checkInitialCellDensity() )
+    }
+
+    const checkInitialCellDensity = (): Boolean => {
+        if (position > 0) {
+            return false
+        } else {
+            return initialCellDensityInput == undefined
+        }
     }
 
     const missingReactorSettings = (): Boolean => {
@@ -106,14 +117,23 @@ export const BatchCultivation = ({ icon }: UnitOperation) => {
                                     "p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white")
 
     return (
-        <>
-            <img className="w-1/6 h-1/4" onClick={toggleSettings} src={icon} alt={"image not found"}/>
-            <form onSubmit={(e) => e.preventDefault()} id="settings" className="absolute top-1/4 right-1/5 overflow-visible hidden p-4 rounded-xl bg-gray-900 shadow-2xl">
+        <div key={position}>
+            <img className="w-1/6 h-1/4" onClick={() => setOpenSettings(!openSettings)} src={icon} alt={"image not found"}/>
+            {openSettings && form()}
+        </div>
+    )
+
+    function form() {
+        return (
+            <form onSubmit={(e) => e.preventDefault()}
+                  className="absolute top-1/4 right-1/5 overflow-visible p-4 rounded-xl bg-gray-900 shadow-2xl">
                 <div>
-                    <label className={classNames("block mb-2 text-md font-black text-white")} id="batch-cultivation">BATCH-CULTIVATION</label>
+                    <label className={classNames("block mb-2 text-md font-black text-white")}>BATCH-CULTIVATION</label>
                 </div>
-                <CultivationSettings labelStyling={labelStyling} inputStyling={inputStyling} constants={constants?.value} stateUpdaters={findStateUpdaters("cultivation")}/>
-                <ReactorSettings labelStyling={labelStyling} inputStyling={inputStyling} constants={constants?.value} stateUpdaters={findStateUpdaters("reactor")}/>
+                <CultivationSettings position={position} labelStyling={labelStyling} inputStyling={inputStyling}
+                                     constants={constants?.value} stateUpdaters={findStateUpdaters("cultivation")}/>
+                <ReactorSettings position={position} labelStyling={labelStyling} inputStyling={inputStyling}
+                                 constants={constants?.value} stateUpdaters={findStateUpdaters("reactor")}/>
                 <button onClick={saveOperation} className={classNames(
                     "bg-cyan-800 ring-4 ring-opacity-25 shadow-2xl",
                     "ring-cyan-700 rounded-full p-3 text-center",
@@ -121,8 +141,8 @@ export const BatchCultivation = ({ icon }: UnitOperation) => {
                 )}>SAVE
                 </button>
             </form>
-        </>
-    )
+        )
+    }
 
     function updateRequest(operation: BatchCultivationRequest) {
         if (simulationRequest?.order != undefined) {
