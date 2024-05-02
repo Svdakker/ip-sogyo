@@ -17,8 +17,8 @@ class BatchCultivationOperation(private val input: BatchCultivationInput,
     private var initialSugarConcentration = input.cultivationSettings.initialSugarConcentration
 
     override fun generateOutput(previousResult: OperationOutput?, previousOperation: UnitOperation?): OperationOutput {
-        if (previousResult != null && previousOperation != null) {
-            correctForPreviousResult(previousResult, previousOperation)
+        if (previousOperation != null) {
+            correctForPreviousResult(previousResult!!, previousOperation)
         }
         return OperationOutput(calculateDuration(), modelOperation(), calculateCosts(), calculateEnergyConsumption())
     }
@@ -48,9 +48,8 @@ class BatchCultivationOperation(private val input: BatchCultivationInput,
     }
 
     private fun correctForPreviousResult(previousResult: OperationOutput, previousOperation: UnitOperation) {
-        return when (previousOperation::class) {
-            BatchCultivationOperation::class -> setCorrection(previousResult, previousOperation as BatchCultivationOperation)
-            else -> throw IllegalArgumentException("Operation not supported as previous operation (${previousOperation::class.simpleName})")
+        if (previousOperation::class == BatchCultivationOperation::class) {
+            setCorrection(previousResult, previousOperation as BatchCultivationOperation)
         }
     }
 
