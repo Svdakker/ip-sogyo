@@ -48,19 +48,11 @@ export const BatchCultivation = ({ icon, position }: UnitOperation) => {
         return await fetchConstants()
     }
 
-    const toggleSettings = () => {
-        if (document.getElementById("settings")!.style.display == "block") {
-            document.getElementById("settings")!.style.display = "none"
-        } else {
-            document.getElementById("settings")!.style.display = "block"
-        }
-    }
-
     const saveOperation = () => {
         const operation = findRequest()
         if (operation != undefined) {
             updateRequest(operation);
-            toggleSettings()
+            setOpenSettings(!openSettings)
         } else {
             alert("Please fill in all required settings for the batch-cultivation!")
         }
