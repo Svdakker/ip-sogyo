@@ -12,9 +12,9 @@ export const CultivationSettings = ( { labelStyling, inputStyling, constants, st
     }
 
     const setPossibleMicroorganisms = () => {
+        (stateUpdaters as UpdateCultivationSettings).updateMicroorganism(constants?.microorganisms[constants?.microorganisms.length - 1])
         return constants?.microorganisms.map(function(val) {
-            (stateUpdaters as UpdateCultivationSettings).updateMicroorganism(val)
-            return <option>{val}</option>
+            return <option key={constants?.microorganisms.indexOf(val)}>{val}</option>
         })
     }
 

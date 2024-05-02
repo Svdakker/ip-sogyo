@@ -26,16 +26,17 @@ export const Simulation = () => {
     }
 
     return (
-        <div className="relative h-screen w-screen bg-cover bg-center bg-cyan-950 flex justify-center">
-            <div id="config-container" className={classNames("block")}>
+        <div className="relative h-screen w-screen bg-cover bg-center bg-cyan-950 flex flex-wrap justify-center">
+            <div className="h-1/6 basis-full"></div>
+            <div id="config-container" className={classNames("basis-full h-3/4")}>
                 <BatchCultivation icon={batch}/>
             </div>
             <button onClick={requestSimulation} className={classNames(
-                "bg-cyan-800 ring-4 ring-opacity-25 shadow-2xl",
+                "w-1/6 mt-3 mb-4 bg-cyan-800 ring-4 ring-opacity-25 shadow-2xl",
                 "ring-cyan-700 rounded-full p-3 text-center",
-                "text-sm text-white font-black"
+                "text-lg text-white font-black"
             )}>
-                RUN!
+                RUN SIMULATION!
             </button>
         </div>
     )

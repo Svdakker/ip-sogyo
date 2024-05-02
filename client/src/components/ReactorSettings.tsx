@@ -12,16 +12,16 @@ export const ReactorSettings = ( { labelStyling, inputStyling, constants, stateU
     }
 
     const setPossibleReactors = () => {
+        (stateUpdaters as UpdateReactorSettings).updateReactorType(constants?.reactors[constants?.reactors.length - 1])
         return constants?.reactors.map(function(val) {
-            (stateUpdaters as UpdateReactorSettings).updateReactorType(val)
-            return <option>{val}</option>
+            return <option key={constants?.reactors.indexOf(val)}>{val}</option>
         })
     }
 
     const setPossibleImpellers = () => {
+        (stateUpdaters as UpdateReactorSettings).updateImpellerType(constants?.impellers[constants?.impellers.length - 1])
         return constants?.impellers.map(function(val) {
-            (stateUpdaters as UpdateReactorSettings).updateImpellerType(val)
-            return <option>{val}</option>
+            return <option key={constants?.impellers.indexOf(val)}>{val}</option>
         })
     }
 
