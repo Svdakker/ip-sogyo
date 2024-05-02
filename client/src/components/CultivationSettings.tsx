@@ -1,15 +1,10 @@
 import {FormProps, UpdateCultivationSettings} from "../RequestTypes.tsx";
 import classNames from "classnames";
+import {useState} from "react";
 
 export const CultivationSettings = ( { position, labelStyling, inputStyling, constants, stateUpdaters }: FormProps ) => {
 
-    const toggleAdvancedCultivationSettings = () => {
-        if (document.getElementById("cultivationadvanced")!.style.display == "block") {
-            document.getElementById("cultivationadvanced")!.style.display = "none"
-        } else {
-            document.getElementById("cultivationadvanced")!.style.display = "block"
-        }
-    }
+    const [showAdvanced, setShowAdvanced] = useState(false)
 
     const setPossibleMicroorganisms = () => {
         (stateUpdaters as UpdateCultivationSettings).updateMicroorganism(constants?.microorganisms[constants?.microorganisms.length - 1])
@@ -40,40 +35,52 @@ export const CultivationSettings = ( { position, labelStyling, inputStyling, con
                            placeholder={"kg/m3"} required
                            onChange={(e) => (stateUpdaters as UpdateCultivationSettings).updateInitialSugarConcentration(Number(e.target.value))}/>
                 </div>
-                <div>
-                    <label className={labelStyling}>Initial cell density (Cx0):</label>
-                    <input className={inputStyling} id="initialCellDensity" type="number" step="any" min="0"
-                           placeholder={"kg/m3"} disabled={checkDisabled()}
-                           onChange={(e) => (stateUpdaters as UpdateCultivationSettings).updateInitialCellDensity(Number(e.target.value))}/>
-                </div>
-                <button onClick={toggleAdvancedCultivationSettings} className={classNames("text-left text-xs italic text-white font-bold")}>
+                {!checkDisabled() && initialCellDensity()}
+                <button onClick={() => setShowAdvanced(!showAdvanced)} className={classNames("text-left text-xs italic text-white font-bold")}>
                     Advanced cultivation settings
                 </button>
-                <div className="hidden" id="cultivationadvanced">
-                    <div>
-                        <label className={labelStyling}>Maximum growth rate (mu):</label>
-                        <input className={inputStyling} id="maxGrowthRate" type="number" step="any" min="0"
-                               placeholder={"/h"}
-                               onChange={(e) => (stateUpdaters as UpdateCultivationSettings).updateMaxGrowthRate(Number(e.target.value))}/>
-                    </div>
-                    <div>
-                        <label className={labelStyling}>Maintenance coefficient (ms):</label>
-                        <input className={inputStyling} id="maintenance" type="number" step="any" min="0"
-                               placeholder={"kg/kgx/h"}
-                               onChange={(e) => (stateUpdaters as UpdateCultivationSettings).updateMaintenance(Number(e.target.value))}/>
-                    </div>
-                    <div>
-                        <label className={labelStyling}>Yield biomass on sugar (Yxs):</label>
-                        <input className={inputStyling} id="yield" type="number" step="any" min="0"
-                               placeholder={"-"}
-                               onChange={(e) => (stateUpdaters as UpdateCultivationSettings).updateYield(Number(e.target.value))}/>
-                    </div>
-                </div>
+                {showAdvanced && advancedCultivation()}
             </div>
         </>
     )
 
+    function initialCellDensity() {
+        return (
+            <div>
+                <label className={labelStyling}>Initial cell density (Cx0):</label>
+                <input className={inputStyling} id="initialCellDensity" type="number" step="any" min="0"
+                       placeholder={"kg/m3"}
+                       onChange={(e) => (stateUpdaters as UpdateCultivationSettings).updateInitialCellDensity(Number(e.target.value))}/>
+            </div>
+        )
+    }
+
     function checkDisabled(): boolean {
         return position > 0;
+    }
+
+    function advancedCultivation() {
+        return (
+            <div>
+                <div>
+                    <label className={labelStyling}>Maximum growth rate (mu):</label>
+                    <input className={inputStyling} id="maxGrowthRate" type="number" step="any" min="0"
+                           placeholder={"/h"}
+                           onChange={(e) => (stateUpdaters as UpdateCultivationSettings).updateMaxGrowthRate(Number(e.target.value))}/>
+                </div>
+                <div>
+                    <label className={labelStyling}>Maintenance coefficient (ms):</label>
+                    <input className={inputStyling} id="maintenance" type="number" step="any" min="0"
+                           placeholder={"kg/kgx/h"}
+                           onChange={(e) => (stateUpdaters as UpdateCultivationSettings).updateMaintenance(Number(e.target.value))}/>
+                </div>
+                <div>
+                    <label className={labelStyling}>Yield biomass on sugar (Yxs):</label>
+                    <input className={inputStyling} id="yield" type="number" step="any" min="0"
+                           placeholder={"-"}
+                           onChange={(e) => (stateUpdaters as UpdateCultivationSettings).updateYield(Number(e.target.value))}/>
+                </div>
+            </div>
+        )
     }
 }
