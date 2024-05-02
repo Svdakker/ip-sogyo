@@ -1,4 +1,4 @@
-import {Model} from "../Types.tsx";
+import {Model} from "../ResultTypes.tsx";
 import {Line} from "react-chartjs-2";
 
 export const BatchGraph = ( { data }: Model) => {

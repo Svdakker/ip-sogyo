@@ -1,4 +1,4 @@
-import {TableData} from "../Types.tsx";
+import {TableData} from "../ResultTypes.tsx";
 
 export const ResultTable = ( { duration, energyCosts, energyUsed }: TableData) => {
     return (

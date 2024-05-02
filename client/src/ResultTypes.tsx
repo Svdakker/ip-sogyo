@@ -1,6 +1,7 @@
 export type Output = {
     value: {
-        batchCultivation: BatchCultivation | undefined
+        order: string[] | undefined
+        output: BatchCultivation[] | undefined
     }
 }
 
@@ -39,16 +40,6 @@ export type CostEstimation = {
 
 export type PowerConsumption = {
     operations: number
-}
-
-export type FormProps = {
-    labelStyling: string
-    inputStyling: string
-    constants: {
-        microorganisms: string[]
-        reactors: string[]
-        impellers: string[]
-    } | undefined
 }
 
 export function isOutput(output: unknown): output is Output {

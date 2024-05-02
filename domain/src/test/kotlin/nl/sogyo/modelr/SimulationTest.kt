@@ -1,5 +1,9 @@
 package nl.sogyo.modelr
 
+import nl.sogyo.modelr.data.CostEstimation
+import nl.sogyo.modelr.data.OperationOutput
+import nl.sogyo.modelr.data.PowerConsumption
+import nl.sogyo.modelr.data.SimulationOutput
 import nl.sogyo.modelr.data.batchCultivationRequest.BatchCultivationInput
 import nl.sogyo.modelr.data.batchCultivationRequest.CultivationSettings
 import nl.sogyo.modelr.data.batchCultivationRequest.ReactorSettings
@@ -11,14 +15,14 @@ class SimulationTest {
 
     @Test
     fun testSimulationCanBeCreated() {
-        val simulation = Simulation(BatchCultivationCalc(BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5))))
+        val simulation = Simulation(BatchCultivationOperation(BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5))))
 
         assertNotNull(simulation)
     }
 
     @Test
     fun testSimulationStartsWithUnitOperation() {
-        val simulation = Simulation(BatchCultivationCalc(BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5))))
+        val simulation = Simulation(BatchCultivationOperation(BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5))))
 
         assertNotNull(simulation.getFirstUnitOperation())
     }
@@ -29,7 +33,7 @@ class SimulationTest {
         val settings = File("src/test/resources/simulationSettings.json").readText()
         val simulation = factory.createNewSimulation(listOf("batch-cultivation"),settings)
 
-        val result = simulation.runSimulation().duration
+        val result = simulation.runSimulation().output[0]!!.duration
 
         assertEquals(17.51, result)
     }
@@ -45,9 +49,52 @@ class SimulationTest {
 
         val result = simulation.runSimulation()
 
-        assertEquals(9.65, result.duration)
-        assertEquals(403.98, result.costEstimation.energy)
-        assertEquals(2693.2, result.powerConsumption.operations)
-        assertEquals(expectedModel, result.model)
+        assertEquals(9.65, result.output[0]!!.duration)
+        assertEquals(403.98, result.output[0]!!.costEstimation.energy)
+        assertEquals(2693.2, result.output[0]!!.powerConsumption.operations)
+        assertEquals(expectedModel, result.output[0]!!.model)
+    }
+
+    @Test
+    fun testSimulationCanHaveTwoDifferentBatchCultivations() {
+        val factory = SimulationFactory()
+        val operations = listOf("batch-cultivation", "batch-cultivation")
+        val settings = File("src/test/resources/simulationSettingsTwoBatch.json").readText()
+        val simulation = factory.createNewSimulation(operations,settings)
+
+        val firstBatch = simulation.getFirstUnitOperation()
+        val secondBatch = simulation.getFirstUnitOperation().getNextOperation()
+
+        assertNotEquals(firstBatch.generateOutput(), secondBatch!!.generateOutput())
+    }
+
+    @Test
+    fun testSimulationCanHaveThreeDifferentBatchCultivations() {
+        val factory = SimulationFactory()
+        val operations = listOf("batch-cultivation", "batch-cultivation", "batch-cultivation")
+        val settings = File("src/test/resources/simulationSettingsThreeBatch.json").readText()
+        val simulation = factory.createNewSimulation(operations,settings)
+
+        val firstBatch = simulation.getFirstUnitOperation()
+        val secondBatch = firstBatch.getNextOperation()
+        val thirdBatch = secondBatch!!.getNextOperation()
+
+        assertNotEquals(firstBatch.generateOutput(), secondBatch.generateOutput())
+        assertNotEquals(firstBatch.generateOutput(), thirdBatch!!.generateOutput())
+        assertNotEquals(secondBatch.generateOutput(), thirdBatch.generateOutput())
+    }
+
+    @Test
+    fun testSubsequentCultivationsUseOutputFromPreviousCultivations() {
+        val factory = SimulationFactory()
+        val operations = listOf("batch-cultivation", "batch-cultivation", "batch-cultivation")
+        val settings = File("src/test/resources/simulationSettingsThreeBatch.json").readText()
+        val simulation = factory.createNewSimulation(operations,settings)
+        val expected = SimulationOutput(listOf(OperationOutput(17.51, listOf(listOf(0.0, 0.12, 20.0), listOf(5.0, 0.4, 18.79), listOf(10.0, 1.32, 11.99), listOf(15.0, 4.39, -19.97)), CostEstimation(733.03), PowerConsumption(4886.84)),
+            OperationOutput(8.23, listOf(listOf(0.0, 0.28, 22.51), listOf(5.0, 3.37, 11.14), listOf(10.0, 41.07, -254.71)), CostEstimation(344.54), PowerConsumption(2296.9)),
+            OperationOutput(3.46, listOf(listOf(0.0, 3.37, 21.14), listOf(5.0, 41.06, -117.44)), CostEstimation(energy=144.85), PowerConsumption(operations=965.65))))
+        val result = simulation.runSimulation()
+
+        assertEquals(expected, result)
     }
 }

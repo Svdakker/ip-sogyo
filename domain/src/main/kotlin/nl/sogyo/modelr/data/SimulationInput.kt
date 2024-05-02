@@ -5,5 +5,5 @@ import nl.sogyo.modelr.data.batchCultivationRequest.BatchCultivation
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class SimulationInput(
-    val batchCultivation: BatchCultivation? = null
+    val batchCultivation: List<BatchCultivation?> = emptyList()
 )
