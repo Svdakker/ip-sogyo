@@ -1,7 +1,7 @@
 import Chart from "chart.js/auto";
 import {CategoryScale} from "chart.js";
 import {useEffect, useState} from "react";
-import {isOutput, Output} from "../Types.tsx";
+import {BatchCultivation, isOutput, Output} from "../ResultTypes.tsx";
 import {fetchResult} from "../services/api.tsx";
 import classNames from "classnames";
 import {ResultTable} from "../components/ResultTable.tsx";
@@ -24,19 +24,40 @@ export const Result = () => {
         });
     }, []);
 
+    const displayResults = (type: string) => {
+        return results?.value.order?.map((operation, position) => {
+            if (operation == "batch-cultivation") {
+                const batch = results?.value.output![position!]
+                return addResultComponents(type, batch);
+            }
+        })
+    }
+
     return (
         <div className="relative h-screen w-screen bg-cover bg-center bg-cyan-950 flex justify-center">
             <div id="results-container" className={classNames("flex w-screen h-screen")}>
                 <div className="flex flex-wrap justify-center">
                     <div id="table-container" className="w-screen flex flex-wrap justify-center">
-                        <ResultTable duration={results?.value.batchCultivation?.duration} energyCosts={results?.value.batchCultivation?.costEstimation.energy}
-                                     energyUsed={results?.value.batchCultivation?.powerConsumption.operations}/>
+                        {displayResults("table")}
                     </div>
                     <div id="model-container" className="w-screen h-3/4 flex flex-wrap justify-center">
-                        <BatchGraph data={results?.value.batchCultivation?.model}/>
+                        {displayResults("graph")}
                     </div>
                 </div>
             </div>
         </div>
     )
+
+    function addResultComponents(type: string, batch: BatchCultivation) {
+        if (type == "table") {
+            return (
+                <ResultTable duration={batch.duration} energyCosts={batch.costEstimation.energy}
+                             energyUsed={batch.powerConsumption.operations}/>
+            )
+        } else {
+            return (
+                <BatchGraph data={batch.model}/>
+            )
+        }
+    }
 }

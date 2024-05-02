@@ -3,7 +3,7 @@ import {CultivationSettings} from "./CultivationSettings.tsx";
 import {ReactorSettings} from "./ReactorSettings.tsx";
 import {useEffect, useState} from "react";
 import {fetchConstants} from "../services/api.tsx";
-import {Constants, isConstants} from "../Types.tsx";
+import {Constants, isConstants} from "../ResultTypes.tsx";
 import {useSimulationRequest} from "../contexts/simulationRequestContext.tsx";
 import {BatchCultivationRequest, UpdateCultivationSettings, UpdateReactorSettings,} from "../RequestTypes.tsx";
 

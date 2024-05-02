@@ -1,6 +1,7 @@
 export type Output = {
     value: {
-        batchCultivation: BatchCultivation | undefined
+        order: string[] | undefined
+        output: BatchCultivation[] | undefined
     }
 }
 
