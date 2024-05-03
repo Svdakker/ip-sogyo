@@ -1,11 +1,11 @@
-import {Model} from "../ResultTypes.tsx";
+import {GraphData} from "../ResultTypes.tsx";
 import {Line} from "react-chartjs-2";
 
-export const BatchGraph = ( { data }: Model) => {
+export const BatchGraph = ( { position, model }: GraphData) => {
 
-    const timePoints = () => data?.map(dataPoint => dataPoint[0])
-    const cellDensities = () => data?.map(dataPoint => dataPoint[1])
-    const sugarConcentrations = () => data?.map(dataPoint => dataPoint[2])
+    const timePoints = () => model?.map(dataPoint => dataPoint[0])
+    const cellDensities = () => model?.map(dataPoint => dataPoint[1])
+    const sugarConcentrations = () => model?.map(dataPoint => dataPoint[2])
 
     const canvasData = {
         datasets: [
@@ -69,7 +69,7 @@ export const BatchGraph = ( { data }: Model) => {
                 },
                 color: "rgb(255,255,255)",
                 display: true,
-                text: "Batch operation modeled over time"
+                text: `Batch operation ${position} modeled over time`
             },
             legend: {
                 labels: {
@@ -82,7 +82,7 @@ export const BatchGraph = ( { data }: Model) => {
 
     return (
         <>
-            <Line className="" id={"batch-cultivation"} options={options} data={canvasData}/>
+            <Line options={options} data={canvasData}/>
         </>
     )
 }

@@ -1,3 +1,5 @@
+import {Dispatch, SetStateAction} from "react";
+
 export type Output = {
     value: {
         order: string[] | undefined
@@ -24,14 +26,14 @@ export type BatchCultivation = {
     powerConsumption: PowerConsumption
 }
 
-export type Model = {
-    data: number[][] | undefined
+export type GraphData  = {
+    model: number[][] | undefined,
+    position: number,
 }
 
 export type TableData = {
-    duration: number | undefined
-    energyCosts: number | undefined
-    energyUsed: number | undefined
+    data: BatchCultivation[]
+    switchGraph: Dispatch<SetStateAction<number>>,
 }
 
 export type CostEstimation = {

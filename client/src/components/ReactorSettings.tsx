@@ -49,17 +49,19 @@ export const ReactorSettings = ( { labelStyling, inputStyling, constants, stateU
                            placeholder={"/s"} required
                            onChange={(e) => (stateUpdaters as UpdateReactorSettings).updateAgitatorSpeed(Number(e.target.value))}/>
                 </div>
-                <button onClick={() => setShowAdvanced(!showAdvanced)} className={classNames("text-left text-xs italic text-white font-bold")}>
-                    Advanced reactor settings
-                </button>
                 {showAdvanced && advancedReactor()}
+                <div className="flex items-center">
+                    <button onClick={() => setShowAdvanced(!showAdvanced)} className={classNames("text-left text-xs italic text-white font-bold")}>
+                        Advanced reactor settings
+                    </button>
+                </div>
             </div>
         </>
     )
 
     function advancedReactor() {
         return (
-            <div>
+            <>
                 <div>
                     <label className={labelStyling}>Nominal volume:</label>
                     <input className={inputStyling} id="nominalVolume" type="number"
@@ -84,7 +86,7 @@ export const ReactorSettings = ( { labelStyling, inputStyling, constants, stateU
                            placeholder={"m"}
                            onChange={(e) => (stateUpdaters as UpdateReactorSettings).updateWidth(Number(e.target.value))}/>
                 </div>
-            </div>
+            </>
         )
     }
 }

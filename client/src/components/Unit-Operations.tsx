@@ -6,6 +6,7 @@ import {fetchConstants} from "../services/api.tsx";
 import {Constants, isConstants} from "../ResultTypes.tsx";
 import {useSimulationRequest} from "../contexts/simulationRequestContext.tsx";
 import {BatchCultivationRequest, UpdateCultivationSettings, UpdateReactorSettings,} from "../RequestTypes.tsx";
+import {ArcherElement} from "react-archer";
 
 interface UnitOperation {
     icon: string
@@ -16,6 +17,8 @@ export const BatchCultivation = ({ icon, position }: UnitOperation) => {
     const { simulationRequest, setSimulationRequest } = useSimulationRequest()
 
     const [openSettings, setOpenSettings] = useState(false)
+
+    const [saved, setSaved] = useState(false)
 
     const [ constants, setConstants] = useState<Constants | undefined>(undefined)
 
@@ -53,6 +56,7 @@ export const BatchCultivation = ({ icon, position }: UnitOperation) => {
         if (operation != undefined) {
             updateRequest(operation);
             setOpenSettings(!openSettings)
+            setSaved(!saved)
         } else {
             alert("Please fill in all required settings for the batch-cultivation!")
         }
@@ -105,20 +109,27 @@ export const BatchCultivation = ({ icon, position }: UnitOperation) => {
 
     const labelStyling = classNames("block mb-2 text-sm font-medium text-white")
 
-    const inputStyling = classNames("text-sm rounded-lg block w-full border",
+    const inputStyling = classNames("text-sm rounded-lg block w-full border focus:ring-offset-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
                                     "p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white")
 
     return (
-        <div key={position}>
-            <img className="w-1/6 h-1/4" onClick={() => setOpenSettings(!openSettings)} src={icon} alt={"image not found"}/>
-            {openSettings && form()}
-        </div>
+        <ArcherElement id={String(position)} key={position} relations={position > 0 ? [
+            {
+                targetId: `${String(Number(position - 1))}`,
+                targetAnchor: 'right',
+                sourceAnchor: 'left'
+            }] : []}>
+            <div key={position} className={"flex justify-center h-1/3"}>
+                <img className={`max-h-full max-w-sm ${saved ? 'opacity-25' : 'opacity-100'}`} onClick={() => {if (!saved) { setOpenSettings(!openSettings) }}} src={icon} alt={"image not found"}/>
+                {openSettings && form()}
+            </div>
+        </ArcherElement>
     )
 
     function form() {
         return (
             <form onSubmit={(e) => e.preventDefault()}
-                  className="absolute top-1/4 right-1/5 overflow-visible p-4 rounded-xl bg-gray-900 shadow-2xl">
+                  className="absolute top-2 right-1/5 p-4 rounded-xl bg-gray-900 shadow-2xl">
                 <div>
                     <label className={classNames("block mb-2 text-md font-black text-white")}>BATCH-CULTIVATION</label>
                 </div>
@@ -129,8 +140,11 @@ export const BatchCultivation = ({ icon, position }: UnitOperation) => {
                 <button onClick={saveOperation} className={classNames(
                     "bg-cyan-800 ring-4 ring-opacity-25 shadow-2xl",
                     "ring-cyan-700 rounded-full p-3 text-center",
-                    "text-sm text-white font-black"
-                )}>SAVE
+                    "text-sm text-white font-black")}>
+                    SAVE
+                </button>
+                <button onClick={() => setOpenSettings(!openSettings)} className={classNames("text-center text-xs text-white font-black mx-4")}>
+                    Cancel
                 </button>
             </form>
         )

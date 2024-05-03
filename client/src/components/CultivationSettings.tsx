@@ -36,10 +36,12 @@ export const CultivationSettings = ( { position, labelStyling, inputStyling, con
                            onChange={(e) => (stateUpdaters as UpdateCultivationSettings).updateInitialSugarConcentration(Number(e.target.value))}/>
                 </div>
                 {!checkDisabled() && initialCellDensity()}
-                <button onClick={() => setShowAdvanced(!showAdvanced)} className={classNames("text-left text-xs italic text-white font-bold")}>
-                    Advanced cultivation settings
-                </button>
                 {showAdvanced && advancedCultivation()}
+                <div className="flex items-center">
+                    <button onClick={() => setShowAdvanced(!showAdvanced)} className={classNames("text-left text-xs italic text-white font-bold")}>
+                        Advanced cultivation settings
+                    </button>
+                </div>
             </div>
         </>
     )
@@ -61,7 +63,7 @@ export const CultivationSettings = ( { position, labelStyling, inputStyling, con
 
     function advancedCultivation() {
         return (
-            <div>
+            <>
                 <div>
                     <label className={labelStyling}>Maximum growth rate (mu):</label>
                     <input className={inputStyling} id="maxGrowthRate" type="number" step="any" min="0"
@@ -80,7 +82,7 @@ export const CultivationSettings = ( { position, labelStyling, inputStyling, con
                            placeholder={"-"}
                            onChange={(e) => (stateUpdaters as UpdateCultivationSettings).updateYield(Number(e.target.value))}/>
                 </div>
-            </div>
+            </>
         )
     }
 }
