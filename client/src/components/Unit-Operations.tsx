@@ -105,7 +105,7 @@ export const BatchCultivation = ({ icon, position }: UnitOperation) => {
 
     const labelStyling = classNames("block mb-2 text-sm font-medium text-white")
 
-    const inputStyling = classNames("text-sm rounded-lg block w-full border",
+    const inputStyling = classNames("text-sm rounded-lg block w-full border focus:ring-offset-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
                                     "p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white")
 
     return (
@@ -129,8 +129,11 @@ export const BatchCultivation = ({ icon, position }: UnitOperation) => {
                 <button onClick={saveOperation} className={classNames(
                     "bg-cyan-800 ring-4 ring-opacity-25 shadow-2xl",
                     "ring-cyan-700 rounded-full p-3 text-center",
-                    "text-sm text-white font-black"
-                )}>SAVE
+                    "text-sm text-white font-black")}>
+                    SAVE
+                </button>
+                <button onClick={() => setOpenSettings(!openSettings)} className={classNames("text-center text-xs text-white font-black mx-4")}>
+                    Cancel
                 </button>
             </form>
         )
