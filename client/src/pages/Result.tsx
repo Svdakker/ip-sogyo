@@ -1,9 +1,8 @@
 import Chart from "chart.js/auto";
 import {CategoryScale} from "chart.js";
 import {useEffect, useState} from "react";
-import {BatchCultivation, isOutput, Output} from "../ResultTypes.tsx";
+import {isOutput, Output} from "../ResultTypes.tsx";
 import {fetchResult} from "../services/api.tsx";
-import classNames from "classnames";
 import {ResultTable} from "../components/ResultTable.tsx";
 import {BatchGraph} from "../components/BatchGraph.tsx";
 
@@ -11,6 +10,8 @@ Chart.register(CategoryScale);
 
 export const Result = () => {
     const [results, setResults] = useState<Output | null>(null)
+
+    const [graph, setGraph] = useState(-1)
 
     async function retrieveResult() {
         return await fetchResult()
@@ -24,40 +25,33 @@ export const Result = () => {
         });
     }, []);
 
-    const displayResults = (type: string) => {
-        return results?.value.order?.map((operation, position) => {
-            if (operation == "batch-cultivation") {
-                const batch = results?.value.output![position!]
-                return addResultComponents(type, batch);
-            }
-        })
-    }
-
-    return (
-        <div className="relative h-screen w-screen bg-cover bg-center bg-cyan-950 flex justify-center">
-            <div id="results-container" className={classNames("flex w-screen h-screen")}>
-                <div className="flex flex-wrap justify-center">
-                    <div id="table-container" className="w-screen flex flex-wrap justify-center">
-                        {displayResults("table")}
-                    </div>
-                    <div id="model-container" className="w-screen h-3/4 flex flex-wrap justify-center">
-                        {displayResults("graph")}
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
-
-    function addResultComponents(type: string, batch: BatchCultivation) {
-        if (type == "table") {
+    const displayGraphs = (index: number) => {
+        if (index != -1) {
+            const batch = results?.value.output![index]
             return (
-                <ResultTable duration={batch.duration} energyCosts={batch.costEstimation.energy}
-                             energyUsed={batch.powerConsumption.operations}/>
-            )
-        } else {
-            return (
-                <BatchGraph data={batch.model}/>
+                <BatchGraph position={index + 1} key={index} model={batch?.model}/>
             )
         }
     }
+
+    const createTable = () => {
+        if (results?.value.output) {
+            return (
+                <ResultTable switchGraph={setGraph} data={results?.value.output}></ResultTable>
+            )
+        }
+    }
+
+    return (
+        <div className="relative h-screen w-screen flex justify-center">
+                <div className="flex flex-wrap justify-center">
+                    <div id="table-container" className="w-screen flex flex-wrap justify-center">
+                        {createTable()}
+                    </div>
+                    <div id="model-container" className="w-screen h-3/4 flex flex-wrap justify-center">
+                        {displayGraphs(graph)}
+                    </div>
+                </div>
+        </div>
+    )
 }

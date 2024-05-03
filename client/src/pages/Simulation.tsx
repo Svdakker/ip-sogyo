@@ -34,7 +34,7 @@ export const Simulation = () => {
     }
 
     return (
-            <div className="relative h-screen w-screen bg-cover bg-center bg-cyan-950 flex flex-wrap justify-center">
+            <div className="relative h-screen w-screen flex flex-wrap justify-center">
                 <div className="h-[10%] basis-full flex justify-center">
                     <button onClick={addBatchCultivation} className={classNames("text-center text-lg text-white font-black")}>+ Batch-cultivation</button>
                 </div>
