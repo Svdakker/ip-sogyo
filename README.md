@@ -36,6 +36,12 @@ Gradle (v8.7) and SpringBoot (v3.2.4) are used to build and run the backend, the
 ./gradlew clean bootRun
 ```
 
+Acceptance and integration tests are run in a docker container. Therefore, docker should be installed locally to allow building:
+
+```
+https://docs.docker.com/get-docker/
+```
+
 Once the front-end and back-end are assembled, the application should be running at http://localhost:5173/
 
 # Learning goals
