@@ -17,6 +17,8 @@ export const BatchCultivation = ({ icon, position }: UnitOperation) => {
 
     const [openSettings, setOpenSettings] = useState(false)
 
+    const [saved, setSaved] = useState(false)
+
     const [ constants, setConstants] = useState<Constants | undefined>(undefined)
 
     const[microorganismInput, setMicroorganismInput] = useState<string | undefined>(undefined)
@@ -53,6 +55,7 @@ export const BatchCultivation = ({ icon, position }: UnitOperation) => {
         if (operation != undefined) {
             updateRequest(operation);
             setOpenSettings(!openSettings)
+            setSaved(!saved)
         } else {
             alert("Please fill in all required settings for the batch-cultivation!")
         }
@@ -109,10 +112,12 @@ export const BatchCultivation = ({ icon, position }: UnitOperation) => {
                                     "p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white")
 
     return (
-        <div key={position}>
-            <img className="w-1/6 h-1/4" onClick={() => setOpenSettings(!openSettings)} src={icon} alt={"image not found"}/>
-            {openSettings && form()}
-        </div>
+        <>
+            <div key={position} className={`basis-1/5 m-6 h-1/3 flex justify-center`}>
+                <img className={`max-h-full max-w-sm ${saved ? 'opacity-25' : 'opacity-100'}`} onClick={() => {if (!saved) { setOpenSettings(!openSettings) }}} src={icon} alt={"image not found"}/>
+                {openSettings && form()}
+            </div>
+        </>
     )
 
     function form() {
