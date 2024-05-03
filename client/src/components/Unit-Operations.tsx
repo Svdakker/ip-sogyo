@@ -6,6 +6,7 @@ import {fetchConstants} from "../services/api.tsx";
 import {Constants, isConstants} from "../ResultTypes.tsx";
 import {useSimulationRequest} from "../contexts/simulationRequestContext.tsx";
 import {BatchCultivationRequest, UpdateCultivationSettings, UpdateReactorSettings,} from "../RequestTypes.tsx";
+import {ArcherElement} from "react-archer";
 
 interface UnitOperation {
     icon: string
@@ -112,18 +113,23 @@ export const BatchCultivation = ({ icon, position }: UnitOperation) => {
                                     "p-2.5 bg-gray-700 border-gray-600 placeholder-gray-400 text-white")
 
     return (
-        <>
-            <div key={position} className={`basis-1/5 m-6 h-1/3 flex justify-center`}>
+        <ArcherElement id={String(position)} key={position} relations={position > 0 ? [
+            {
+                targetId: `${String(Number(position - 1))}`,
+                targetAnchor: 'right',
+                sourceAnchor: 'left'
+            }] : []}>
+            <div key={position} className={"flex justify-center h-1/3"}>
                 <img className={`max-h-full max-w-sm ${saved ? 'opacity-25' : 'opacity-100'}`} onClick={() => {if (!saved) { setOpenSettings(!openSettings) }}} src={icon} alt={"image not found"}/>
                 {openSettings && form()}
             </div>
-        </>
+        </ArcherElement>
     )
 
     function form() {
         return (
             <form onSubmit={(e) => e.preventDefault()}
-                  className="absolute top-1/4 right-1/5 overflow-visible p-4 rounded-xl bg-gray-900 shadow-2xl">
+                  className="absolute top-2 right-1/5 p-4 rounded-xl bg-gray-900 shadow-2xl">
                 <div>
                     <label className={classNames("block mb-2 text-md font-black text-white")}>BATCH-CULTIVATION</label>
                 </div>
