@@ -1,6 +1,8 @@
 package nl.sogyo.modelr
 
 import nl.sogyo.modelr.data.centrifugationRequest.CentrifugationInput
+import nl.sogyo.modelr.data.centrifugationRequest.CentrifugationSettings
+import nl.sogyo.modelr.data.centrifugationRequest.CentrifugeProperties
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
@@ -8,8 +10,9 @@ class CentrifugationOperationTest {
 
     @Test
     fun testCentrifugationOperationCanBeCreatedWithInput() {
-        val input = CentrifugationInput()
+        val input = CentrifugationInput(CentrifugeProperties(8.0E-2, 2.2E-3, 50, 45.0,  5.0),         CentrifugationSettings(9200.0, 3.22E-5, 52.5E-3))
 
+        CentrifugationSettings(9200.0, 3.22E-5, 52.5E-3)
         val result = CentrifugationOperation(input)
 
         assertNotNull(result)
@@ -17,7 +20,7 @@ class CentrifugationOperationTest {
 
     @Test
     fun testCentrifugationOperationCanBeModeledForVaryingFlowRate() {
-        val input = CentrifugationInput()
+        val input = CentrifugationInput(CentrifugeProperties(8.0E-2, 2.2E-3, 50, 45.0,  5.0),         CentrifugationSettings(9200.0, 3.22E-5, 52.5E-3))
         val operation = CentrifugationOperation(input)
         val expected = listOf(listOf(1.2879999999999999E-5, 1585591.8), listOf(1.932E-5, 1057061.2), listOf(2.5759999999999997E-5, 792795.9), listOf(3.22E-5, 634236.72), listOf(3.8639999999999996E-5, 528530.6), listOf(4.5079999999999995E-5, 453026.23), listOf(5.1519999999999995E-5,396397.95 ))
         val result = operation.modelOperation()
@@ -27,7 +30,7 @@ class CentrifugationOperationTest {
 
     @Test
     fun testEfficiencyOfSeparationCanBeCalculated() {
-        val input = CentrifugationInput()
+        val input = CentrifugationInput(CentrifugeProperties(8.0E-2, 2.2E-3, 50, 45.0,  5.0),         CentrifugationSettings(9200.0, 3.22E-5, 52.5E-3))
         val operation = CentrifugationOperation(input)
 
         val result = operation.calculateEfficiencyOfSeparation(input.centrifugationSettings.liquidFlowRate)
@@ -37,7 +40,7 @@ class CentrifugationOperationTest {
 
     @Test
     fun testDurationOfCentrifugationCanBeCalculated() {
-        val input = CentrifugationInput()
+        val input = CentrifugationInput(CentrifugeProperties(8.0E-2, 2.2E-3, 50, 45.0,  5.0), CentrifugationSettings(9200.0, 3.22E-5, 52.5E-3))
         val operation = CentrifugationOperation(input)
 
         val result = operation.calculateDuration()
@@ -47,7 +50,7 @@ class CentrifugationOperationTest {
 
     @Test
     fun testPowerConsumptionOfCentrifugationCanBeCalculated() {
-        val input = CentrifugationInput()
+        val input = CentrifugationInput(CentrifugeProperties(8.0E-2, 2.2E-3, 50, 45.0,  5.0),         CentrifugationSettings(9200.0, 3.22E-5, 52.5E-3))
         val operation = CentrifugationOperation(input)
 
         val result = operation.calculateEnergyConsumption()
@@ -57,7 +60,7 @@ class CentrifugationOperationTest {
 
     @Test
     fun testCostsOfCentrifugationOperationCanBeCalculated() {
-        val input = CentrifugationInput()
+        val input = CentrifugationInput(CentrifugeProperties(8.0E-2, 2.2E-3, 50, 45.0,  5.0),         CentrifugationSettings(9200.0, 3.22E-5, 52.5E-3))
         val operation = CentrifugationOperation(input)
 
         val result = operation.calculateCosts()

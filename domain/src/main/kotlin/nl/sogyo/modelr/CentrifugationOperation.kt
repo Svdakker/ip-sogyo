@@ -3,7 +3,7 @@ package nl.sogyo.modelr
 import nl.sogyo.modelr.data.CostEstimation
 import nl.sogyo.modelr.data.OperationOutput
 import nl.sogyo.modelr.data.PowerConsumption
-import nl.sogyo.modelr.data.batchCultivationRequest.CostFactors
+import nl.sogyo.modelr.data.CostFactors
 import nl.sogyo.modelr.data.centrifugationRequest.CentrifugationInput
 import kotlin.math.PI
 import kotlin.math.pow
@@ -69,7 +69,7 @@ class CentrifugationOperation(private val input: CentrifugationInput,
 
     private fun calculateRelativeGravitationalVelocity(): Double {
         val centrifugeProperties = input.centrifugeProperties
-        return multiply(calculateAngularVelocity().pow(2), (centrifugeProperties.outerRadius - centrifugeProperties.innerRadius))
+        return multiply(calculateAngularVelocity().pow(2), (centrifugeProperties.outerRadius!! - centrifugeProperties.innerRadius!!))
     }
 
     private fun calculateSigmaFactor(): Double {
@@ -79,15 +79,15 @@ class CentrifugationOperation(private val input: CentrifugationInput,
                 multiply(
                     multiply(
                         multiply(2.0, PI),
-                        centrifugeProperties.numberOfDisks.toDouble()
+                        centrifugeProperties.numberOfDisks!!.toDouble()
                     ),
                         calculateAngularVelocity().pow(2)
                 ),
-                (centrifugeProperties.outerRadius.pow(3) - centrifugeProperties.innerRadius.pow(2))
+                (centrifugeProperties.outerRadius!!.pow(3) - centrifugeProperties.innerRadius!!.pow(2))
             ),
             multiply(
                 multiply(3.0, 9.81),
-                tan(centrifugeProperties.diskAngle))
+                tan(centrifugeProperties.diskAngle!!))
         )
     }
 
@@ -111,7 +111,7 @@ class CentrifugationOperation(private val input: CentrifugationInput,
      */
 
     override fun calculateEnergyConsumption(): PowerConsumption {
-        return PowerConsumption(round(multiply(input.centrifugeProperties.motorPower, calculateDuration())))
+        return PowerConsumption(round(multiply(input.centrifugeProperties.motorPower!!, calculateDuration())))
     }
 
     /**

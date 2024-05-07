@@ -97,4 +97,19 @@ class SimulationTest {
 
         assertEquals(expected, result)
     }
+
+    @Test
+    fun testCentrifugationCanBeRunAfterBatchCultivation() {
+        val factory = SimulationFactory()
+        val operations = listOf("batch-cultivation", "centrifugation")
+        val settings = File("src/test/resources/simulationSettingsCentrifuge.json").readText()
+        val simulation = factory.createNewSimulation(operations,settings)
+
+        val expected = SimulationOutput(listOf(OperationOutput(17.51, listOf(listOf(0.0, 0.12, 20.0), listOf(5.0, 0.4, 18.79), listOf(10.0, 1.32, 11.99), listOf(15.0, 4.39, -19.97)), CostEstimation(733.03), PowerConsumption(4886.84)),
+                OperationOutput(duration=0.45, model=listOf(listOf(1.2879999999999999E-5, 1585591.8), listOf(1.932E-5, 1057061.2), listOf(2.5759999999999997E-5, 792795.9), listOf(3.22E-5, 634236.72), listOf(3.8639999999999996E-5, 528530.6), listOf(4.5079999999999995E-5, 453026.23), listOf(5.1519999999999995E-5, 396397.95)), costEstimation=CostEstimation(energy=0.34), powerConsumption=PowerConsumption(operations=2.25))))
+
+        val result = simulation.runSimulation()
+
+        assertEquals(expected, result)
+    }
 }

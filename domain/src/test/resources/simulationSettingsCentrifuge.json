@@ -1,0 +1,107 @@
+{
+  "batchCultivation": [{
+    "costFactor": {
+      "date": [
+        2024,
+        4,
+        25
+      ],
+      "energy": 0.15,
+      "id": 1
+    },
+    "id": 1,
+    "impeller": {
+      "id": 1,
+      "impellerDiameter": 0.97,
+      "impellerFlowNumber": 0.72,
+      "impellerPowerNumber": 5.2,
+      "type": "rushton turbine"
+    },
+    "microorganism": {
+      "date": [
+        2024,
+        4,
+        25
+      ],
+      "id": 1,
+      "maintenance": 0.00703,
+      "maxGrowthRate": 0.24,
+      "name": "saccharomyces cerevisiae",
+      "yield": 0.4
+    },
+    "position": 0,
+    "reactor": {
+      "date": [
+        2024,
+        4,
+        25
+      ],
+      "height": 9.29,
+      "id": 1,
+      "name": "example",
+      "nominalVolume": 70.0,
+      "width": 3.1,
+      "workingVolume": 52.5
+    },
+    "request": {
+      "cultivationSettings": {
+        "accuracy": 5,
+        "id": 1,
+        "initialCellDensity": 0.12,
+        "initialSugarConcentration": 20.0,
+        "maintenance": null,
+        "maxGrowthRate": null,
+        "microorganism": "saccharomyces cerevisiae",
+        "yield": null
+      },
+      "id": 1,
+      "operationType": "batch-cultivation",
+      "reactorSettings": {
+        "agitatorSpeed": 2.5,
+        "height": null,
+        "id": 1,
+        "impellerType": "rushton turbine",
+        "nominalVolume": null,
+        "numberOfImpellers": 4,
+        "reactorType": "example",
+        "width": null,
+        "workingVolume": null
+      }
+    },
+    "result": null
+  }],
+  "centrifugation": [{
+    "position": 1,
+    "request": {
+      "centrifugeProperties": {
+        "outerRadius": null,
+        "innerRadius": null,
+        "numberOfDisks": null,
+        "diskAngle": null,
+        "motorPower": null
+      },
+      "centrifugationSettings": {
+        "frequencyOfRotation": 9200.0,
+        "liquidFlowRate": 3.22E-5,
+        "liquidVolume": 52.5E-3
+      }
+    },
+    "costFactor": {
+      "date": [
+        2024,
+        4,
+        25
+      ],
+      "energy": 0.15,
+      "id": 1
+    },
+    "centrifuge": {
+      "outerRadius": 8.0E-2,
+      "innerRadius": 2.2E-3,
+      "numberOfDisks": 50,
+      "diskAngle": 45.0,
+      "motorPower": 5.0
+    }
+  }],
+  "id": 1
+}

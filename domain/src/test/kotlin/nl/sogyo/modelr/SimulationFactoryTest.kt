@@ -27,4 +27,15 @@ class SimulationFactoryTest {
             factory.createNewSimulation(operations, settings)
         }
     }
+
+    @Test
+    fun testSimulationCanContainBatchAndCentrifugation() {
+        val factory = SimulationFactory()
+        val operations = listOf("batch-cultivation", "centrifugation")
+        val settings = File("src/test/resources/simulationSettingsCentrifuge.json").readText()
+
+        val result = factory.createNewSimulation(operations, settings)
+
+        assertNotNull(result)
+    }
 }

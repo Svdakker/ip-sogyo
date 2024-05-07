@@ -65,7 +65,7 @@ class SimulationService(
         return simulationRepository.save(simulation).id!!
     }
 
-    private fun createSimulation(operations: List<UnitOperation>): Simulation {
+    private fun createSimulation(operations: List<Operation>): Simulation {
         val batch: MutableList<BatchCultivation?> = mutableListOf()
         operations.map {operation ->
             when (operation.type) {
@@ -76,7 +76,7 @@ class SimulationService(
         return Simulation(batchCultivation = batch)
     }
 
-    private fun saveUnitOperations(request: SimulationRequestDTO, savedOperations: List<Int>, accumulator: List<UnitOperation>): List<UnitOperation> {
+    private fun saveUnitOperations(request: SimulationRequestDTO, savedOperations: List<Int>, accumulator: List<Operation>): List<Operation> {
         return if (request.order.size == savedOperations.sum()) {
             accumulator
         } else {
@@ -86,21 +86,21 @@ class SimulationService(
         }
     }
 
-    private fun saveUnitOperation(operation: String, request: SimulationRequestDTO, position: Int, savedOperations: List<Int>): UnitOperation {
+    private fun saveUnitOperation(operation: String, request: SimulationRequestDTO, position: Int, savedOperations: List<Int>): Operation {
         return when (operation) {
             "batch-cultivation" -> saveBatchCultivation(request.batchCultivation[savedOperations[0]]!!, position)
             else -> throw IllegalArgumentException("Unit operation not found ($operation)")
         }
     }
 
-    private fun updateSavedOperations(nextOperation: UnitOperation, savedOperations: List<Int>): List<Int> {
+    private fun updateSavedOperations(nextOperation: Operation, savedOperations: List<Int>): List<Int> {
         return when (nextOperation.type) {
             "batch-cultivation" -> listOf(savedOperations[0] + 1)
             else -> throw IllegalArgumentException("Unexpected nextOperation type ${nextOperation.type}")
         }
     }
 
-    private fun saveBatchCultivation(request: BatchCultivationRequestDTO, position: Int): UnitOperation {
+    private fun saveBatchCultivation(request: BatchCultivationRequestDTO, position: Int): Operation {
         val requestId = saveRequest(request)
 
         val savedRequest = requestRepository.findById(requestId)
@@ -115,7 +115,7 @@ class SimulationService(
 
         val batchCultivation = BatchCultivation(position, savedRequest.get(), null, costFactor!!, microorganism!!, reactor!!, impeller!!)
 
-        return UnitOperation("batch-cultivation", batchCultivationRepository.save(batchCultivation).id!!)
+        return Operation("batch-cultivation", batchCultivationRepository.save(batchCultivation).id!!)
     }
 
     private fun saveRequest(request: BatchCultivationRequestDTO): Long {
@@ -272,7 +272,7 @@ sealed class ApiResult<out T> {
     internal data class Success<T>(val value: T) : ApiResult<T>()
 }
 
-internal data class UnitOperation(val type: String, val id: Long)
+internal data class Operation(val type: String, val id: Long)
 
 internal class EmptyStringException(msg: String): Exception(msg)
 
