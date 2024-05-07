@@ -34,16 +34,17 @@ class CentrifugationOperation(private val input: CentrifugationInput,
 
     override fun modelOperation(): List<List<Double>> {
         val model = mutableListOf<List<Double>>()
-        modelDataPoints(model, input.centrifugationSettings.minLiquidFlowRate)
+        modelDataPoints(model, 0.4)
         return model
     }
 
-    private fun modelDataPoints(model: MutableList<List<Double>>, flowRate: Double) {
-        if (flowRate < input.centrifugationSettings.maxLiquidFlowRate) {
+    private fun modelDataPoints(model: MutableList<List<Double>>, accumulator: Double) {
+        val flowRate = multiply(input.centrifugationSettings.liquidFlowRate, accumulator)
+        if (flowRate < multiply(input.centrifugationSettings.liquidFlowRate, 1.5)) {
             model.add(calculateDataPoint(flowRate))
-            modelDataPoints(model,flowRate + multiply(0.20, flowRate))
+            modelDataPoints(model,accumulator + 0.2)
         } else {
-            model.add(calculateDataPoint(input.centrifugationSettings.maxLiquidFlowRate))
+            model.add(calculateDataPoint(multiply(input.centrifugationSettings.liquidFlowRate, 1.6)))
         }
     }
 
@@ -101,7 +102,7 @@ class CentrifugationOperation(private val input: CentrifugationInput,
      */
 
     override fun calculateDuration(): Double {
-        return 100.0
+        return round(divide(divide(input.centrifugationSettings.liquidVolume, input.centrifugationSettings.liquidFlowRate), 3600.0))
     }
 
     /**
@@ -110,7 +111,7 @@ class CentrifugationOperation(private val input: CentrifugationInput,
      */
 
     override fun calculateEnergyConsumption(): PowerConsumption {
-        return PowerConsumption(100.0)
+        return PowerConsumption(round(multiply(input.centrifugeProperties.motorPower, calculateDuration())))
     }
 
     /**
@@ -119,6 +120,6 @@ class CentrifugationOperation(private val input: CentrifugationInput,
      */
 
     override fun calculateCosts(): CostEstimation {
-        return CostEstimation(100.0)
+        return CostEstimation(round(multiply(costs.energy, calculateEnergyConsumption().operations)))
     }
 }
