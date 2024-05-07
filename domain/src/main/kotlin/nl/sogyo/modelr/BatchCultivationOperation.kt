@@ -50,6 +50,8 @@ class BatchCultivationOperation(private val input: BatchCultivationInput,
     private fun correctForPreviousResult(previousResult: OperationOutput, previousOperation: UnitOperation) {
         if (previousOperation::class == BatchCultivationOperation::class) {
             setCorrection(previousResult, previousOperation as BatchCultivationOperation)
+        } else {
+            throw IllegalArgumentException("operation not supported as previous operation")
         }
     }
 

@@ -9,6 +9,7 @@ import nl.sogyo.modelr.data.batchCultivationRequest.CultivationSettings
 import nl.sogyo.modelr.data.batchCultivationRequest.ReactorSettings
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.io.File
 
 class SimulationTest {
@@ -41,7 +42,7 @@ class SimulationTest {
     @Test
     fun testUserInputHasPriorityOverDefault() {
         val factory = SimulationFactory()
-        val operations = listOf("batch-cultivation")
+        val operations = listOf("batch-cultivation", "centrifugation")
         val settings = File("src/test/resources/simulationSettings2.json").readText()
         val simulation = factory.createNewSimulation(operations,settings)
         val expectedModel = listOf(listOf(0.0, 0.12, 20.0), listOf(1.0, 0.2, 19.87), listOf(2.0, 0.33, 19.55), listOf(3.0, 0.54, 18.91),
@@ -53,6 +54,7 @@ class SimulationTest {
         assertEquals(403.98, result.output[0]!!.costEstimation.energy)
         assertEquals(2693.2, result.output[0]!!.powerConsumption.operations)
         assertEquals(expectedModel, result.output[0]!!.model)
+        assertEquals(1.2, result.output[1]!!.duration)
     }
 
     @Test
@@ -111,5 +113,17 @@ class SimulationTest {
         val result = simulation.runSimulation()
 
         assertEquals(expected, result)
+    }
+
+    @Test
+    fun testCentrifugationCantBeRunBeforeBatchCultivation() {
+        val factory = SimulationFactory()
+        val operations = listOf("centrifugation", "batch-cultivation")
+        val settings = File("src/test/resources/simulationSettingsCentrifuge2.json").readText()
+        val simulation = factory.createNewSimulation(operations,settings)
+
+        assertThrows<IllegalArgumentException> {
+            simulation.runSimulation()
+        }
     }
 }
