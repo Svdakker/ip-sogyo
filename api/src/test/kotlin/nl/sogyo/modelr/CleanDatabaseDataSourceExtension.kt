@@ -25,6 +25,8 @@ class CleanDatabaseDataSourceExtension : BeforeEachCallback {
             it.createStatement().execute("ALTER TABLE simulation AUTO_INCREMENT = 1")
             it.createStatement().execute("DELETE FROM batch_cultivation")
             it.createStatement().execute("ALTER TABLE batch_cultivation AUTO_INCREMENT = 1")
+            it.createStatement().execute("DELETE FROM centrifugation")
+            it.createStatement().execute("ALTER TABLE centrifugation AUTO_INCREMENT = 1")
             it.createStatement().execute("DELETE FROM centrifuge")
             it.createStatement().execute("ALTER TABLE centrifuge AUTO_INCREMENT = 1")
             it.createStatement().execute("SET FOREIGN_KEY_CHECKS=1;")

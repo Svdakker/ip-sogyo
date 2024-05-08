@@ -285,8 +285,9 @@ class SimulationService(
             throw NoSimulationFoundException("No simulation found in DB")
         } else {
             val batchCultivationResult = bundleBatchCultivationResults(simulation, objectMapper)
+            val centrifugationResult = bundleCentrifugationResults(simulation, objectMapper)
 
-            return orderResults(batchCultivationResult)
+            return orderResults(batchCultivationResult, centrifugationResult)
         }
     }
 
@@ -300,13 +301,29 @@ class SimulationService(
         return batchCultivations
     }
 
-    private fun orderResults(batchCultivations: MutableMap<Int, OperationResultDTO>): SimulationResultDTO {
+    private fun bundleCentrifugationResults(simulation: Simulation, objectMapper: ObjectMapper): MutableMap<Int, OperationResultDTO> {
+        val centrifugations: MutableMap<Int, OperationResultDTO> = mutableMapOf()
+        simulation.centrifugation.forEach { centrifugation -> run {
+                val position = centrifugation?.position!!
+                centrifugations[position] = objectMapper.readValue<OperationResultDTO>(centrifugation.result!!)
+            }
+        }
+        return centrifugations
+    }
+
+    private fun orderResults(batchCultivations: MutableMap<Int, OperationResultDTO>, centrifugations: MutableMap<Int, OperationResultDTO>): SimulationResultDTO {
         val output: MutableList<OperationResultDTO> = mutableListOf()
         val order: MutableList<String> = mutableListOf()
 
         batchCultivations.forEach { batch -> run {
                 output.add(batch.key, batch.value)
                 order.add(batch.key, "batch-cultivation")
+            }
+        }
+
+        centrifugations.forEach { centrifugation -> run {
+                output.add(centrifugation.key, centrifugation.value)
+                order.add(centrifugation.key, "centrifugation")
             }
         }
 
