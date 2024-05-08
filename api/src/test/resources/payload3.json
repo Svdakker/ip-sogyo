@@ -14,5 +14,6 @@
       "numberOfImpellers": 4,
       "agitatorSpeed": 2.5
     }
-  }]
+  }],
+  "centrifugation": []
 }

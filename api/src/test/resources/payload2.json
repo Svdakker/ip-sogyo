@@ -23,5 +23,6 @@
   }],
   "order": [
     "batch-cultivation"
-  ]
+  ],
+  "centrifugation": []
 }

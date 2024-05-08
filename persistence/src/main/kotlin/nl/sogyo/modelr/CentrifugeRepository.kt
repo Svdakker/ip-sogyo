@@ -8,4 +8,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Repository
 @Transactional(propagation = Propagation.REQUIRED)
-interface CentrifugeRepository : CrudRepository<Centrifuge, Long>
+interface CentrifugeRepository : CrudRepository<Centrifuge, Long> {
+
+    fun findCentrifugeByName(name: String): Centrifuge?
+}

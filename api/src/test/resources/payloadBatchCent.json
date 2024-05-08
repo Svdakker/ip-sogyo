@@ -1,5 +1,5 @@
 {
-  "order": ["batch-cultivation"],
+  "order": ["batch-cultivation", "centrifugation"],
   "batchCultivation" : [{
     "operationType": "batch-cultivation",
     "cultivationSettings": {
@@ -15,5 +15,15 @@
       "agitatorSpeed": 2.5
     }
   }],
-  "centrifugation": []
+  "centrifugation" : [{
+    "operationType": "centrifugation",
+    "centrifugationSettings": {
+      "frequencyOfRotation": 9200,
+      "liquidFlowRate": 0.0052,
+      "liquidVolume": null
+    },
+    "centrifugeProperties": {
+      "centrifugeType": "example"
+    }
+  }]
 }

@@ -24,6 +24,11 @@ class SimulationService(
     private val batchRequestRepository: BatchRequestRepository,
     private val cultivationSettingsRepository: CultivationSettingsRepository,
     private val reactorSettingsRepository: ReactorSettingsRepository,
+    private val centrifugeRepository: CentrifugeRepository,
+    private val centrifugationRepository: CentrifugationRepository,
+    private val centrifugationSettingsRepository: CentrifugationSettingsRepository,
+    private val centrifugationRequestRepository: CentrifugationRequestRepository,
+    private val centrifugePropertiesRepository: CentrifugePropertiesRepository
 ) {
 
     @Transactional
@@ -58,7 +63,7 @@ class SimulationService(
     }
 
     fun saveNewSimulation(request: SimulationRequestDTO): Long {
-        val operations = saveUnitOperations(request, listOf(0), emptyList())
+        val operations = saveUnitOperations(request, listOf(0, 0), emptyList())
 
         val simulation = createSimulation(operations)
 
@@ -67,13 +72,15 @@ class SimulationService(
 
     private fun createSimulation(operations: List<Operation>): Simulation {
         val batch: MutableList<BatchCultivation?> = mutableListOf()
+        val centrifuge: MutableList<Centrifugation?> = mutableListOf()
         operations.map {operation ->
             when (operation.type) {
                 "batch-cultivation" -> { batch.add(batchCultivationRepository.findById(operation.id).get()) }
+                "centrifugation" -> { centrifuge.add(centrifugationRepository.findById(operation.id).get()) }
                 else -> throw IllegalArgumentException("Unexpected operation type $operation")
             }
         }
-        return Simulation(batchCultivation = batch)
+        return Simulation(batchCultivation = batch, centrifugation = centrifuge)
     }
 
     private fun saveUnitOperations(request: SimulationRequestDTO, savedOperations: List<Int>, accumulator: List<Operation>): List<Operation> {
@@ -89,19 +96,21 @@ class SimulationService(
     private fun saveUnitOperation(operation: String, request: SimulationRequestDTO, position: Int, savedOperations: List<Int>): Operation {
         return when (operation) {
             "batch-cultivation" -> saveBatchCultivation(request.batchCultivation[savedOperations[0]]!!, position)
+            "centrifugation" -> saveCentrifugation(request.centrifugation[savedOperations[1]]!!, position)
             else -> throw IllegalArgumentException("Unit operation not found ($operation)")
         }
     }
 
     private fun updateSavedOperations(nextOperation: Operation, savedOperations: List<Int>): List<Int> {
         return when (nextOperation.type) {
-            "batch-cultivation" -> listOf(savedOperations[0] + 1)
+            "batch-cultivation" -> listOf(savedOperations[0] + 1, savedOperations[1])
+            "centrifugation" -> listOf(savedOperations[0], savedOperations[1] + 1)
             else -> throw IllegalArgumentException("Unexpected nextOperation type ${nextOperation.type}")
         }
     }
 
     private fun saveBatchCultivation(request: BatchCultivationRequestDTO, position: Int): Operation {
-        val requestId = saveRequest(request)
+        val requestId = saveBatchRequest(request)
 
         val savedRequest = batchRequestRepository.findById(requestId)
 
@@ -118,7 +127,7 @@ class SimulationService(
         return Operation("batch-cultivation", batchCultivationRepository.save(batchCultivation).id!!)
     }
 
-    private fun saveRequest(request: BatchCultivationRequestDTO): Long {
+    private fun saveBatchRequest(request: BatchCultivationRequestDTO): Long {
         val operationType = request.operationType
 
         val cultivationSettingsId = saveCultivationSettings(request.cultivationSettings)
@@ -169,12 +178,68 @@ class SimulationService(
         }
     }
 
+    private fun saveCentrifugation(request: CentrifugationRequestDTO, position: Int): Operation {
+        val requestId = saveCentrifugationRequest(request)
+
+        val savedRequest = centrifugationRequestRepository.findById(requestId)
+
+        val centrifuge = centrifugeRepository.findCentrifugeByName(request.centrifugeProperties.centrifugeType)
+
+        val costFactor = costFactorRepository.findFirstByOrderByDateDesc()
+
+        val centrifugation = Centrifugation(position, savedRequest.get(),null, costFactor!!, centrifuge!!)
+
+        return Operation("centrifugation", centrifugationRepository.save(centrifugation).id!!)
+    }
+
+    private fun saveCentrifugationRequest(request: CentrifugationRequestDTO): Long {
+        val operationType = request.operationType
+
+        val centrifugationSettingsId = saveCentrifugationSettings(request.centrifugationSettings)
+
+        val centrifugePropertiesId = saveCentrifugeProperties(request.centrifugeProperties)
+
+        val centrifugationSettings = centrifugationSettingsRepository.findById(centrifugationSettingsId)
+
+        val centrifugeProperties = centrifugePropertiesRepository.findById(centrifugePropertiesId)
+
+        return centrifugationRequestRepository.save(CentrifugationRequest(operationType, centrifugationSettings.get(), centrifugeProperties.get())).id!!
+    }
+
+    private fun saveCentrifugationSettings(request: CentrifugationSettingsDTO): Long {
+        return centrifugationSettingsRepository.save(
+            CentrifugationSettings(
+                request.frequencyOfRotation,
+                request.liquidFlowRate,
+                request.liquidVolume,
+                )
+        ).id!!
+    }
+
+    private fun saveCentrifugeProperties(request: CentrifugePropertiesDTO): Long {
+        if (request.centrifugeType == "") {
+            throw EmptyStringException("Centrifuge type input is empty string!")
+        } else {
+            return centrifugePropertiesRepository.save(
+                CentrifugeProperties(
+                    request.centrifugeType,
+                    request.outerRadius,
+                    request.innerRadius,
+                    request.numberOfDisks,
+                    request.diskAngle,
+                    request.motorPower
+                )
+            ).id!!
+        }
+    }
+
     private fun saveResults(result: SimulationResultDTO, objectMapper: ObjectMapper, simulationId: Long) {
         val simulation = simulationRepository.findById(simulationId).get()
 
         val resultStrings = result.output.map { operationResultDTO -> objectMapper.writeValueAsString(operationResultDTO) }
 
         saveBatchCultivations(simulation, resultStrings)
+        saveCentrifugations(simulation, resultStrings)
     }
 
     private fun saveBatchCultivations(simulation: Simulation, resultStrings: List<String>) {
@@ -182,6 +247,15 @@ class SimulationService(
             batch -> if (batch != null) {
                 val position = batch.position
                 batchCultivationRepository.setResultForBatchCultivation(batch.id!!, resultStrings[position])
+            }
+        }
+    }
+
+    private fun saveCentrifugations(simulation: Simulation, resultStrings: List<String>) {
+        simulation.centrifugation.forEach {
+            centrifugation -> if (centrifugation != null) {
+                val position = centrifugation.position
+                centrifugationRepository.setResultForCentrifugation(centrifugation.id!!, resultStrings[position])
             }
         }
     }

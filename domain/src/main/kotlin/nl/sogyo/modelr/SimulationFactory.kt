@@ -190,8 +190,7 @@ class SimulationFactory : ISimulationFactory {
     }
 
     private fun isValidCentrifugationSettings(centrifugationSettings: CentrifugationSettings): Boolean {
-        return !(centrifugationSettings.liquidFlowRate < 1.0E-8 || centrifugationSettings.liquidVolume < 1.0E-8 ||
-                centrifugationSettings.frequencyOfRotation < 1.0E-8)
+        return !(centrifugationSettings.liquidFlowRate < 1.0E-8 || centrifugationSettings.frequencyOfRotation < 1.0E-8)
     }
 
     private fun isValidCentrifugeProperties(centrifugeProperties: CentrifugeProperties): Boolean {

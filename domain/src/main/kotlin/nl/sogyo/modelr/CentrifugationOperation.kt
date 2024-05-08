@@ -112,11 +112,11 @@ class CentrifugationOperation(private val input: CentrifugationInput,
      */
 
     override fun calculateDuration(): Double {
-        return round(divide(divide(liquidVolume, requestedFlowRate), 3600.0))
+        return round(divide(divide(liquidVolume!!, requestedFlowRate), 3600.0))
     }
 
     private fun modelDuration(flowRate: Double): Double {
-        return round(divide(divide(liquidVolume, flowRate), 3600.0))
+        return round(divide(divide(liquidVolume!!, flowRate), 3600.0))
     }
 
     /**

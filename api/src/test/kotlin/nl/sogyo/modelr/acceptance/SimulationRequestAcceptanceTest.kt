@@ -1,10 +1,7 @@
 package nl.sogyo.modelr.acceptance
 
 import nl.sogyo.modelr.*
-import nl.sogyo.modelr.entities.CostFactor
-import nl.sogyo.modelr.entities.Impeller
-import nl.sogyo.modelr.entities.Microorganism
-import nl.sogyo.modelr.entities.Reactor
+import nl.sogyo.modelr.entities.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,7 +15,7 @@ import java.time.LocalDate
 
 @RealDatabaseTest
 @AutoConfigureMockMvc
-class SimulationBatchRequestAcceptanceTest {
+class SimulationRequestAcceptanceTest {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
@@ -34,6 +31,9 @@ class SimulationBatchRequestAcceptanceTest {
 
     @Autowired
     private lateinit var costFactorRepository: CostFactorRepository
+
+    @Autowired
+    private lateinit var centrifugeRepository: CentrifugeRepository
 
     @Test
     fun `scenario run simulation request is successful`() {
@@ -122,6 +122,29 @@ class SimulationBatchRequestAcceptanceTest {
         impellerRepository.save(Impeller("rushton turbine", 0.97, 0.72, 5.2))
         microorganismRepository.save(Microorganism(LocalDate.of(2024,4,25), "saccharomyces cerevisiae", 0.24,0.4,0.00703))
         reactorRepository.save(Reactor(LocalDate.of(2024,4,25), "example", 70.0,52.5, 9.29,3.10))
+        costFactorRepository.save(CostFactor(LocalDate.of(2024,4,25), 0.15))
+
+        //Act
+        val result = mockMvc.perform(
+            post("/modelr/api/run-simulation")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(payload)
+        )
+            .andExpect(status().isOk)
+            .andReturn()
+
+        //Assert
+        assertEquals("{\"value\":1}", result.response.contentAsString)
+    }
+
+    @Test
+    fun `Scenario run simulation request is successful for simulation with cascade of batch cultivation and centrifugation`() {
+        //Setup
+        val payload = File("src/test/resources/payloadBatchCent.json").readText()
+        impellerRepository.save(Impeller("rushton turbine", 0.97, 0.72, 5.2))
+        microorganismRepository.save(Microorganism(LocalDate.of(2024,4,25), "saccharomyces cerevisiae", 0.24,0.4,0.00703))
+        reactorRepository.save(Reactor(LocalDate.of(2024,4,25), "example", 70.0,52.5, 9.29,3.10))
+        centrifugeRepository.save(Centrifuge(LocalDate.now(), "example", 2.2E-2, 1.2E-3, 50, 45.0, 5.0))
         costFactorRepository.save(CostFactor(LocalDate.of(2024,4,25), 0.15))
 
         //Act

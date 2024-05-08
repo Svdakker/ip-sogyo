@@ -11,8 +11,8 @@ class CentrifugationSettings(
     @Column(nullable = false)
     var liquidFlowRate: Double, //m3 s-1
 
-    @Column(nullable = false)
-    var liquidVolume: Double,//m3
+    @Column(nullable = true)
+    var liquidVolume: Double?,//m3
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,

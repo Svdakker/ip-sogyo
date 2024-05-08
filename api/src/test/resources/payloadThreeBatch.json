@@ -48,5 +48,6 @@
         "nominalVolume": "240.0",
         "workingVolume": "200.0"
       }
-    }]
+    }],
+  "centrifugation": []
 }
