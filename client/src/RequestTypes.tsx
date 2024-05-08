@@ -3,6 +3,7 @@ import {Dispatch, SetStateAction} from "react";
 export type SimulationRequest = {
     order: string[] | undefined,
     batchCultivation: BatchCultivationRequest[] | undefined
+    centrifugation: CentrifugationRequest[] | undefined
 }
 
 export type BatchCultivationRequest = {
@@ -32,6 +33,27 @@ export type ReactorSettingsRequest = {
     agitatorSpeed: number | undefined,
 }
 
+export type CentrifugationRequest = {
+    operationType: string,
+    centrifugationSettings: CentrifugationSettings | undefined
+    centrifugeProperties: CentrifugeProperties | undefined
+}
+
+export type CentrifugationSettings = {
+    frequencyOfRotation: number | undefined
+    liquidFlowRate: number | undefined
+    liquidVolume: number | undefined
+}
+
+export type CentrifugeProperties = {
+    centrifugeType: string | undefined
+    outerRadius: number | undefined
+    innerRadius: number | undefined
+    numberOfDisks: number | undefined
+    diskAngle: number | undefined
+    motorPower: number | undefined
+}
+
 export type FormProps = {
     position: number,
     labelStyling: string
@@ -40,8 +62,9 @@ export type FormProps = {
         microorganisms: string[]
         reactors: string[]
         impellers: string[]
+        centrifuges: string[]
     } | undefined
-    stateUpdaters: UpdateReactorSettings | UpdateCultivationSettings
+    stateUpdaters: UpdateReactorSettings | UpdateCultivationSettings | Dispatch<SetStateAction<string | undefined>>
 }
 
 export type UpdateCultivationSettings = {

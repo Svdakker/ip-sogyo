@@ -1,26 +1,18 @@
 import classNames from "classnames";
 import {CultivationSettings} from "./CultivationSettings.tsx";
 import {ReactorSettings} from "./ReactorSettings.tsx";
-import {useEffect, useState} from "react";
-import {fetchConstants} from "../services/api.tsx";
-import {Constants, isConstants} from "../ResultTypes.tsx";
+import {useState} from "react";
 import {useSimulationRequest} from "../contexts/simulationRequestContext.tsx";
 import {BatchCultivationRequest, UpdateCultivationSettings, UpdateReactorSettings,} from "../RequestTypes.tsx";
 import {ArcherElement} from "react-archer";
+import {UnitOperation} from "./Unit-Operation.tsx";
 
-interface UnitOperation {
-    icon: string
-    position: number
-}
-
-export const BatchCultivation = ({ icon, position }: UnitOperation) => {
+export const BatchCultivation = ({ icon, position, constants }: UnitOperation) => {
     const { simulationRequest, setSimulationRequest } = useSimulationRequest()
 
     const [openSettings, setOpenSettings] = useState(false)
 
     const [saved, setSaved] = useState(false)
-
-    const [ constants, setConstants] = useState<Constants | undefined>(undefined)
 
     const[microorganismInput, setMicroorganismInput] = useState<string | undefined>(undefined)
     const[accuracyInput, setAccuracyInput] = useState<number | undefined>(undefined)
@@ -39,22 +31,10 @@ export const BatchCultivation = ({ icon, position }: UnitOperation) => {
     const[numberOfImpellersInput, setNumberOfImpellersInput] = useState<number | undefined>(undefined)
     const[agitatorSpeedInput, setAgitatorSpeedInput] = useState<number | undefined>(undefined)
 
-    useEffect(() => {
-        retrieveConstants().then(constants => {
-            if(isConstants(constants)) {
-                setConstants(constants)
-            }
-        })
-    }, []);
-
-    async function retrieveConstants() {
-        return await fetchConstants()
-    }
-
-    const saveOperation = () => {
-        const operation = findRequest()
+    const saveOperationBatch = () => {
+        const operation = findRequestBatch()
         if (operation != undefined) {
-            updateRequest(operation);
+            updateRequestBatch(operation);
             setOpenSettings(!openSettings)
             setSaved(!saved)
         } else {
@@ -62,7 +42,7 @@ export const BatchCultivation = ({ icon, position }: UnitOperation) => {
         }
     }
 
-    const findRequest = (): BatchCultivationRequest | undefined => {
+    const findRequestBatch = (): BatchCultivationRequest | undefined => {
         if (missingCultivationSettings() == false && missingReactorSettings() == false) {
             return {
                 operationType: "batch-cultivation",
@@ -121,12 +101,12 @@ export const BatchCultivation = ({ icon, position }: UnitOperation) => {
             }] : []}>
             <div key={position} className={"flex justify-center h-1/3"}>
                 <img className={`max-h-full max-w-sm ${saved ? 'opacity-25' : 'opacity-100'}`} onClick={() => {if (!saved) { setOpenSettings(!openSettings) }}} src={icon} alt={"image not found"}/>
-                {openSettings && form()}
+                {openSettings && batchForm()}
             </div>
         </ArcherElement>
     )
 
-    function form() {
+    function batchForm() {
         return (
             <form onSubmit={(e) => e.preventDefault()}
                   className="absolute top-2 right-1/5 p-4 rounded-xl bg-gray-900 shadow-2xl">
@@ -137,7 +117,7 @@ export const BatchCultivation = ({ icon, position }: UnitOperation) => {
                                      constants={constants?.value} stateUpdaters={findStateUpdaters("cultivation")}/>
                 <ReactorSettings position={position} labelStyling={labelStyling} inputStyling={inputStyling}
                                  constants={constants?.value} stateUpdaters={findStateUpdaters("reactor")}/>
-                <button onClick={saveOperation} className={classNames(
+                <button onClick={saveOperationBatch} className={classNames(
                     "bg-cyan-800 ring-4 ring-opacity-25 shadow-2xl",
                     "ring-cyan-700 rounded-full p-3 text-center",
                     "text-sm text-white font-black")}>
@@ -150,7 +130,7 @@ export const BatchCultivation = ({ icon, position }: UnitOperation) => {
         )
     }
 
-    function updateRequest(operation: BatchCultivationRequest) {
+    function updateRequestBatch(operation: BatchCultivationRequest) {
         if (simulationRequest?.order != undefined) {
             let updatedRequest = simulationRequest
             updatedRequest.order!.push("batch-cultivation")
@@ -160,6 +140,7 @@ export const BatchCultivation = ({ icon, position }: UnitOperation) => {
             setSimulationRequest({
                 order: ["batch-cultivation"],
                 batchCultivation: [operation],
+                centrifugation: []
             })
         }
     }

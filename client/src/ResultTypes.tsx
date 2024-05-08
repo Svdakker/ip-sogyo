@@ -3,7 +3,7 @@ import {Dispatch, SetStateAction} from "react";
 export type Output = {
     value: {
         order: string[] | undefined
-        output: BatchCultivation[] | undefined
+        output: UnitOperationResult[] | undefined
     }
 }
 
@@ -16,10 +16,11 @@ export type Constants = {
         microorganisms: string[]
         reactors: string[]
         impellers: string[]
+        centrifuges: string[]
     }
 }
 
-export type BatchCultivation = {
+export type UnitOperationResult = {
     duration: number
     model: number[][]
     costEstimation: CostEstimation
@@ -32,7 +33,7 @@ export type GraphData  = {
 }
 
 export type TableData = {
-    data: BatchCultivation[]
+    data: UnitOperationResult[]
     switchGraph: Dispatch<SetStateAction<number>>,
 }
 
