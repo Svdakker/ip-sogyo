@@ -5,6 +5,7 @@ import {isOutput, Output} from "../ResultTypes.tsx";
 import {fetchResult} from "../services/api.tsx";
 import {ResultTable} from "../components/ResultTable.tsx";
 import {BatchGraph} from "../components/BatchGraph.tsx";
+import {CentrifugeGraph} from "../components/CentrifugeGraph.tsx";
 
 Chart.register(CategoryScale);
 
@@ -27,10 +28,16 @@ export const Result = () => {
 
     const displayGraphs = (index: number) => {
         if (index != -1) {
-            const batch = results?.value.output![index]
-            return (
-                <BatchGraph position={index + 1} key={index} model={batch?.model}/>
-            )
+            const operation = results?.value.output![index]
+            if (results?.value.order![index] == "batch-cultivation") {
+                return (
+                    <BatchGraph position={index + 1} key={index} model={operation?.model}/>
+                )
+            } else {
+                return (
+                    <CentrifugeGraph position={index + 1} key={index} model={operation?.model}/>
+                )
+            }
         }
     }
 
