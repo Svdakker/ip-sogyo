@@ -18,7 +18,7 @@ import java.time.LocalDate
 
 @RealDatabaseTest
 @AutoConfigureMockMvc
-class SimulationRequestAcceptanceTest {
+class SimulationBatchRequestAcceptanceTest {
 
     @Autowired
     private lateinit var mockMvc: MockMvc

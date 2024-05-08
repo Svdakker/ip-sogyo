@@ -21,7 +21,7 @@ class SimulationService(
     private val reactorRepository: ReactorRepository,
     private val impellerRepository: ImpellerRepository,
     private val costFactorRepository: CostFactorRepository,
-    private val requestRepository: RequestRepository,
+    private val batchRequestRepository: BatchRequestRepository,
     private val cultivationSettingsRepository: CultivationSettingsRepository,
     private val reactorSettingsRepository: ReactorSettingsRepository,
 ) {
@@ -103,7 +103,7 @@ class SimulationService(
     private fun saveBatchCultivation(request: BatchCultivationRequestDTO, position: Int): Operation {
         val requestId = saveRequest(request)
 
-        val savedRequest = requestRepository.findById(requestId)
+        val savedRequest = batchRequestRepository.findById(requestId)
 
         val microorganism = microorganismRepository.findMicroorganismsByName(request.cultivationSettings.microorganism)
 
@@ -129,7 +129,7 @@ class SimulationService(
 
         val reactorSettings = reactorSettingsRepository.findById(reactorSettingsId)
 
-        return requestRepository.save(Request(operationType, reactorSettings.get(), cultivationSettings.get())).id!!
+        return batchRequestRepository.save(BatchRequest(operationType, reactorSettings.get(), cultivationSettings.get())).id!!
     }
 
     private fun saveCultivationSettings(request: CultivationSettingsDTO): Long {
