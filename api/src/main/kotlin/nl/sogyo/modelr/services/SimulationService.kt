@@ -339,12 +339,15 @@ class SimulationService(
 
             val impellers = impellerRepository.findAllTypes()
 
-            val constants = KnownConstantsDTO(microorganisms, reactors, impellers)
+            val centrifuges = centrifugeRepository.findAllNames()
+
+            val constants = KnownConstantsDTO(microorganisms, reactors, impellers, centrifuges)
 
             when {
                 constants.microorganisms.isEmpty() -> throw NoConstantsFoundException("No microorganisms found in DB")
                 constants.impellers.isEmpty() -> throw NoConstantsFoundException("No impellers found in DB")
                 constants.reactors.isEmpty() -> throw NoConstantsFoundException("No reactors found in DB")
+                constants.centrifuges.isEmpty() -> throw NoConstantsFoundException("No centrifuges found in DB")
                 else -> return Success(constants)
             }
         }

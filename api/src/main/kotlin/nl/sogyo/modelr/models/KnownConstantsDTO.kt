@@ -8,5 +8,7 @@ data class KnownConstantsDTO(
     @JsonProperty
     var reactors: List<String?> = emptyList(),
     @JsonProperty
-    var impellers: List<String?> = emptyList()
+    var impellers: List<String?> = emptyList(),
+    @JsonProperty
+    var centrifuges: List<String?> = emptyList()
 )
