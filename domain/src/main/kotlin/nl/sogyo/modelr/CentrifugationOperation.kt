@@ -14,12 +14,21 @@ class CentrifugationOperation(private val input: CentrifugationInput,
                               private val nextOperation: UnitOperation? = null
 ) : UnitOperation() {
 
+    private val requestedFlowRate = input.centrifugationSettings.liquidFlowRate
+    private var liquidVolume = input.centrifugationSettings.liquidVolume
+
+    private fun setLiquidVolume(volume: Double) {
+        this.liquidVolume = volume
+    }
+
     override fun getNextOperation(): UnitOperation? {
         return this.nextOperation
     }
 
-    override fun generateOutput(previousResult: OperationOutput?, previousOperation: UnitOperation?): OperationOutput {
-        return OperationOutput(calculateDuration(), modelOperation(), calculateCosts(), calculateEnergyConsumption())
+    override fun setCorrection(previousResult: OperationOutput, previousOperation: BatchCultivationOperation) {
+        val previousVolume = previousOperation.getCultivationInput().reactorSettings.workingVolume
+
+        setLiquidVolume(previousVolume!!)
     }
 
     /**
@@ -39,17 +48,18 @@ class CentrifugationOperation(private val input: CentrifugationInput,
     }
 
     private fun modelDataPoints(model: MutableList<List<Double>>, accumulator: Double) {
-        val flowRate = multiply(input.centrifugationSettings.liquidFlowRate, accumulator)
-        if (flowRate < multiply(input.centrifugationSettings.liquidFlowRate, 1.5)) {
+        val flowRate = multiply(requestedFlowRate, accumulator)
+        if (flowRate < multiply(requestedFlowRate, 1.5)) {
             model.add(calculateDataPoint(flowRate))
             modelDataPoints(model,accumulator + 0.2)
         } else {
-            model.add(calculateDataPoint(multiply(input.centrifugationSettings.liquidFlowRate, 1.6)))
+            model.add(calculateDataPoint(multiply(requestedFlowRate, 1.6)))
         }
     }
 
     private fun calculateDataPoint(flowRate: Double): List<Double> {
-        return listOf(flowRate, calculateEfficiencyOfSeparation(flowRate))
+        return listOf(flowRate, calculateEfficiencyOfSeparation(flowRate), modelDuration(flowRate),
+            modelEnergyConsumption(flowRate).operations, modelCosts(flowRate).energy)
     }
 
     fun calculateEfficiencyOfSeparation(flowRate: Double): Double {
@@ -102,7 +112,11 @@ class CentrifugationOperation(private val input: CentrifugationInput,
      */
 
     override fun calculateDuration(): Double {
-        return round(divide(divide(input.centrifugationSettings.liquidVolume, input.centrifugationSettings.liquidFlowRate), 3600.0))
+        return round(divide(divide(liquidVolume, requestedFlowRate), 3600.0))
+    }
+
+    private fun modelDuration(flowRate: Double): Double {
+        return round(divide(divide(liquidVolume, flowRate), 3600.0))
     }
 
     /**
@@ -114,6 +128,10 @@ class CentrifugationOperation(private val input: CentrifugationInput,
         return PowerConsumption(round(multiply(input.centrifugeProperties.motorPower!!, calculateDuration())))
     }
 
+    private fun modelEnergyConsumption(flowRate: Double): PowerConsumption {
+        return PowerConsumption(round(multiply(input.centrifugeProperties.motorPower!!, modelDuration(flowRate))))
+    }
+
     /**
      * Calculations to find the costs related to running a centrifugation operation
      *
@@ -121,5 +139,9 @@ class CentrifugationOperation(private val input: CentrifugationInput,
 
     override fun calculateCosts(): CostEstimation {
         return CostEstimation(round(multiply(costs.energy, calculateEnergyConsumption().operations)))
+    }
+
+    private fun modelCosts(flowRate: Double): CostEstimation {
+        return CostEstimation(round(multiply(costs.energy, modelEnergyConsumption(flowRate).operations)))
     }
 }

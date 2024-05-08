@@ -16,13 +16,6 @@ class BatchCultivationOperation(private val input: BatchCultivationInput,
     private var initialCellDensity = input.cultivationSettings.initialCellDensity
     private var initialSugarConcentration = input.cultivationSettings.initialSugarConcentration
 
-    override fun generateOutput(previousResult: OperationOutput?, previousOperation: UnitOperation?): OperationOutput {
-        if (previousOperation != null) {
-            correctForPreviousResult(previousResult!!, previousOperation)
-        }
-        return OperationOutput(calculateDuration(), modelOperation(), calculateCosts(), calculateEnergyConsumption())
-    }
-
     override fun getNextOperation(): UnitOperation? {
         return this.nextOperation
     }
@@ -43,19 +36,11 @@ class BatchCultivationOperation(private val input: BatchCultivationInput,
         this.initialSugarConcentration = initialSugarConcentration
     }
 
-    private fun getCultivationInput(): BatchCultivationInput {
+    fun getCultivationInput(): BatchCultivationInput {
         return this.input
     }
 
-    private fun correctForPreviousResult(previousResult: OperationOutput, previousOperation: UnitOperation) {
-        if (previousOperation::class == BatchCultivationOperation::class) {
-            setCorrection(previousResult, previousOperation as BatchCultivationOperation)
-        } else {
-            throw IllegalArgumentException("operation not supported as previous operation")
-        }
-    }
-
-    private fun setCorrection(previousResult: OperationOutput, previousOperation: BatchCultivationOperation) {
+    override fun setCorrection(previousResult: OperationOutput, previousOperation: BatchCultivationOperation) {
         val previousModel = previousResult.model
         val previousVolume = previousOperation.getCultivationInput().reactorSettings.workingVolume
         val currentVolume = input.reactorSettings.workingVolume
