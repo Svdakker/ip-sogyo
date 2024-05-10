@@ -1,17 +1,21 @@
 import {FormProps, UpdateCultivationSettings} from "../RequestTypes.tsx";
 import classNames from "classnames";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export const CultivationSettings = ( { position, labelStyling, inputStyling, constants, stateUpdaters }: FormProps ) => {
 
     const [showAdvanced, setShowAdvanced] = useState(false)
 
-    const setPossibleMicroorganisms = () => {
+    const [microorganismOptions, setMicroorganismOptions] = useState([<></>])
+
+    useEffect(() => {
         (stateUpdaters as UpdateCultivationSettings).updateMicroorganism(constants?.microorganisms[constants?.microorganisms.length - 1])
-        return constants?.microorganisms.map(function(val) {
-            return <option key={constants?.microorganisms.indexOf(val)}>{val}</option>
-        })
-    }
+        if (constants) {
+            setMicroorganismOptions(constants!.microorganisms.map(function(val, index) {
+                return <option key={index}>{val}</option>
+            }))
+        }
+    }, [constants, stateUpdaters]);
 
     return (
         <>
@@ -20,7 +24,7 @@ export const CultivationSettings = ( { position, labelStyling, inputStyling, con
                     <label className={labelStyling}>Microorganism:</label>
                     <select onChange={(e) => { (stateUpdaters as UpdateCultivationSettings).updateMicroorganism(e.target.value) }}
                             className={inputStyling} id="microorganism">
-                        {setPossibleMicroorganisms()}
+                        {microorganismOptions}
                     </select>
                 </div>
                 <div>

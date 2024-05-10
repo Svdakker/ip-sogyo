@@ -1,11 +1,9 @@
 import {useSimulationRequest} from "../contexts/simulationRequestContext.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import classNames from "classnames";
 import {ArcherElement} from "react-archer";
 import {CentrifugationRequest} from "../RequestTypes.tsx";
 import {UnitOperation} from "./Unit-Operation.tsx";
-import {CentrifugeType} from "./CentrifugeType.tsx";
-
 
 export const Centrifugation = ({icon, position, constants}: UnitOperation) => {
     const { simulationRequest, setSimulationRequest } = useSimulationRequest()
@@ -25,6 +23,17 @@ export const Centrifugation = ({icon, position, constants}: UnitOperation) => {
     const [ diskAngleInput, setDiskAngleInput ] = useState<number | undefined>(undefined)
     const [ numberOfDisksInput, setNumberOfDisksInput ] = useState<number | undefined>(undefined)
     const [ motorPowerInput, setMotorPowerInput ] = useState<number | undefined>(undefined)
+
+    const [centrifugeOptions, setCentrifugeOptions] = useState([<></>])
+
+    useEffect(() => {
+        setCentrifugeTypeInput(constants?.value.centrifuges[constants?.value.centrifuges.length - 1]);
+        if(constants) {
+            setCentrifugeOptions(constants?.value.centrifuges.map(function(val, index) {
+                return <option key={index}>{val}</option>
+            }))
+        }
+    }, [constants])
 
     const saveOperationCentrifugation = () => {
         const operation = findRequestCentrifugation()
@@ -58,7 +67,7 @@ export const Centrifugation = ({icon, position, constants}: UnitOperation) => {
         }
     }
 
-    const missingCentrifugationInput = (): Boolean => {
+    const missingCentrifugationInput = (): boolean => {
         return ( centrifugeTypeInput == undefined || frequencyOfRotationInput == undefined || liquidFlowRateInput == undefined)
     }
 
@@ -106,8 +115,15 @@ export const Centrifugation = ({icon, position, constants}: UnitOperation) => {
                                onChange={(e) => setLiquidFlowRateInput(Number(e.target.value))}/>
                     </div>
                     {!checkDisabled() && liquidVolume()}
-                    <CentrifugeType constants={constants.value} inputStyling={inputStyling} labelStyling={labelStyling}
-                                    position={position} stateUpdaters={setCentrifugeTypeInput}/>
+                    <div>
+                        <label className={labelStyling}>Centrifuge:</label>
+                        <select onChange={(e) => {
+                            setCentrifugeTypeInput(e.target.value)
+                        }}
+                                className={inputStyling} id="centrifuge">
+                            {centrifugeOptions}
+                        </select>
+                    </div>
                     {showAdvanced && advancedCentrifuge()}
                     <div className="flex items-center">
                         <button onClick={() => setShowAdvanced(!showAdvanced)}

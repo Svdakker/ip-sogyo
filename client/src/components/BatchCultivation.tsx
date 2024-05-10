@@ -69,12 +69,12 @@ export const BatchCultivation = ({ icon, position, constants }: UnitOperation) =
         }
     }
 
-    const missingCultivationSettings = (): Boolean => {
+    const missingCultivationSettings = (): boolean => {
         return ( microorganismInput == undefined || accuracyInput == undefined || initialSugarConcentrationInput == undefined
             || checkInitialCellDensity() )
     }
 
-    const checkInitialCellDensity = (): Boolean => {
+    const checkInitialCellDensity = (): boolean => {
         if (position > 0) {
             return false
         } else {
@@ -82,7 +82,7 @@ export const BatchCultivation = ({ icon, position, constants }: UnitOperation) =
         }
     }
 
-    const missingReactorSettings = (): Boolean => {
+    const missingReactorSettings = (): boolean => {
         return ( reactorTypeInput == undefined || impellerTypeInput == undefined || numberOfImpellersInput == undefined ||
             agitatorSpeedInput == undefined )
     }
