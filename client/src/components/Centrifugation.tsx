@@ -1,5 +1,5 @@
 import {useSimulationRequest} from "../contexts/simulationRequestContext.tsx";
-import {useEffect, useState} from "react";
+import {Fragment, useEffect, useState} from "react";
 import classNames from "classnames";
 import {ArcherElement} from "react-archer";
 import {CentrifugationRequest} from "../RequestTypes.tsx";
@@ -24,13 +24,13 @@ export const Centrifugation = ({icon, position, constants}: UnitOperation) => {
     const [ numberOfDisksInput, setNumberOfDisksInput ] = useState<number | undefined>(undefined)
     const [ motorPowerInput, setMotorPowerInput ] = useState<number | undefined>(undefined)
 
-    const [centrifugeOptions, setCentrifugeOptions] = useState([<></>])
+    const [centrifugeOptions, setCentrifugeOptions] = useState([<Fragment key={"centrifugeOptions"}></Fragment>])
 
     useEffect(() => {
         setCentrifugeTypeInput(constants?.value.centrifuges[constants?.value.centrifuges.length - 1]);
         if(constants) {
-            setCentrifugeOptions(constants?.value.centrifuges.map(function(val, index) {
-                return <option key={"centrifugeOption" + index}>{val}</option>
+            setCentrifugeOptions(constants?.value.centrifuges.map(function(val) {
+                return <option key={val}>{val}</option>
             }))
         }
     }, [constants])

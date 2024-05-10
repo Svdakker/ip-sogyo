@@ -1,25 +1,25 @@
 import {FormProps, UpdateCultivationSettings} from "../RequestTypes.tsx";
 import classNames from "classnames";
-import {useEffect, useState} from "react";
+import {Fragment, useEffect, useState} from "react";
 
 export const CultivationSettings = ( { position, labelStyling, inputStyling, constants, stateUpdaters }: FormProps ) => {
 
     const [showAdvanced, setShowAdvanced] = useState(false)
 
-    const [microorganismOptions, setMicroorganismOptions] = useState([<></>])
+    const [microorganismOptions, setMicroorganismOptions] = useState([<Fragment key={"microorganismOptions"}></Fragment>])
 
     useEffect(() => {
         (stateUpdaters as UpdateCultivationSettings).updateMicroorganism(constants?.microorganisms[constants?.microorganisms.length - 1])
         if (constants) {
-            setMicroorganismOptions(constants!.microorganisms.map(function(val, index) {
-                return <option key={"microorganismOption" + index}>{val}</option>
+            setMicroorganismOptions(constants!.microorganisms.map(function(val) {
+                return <option key={val}>{val}</option>
             }))
         }
     }, [constants, stateUpdaters]);
 
     return (
         <>
-            <div className="grid gap-4 mb-4 md:grid-cols-2">
+            <div key={"cultivationSettings" + position} className="grid gap-4 mb-4 md:grid-cols-2">
                 <div>
                     <label className={labelStyling}>Microorganism:</label>
                     <select onChange={(e) => { (stateUpdaters as UpdateCultivationSettings).updateMicroorganism(e.target.value) }}

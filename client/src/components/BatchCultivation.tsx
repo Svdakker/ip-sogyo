@@ -113,9 +113,9 @@ export const BatchCultivation = ({ icon, position, constants }: UnitOperation) =
                 <div>
                     <label className={classNames("block mb-2 text-md font-black text-white")}>BATCH-CULTIVATION</label>
                 </div>
-                <CultivationSettings key={"cultivationSettings" + position} position={position} labelStyling={labelStyling} inputStyling={inputStyling}
+                <CultivationSettings position={position} labelStyling={labelStyling} inputStyling={inputStyling}
                                      constants={constants?.value} stateUpdaters={findStateUpdaters("cultivation")}/>
-                <ReactorSettings key={"reactorSettings" + position} position={position} labelStyling={labelStyling} inputStyling={inputStyling}
+                <ReactorSettings position={position} labelStyling={labelStyling} inputStyling={inputStyling}
                                  constants={constants?.value} stateUpdaters={findStateUpdaters("reactor")}/>
                 <button onClick={saveOperationBatch} className={classNames(
                     "bg-cyan-800 ring-4 ring-opacity-25 shadow-2xl",
