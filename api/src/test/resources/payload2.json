@@ -1,5 +1,5 @@
 {
-  "batchCultivation": {
+  "batchCultivation": [{
     "cultivationSettings": {
       "accuracy": "0.1",
       "initialCellDensity": "0.24",
@@ -20,8 +20,9 @@
       "width": "2.5",
       "workingVolume": "35.4"
     }
-  },
+  }],
   "order": [
     "batch-cultivation"
-  ]
+  ],
+  "centrifugation": []
 }

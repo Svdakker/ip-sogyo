@@ -1,4 +1,4 @@
-import {Constants, Output, Saved} from "../Types.tsx";
+import {Constants, Output, Saved} from "../ResultTypes.tsx";
 
 export async function runSimulation(input: object)  {
     const response: Response = await fetch("modelr/api/run-simulation", {

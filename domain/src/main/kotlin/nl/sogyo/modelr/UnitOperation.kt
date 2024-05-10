@@ -7,9 +7,24 @@ import java.math.RoundingMode
 
 abstract class UnitOperation {
 
-    fun generateOutput(): OperationOutput {
+    fun generateOutput(previousResult: OperationOutput? = null, previousOperation: UnitOperation? = null): OperationOutput {
+        if (previousOperation != null) {
+            correctForPreviousOperation(previousResult!!, previousOperation)
+        }
         return OperationOutput(calculateDuration(), modelOperation(), calculateCosts(), calculateEnergyConsumption())
     }
+
+    private fun correctForPreviousOperation(previousResult: OperationOutput, previousOperation: UnitOperation) {
+        if (previousOperation::class == BatchCultivationOperation::class) {
+            setCorrection(previousResult, previousOperation as BatchCultivationOperation)
+        } else {
+            throw IllegalArgumentException("operation not supported as previous operation")
+        }
+    }
+
+    abstract fun setCorrection(previousResult: OperationOutput, previousOperation: BatchCultivationOperation)
+
+    abstract fun getNextOperation(): UnitOperation?
 
     abstract fun modelOperation(): List<List<Double>>
 

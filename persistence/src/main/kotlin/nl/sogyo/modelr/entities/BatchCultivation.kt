@@ -9,7 +9,7 @@ class BatchCultivation(
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "request_id", nullable = false)
-    var request: Request, //Contains SimulationRequestDTO as Json
+    var request: BatchRequest, //Contains SimulationRequestDTO as Json
 
     @Column(columnDefinition = "TEXT", nullable = true)
     var result: String? = null, //Contains SimulationResultDTO as Json

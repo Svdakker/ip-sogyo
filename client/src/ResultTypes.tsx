@@ -1,6 +1,9 @@
+import {Dispatch, SetStateAction} from "react";
+
 export type Output = {
     value: {
-        batchCultivation: BatchCultivation | undefined
+        order: string[] | undefined
+        output: UnitOperationResult[] | undefined
     }
 }
 
@@ -13,24 +16,25 @@ export type Constants = {
         microorganisms: string[]
         reactors: string[]
         impellers: string[]
+        centrifuges: string[]
     }
 }
 
-export type BatchCultivation = {
+export type UnitOperationResult = {
     duration: number
     model: number[][]
     costEstimation: CostEstimation
     powerConsumption: PowerConsumption
 }
 
-export type Model = {
-    data: number[][] | undefined
+export type GraphData  = {
+    model: number[][] | undefined,
+    position: number,
 }
 
 export type TableData = {
-    duration: number | undefined
-    energyCosts: number | undefined
-    energyUsed: number | undefined
+    data: UnitOperationResult[]
+    switchGraph: Dispatch<SetStateAction<number>>,
 }
 
 export type CostEstimation = {
@@ -39,16 +43,6 @@ export type CostEstimation = {
 
 export type PowerConsumption = {
     operations: number
-}
-
-export type FormProps = {
-    labelStyling: string
-    inputStyling: string
-    constants: {
-        microorganisms: string[]
-        reactors: string[]
-        impellers: string[]
-    } | undefined
 }
 
 export function isOutput(output: unknown): output is Output {

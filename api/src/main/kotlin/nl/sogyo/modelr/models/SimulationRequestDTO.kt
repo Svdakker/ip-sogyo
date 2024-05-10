@@ -6,5 +6,7 @@ data class SimulationRequestDTO(
     @JsonProperty
     var order: List<String>,
     @JsonProperty
-    var batchCultivation: BatchCultivationRequestDTO?,
+    var batchCultivation: List<BatchCultivationRequestDTO?>,
+    @JsonProperty
+    var centrifugation: List<CentrifugationRequestDTO?>
 )

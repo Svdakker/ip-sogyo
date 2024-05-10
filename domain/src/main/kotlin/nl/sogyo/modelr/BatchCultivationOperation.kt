@@ -2,13 +2,57 @@ package nl.sogyo.modelr
 
 import nl.sogyo.modelr.data.*
 import nl.sogyo.modelr.data.batchCultivationRequest.BatchCultivationInput
-import nl.sogyo.modelr.data.batchCultivationRequest.CostFactors
+import nl.sogyo.modelr.data.CostFactors
 import kotlin.math.exp
 import kotlin.math.ln
 import kotlin.math.log
 import kotlin.math.pow
 
-class BatchCultivationCalc(private val input: BatchCultivationInput, private val costs: CostFactors = CostFactors()) : UnitOperation() {
+class BatchCultivationOperation(private val input: BatchCultivationInput,
+                                private val costs: CostFactors = CostFactors(),
+                                private val nextOperation: UnitOperation? = null) :
+    UnitOperation() {
+
+    private var initialCellDensity = input.cultivationSettings.initialCellDensity
+    private var initialSugarConcentration = input.cultivationSettings.initialSugarConcentration
+
+    override fun getNextOperation(): UnitOperation? {
+        return this.nextOperation
+    }
+
+    private fun getInitialCellDensity(): Double {
+        return this.initialCellDensity
+    }
+
+    private fun setInitialCellDensity(initialCellDensity: Double) {
+        this.initialCellDensity = initialCellDensity
+    }
+
+    private fun getInitialSugarConcentration(): Double {
+        return this.initialSugarConcentration
+    }
+
+    private fun setInitialSugarConcentration(initialSugarConcentration: Double) {
+        this.initialSugarConcentration = initialSugarConcentration
+    }
+
+    fun getCultivationInput(): BatchCultivationInput {
+        return this.input
+    }
+
+    override fun setCorrection(previousResult: OperationOutput, previousOperation: BatchCultivationOperation) {
+        val previousModel = previousResult.model
+        val previousVolume = previousOperation.getCultivationInput().reactorSettings.workingVolume
+        val currentVolume = input.reactorSettings.workingVolume
+
+        val finalDataPoint = previousModel[previousModel.size - 2]
+
+        val finalCellMass = multiply(finalDataPoint[1], previousVolume!!)
+        val finalSugarMass = multiply(finalDataPoint[2], previousVolume)
+
+        setInitialCellDensity(divide(finalCellMass, currentVolume!!))
+        setInitialSugarConcentration(divide(finalSugarMass, currentVolume) + getInitialSugarConcentration())
+    }
 
     /**
      * Calculations to model a batch cultivation over time
@@ -54,23 +98,23 @@ class BatchCultivationCalc(private val input: BatchCultivationInput, private val
      */
 
     override fun calculateDuration(): Double {
-        return round(divide(ln(divide(calculateFinalCellDensity(), input.cultivationSettings.initialCellDensity)), input.cultivationSettings.maxGrowthRate!!))
+        return round(divide(ln(divide(calculateFinalCellDensity(), getInitialCellDensity())), input.cultivationSettings.maxGrowthRate!!))
     }
 
     fun calculateFinalCellDensity(): Double {
-        return (input.cultivationSettings.initialCellDensity + divide(
-            multiply(input.cultivationSettings.initialSugarConcentration, input.cultivationSettings.yield!!),
+        return (getInitialCellDensity() + divide(
+            multiply(getInitialSugarConcentration(), input.cultivationSettings.yield!!),
             (1 + divide(multiply(input.cultivationSettings.maintenance!!, input.cultivationSettings.yield), input.cultivationSettings.maxGrowthRate!!))
         ))
     }
 
     fun calculateCellDensity(timePoint: Double): Double {
-        return round(multiply(input.cultivationSettings.initialCellDensity, exp(multiply(input.cultivationSettings.maxGrowthRate!!, timePoint))))
+        return round(multiply(getInitialCellDensity(), exp(multiply(input.cultivationSettings.maxGrowthRate!!, timePoint))))
     }
 
     fun calculateSugarConcentration(timePoint: Double): Double {
         return round(
-            input.cultivationSettings.initialSugarConcentration - multiply(
+            getInitialSugarConcentration() - multiply(
                 multiply(
                     calculateSugarUptakeRate(),
                     calculateCellDensity(timePoint)
@@ -129,13 +173,5 @@ class BatchCultivationCalc(private val input: BatchCultivationInput, private val
         val x = calculatePowerConsumptionWatts()
         return round(divide(x, input.reactorSettings.workingVolume!!))
     }
-
-    /**
-     * Calculations to model the heat production inside the reactor and thus required cooling
-     *
-     * Heating up before the process is not accounted for
-     * Constants used assume an ethanol production process by S.cerevisiae from glucose
-     */
-
 
 }

@@ -30,7 +30,7 @@ class DataHandlingTest {
         val factory = SimulationFactory()
         val simulation = factory.createNewSimulation(listOf("batch-cultivation"), settings)
 
-        val result = simulation.runSimulation().duration
+        val result = simulation.runSimulation().output[0]!!.duration
 
         assertEquals(17.51, result)
     }
@@ -49,7 +49,7 @@ class DataHandlingTest {
     fun testCreatingCultivationSettingsWithNegativeCellDensityThrowsIllegalArgumentException() {
         val factory = SimulationFactory()
         val settings = """{
-            "batchCultivation": {
+            "batchCultivation": [{
             "costFactor": {
             "date": [
             2024,
@@ -119,7 +119,7 @@ class DataHandlingTest {
         }
         },
             "result": null
-        },
+        }],
             "id": 1
         }"""
 
@@ -132,7 +132,7 @@ class DataHandlingTest {
     fun testCreatingCultivationSettingsWithNegativeSugarThrowsIllegalArgumentException() {
         val factory = SimulationFactory()
         val settings = """{
-            "batchCultivation": {
+            "batchCultivation": [{
             "costFactor": {
             "date": [
             2024,
@@ -202,7 +202,7 @@ class DataHandlingTest {
         }
         },
             "result": null
-        },
+        }],
             "id": 1
         }"""
 
@@ -216,7 +216,7 @@ class DataHandlingTest {
     fun testCreatingCultivationSettingsWithNegativeMaintenanceThrowsIllegalArgumentException() {
         val factory = SimulationFactory()
         val settings = """{
-            "batchCultivation": {
+            "batchCultivation": [{
             "costFactor": {
             "date": [
             2024,
@@ -286,7 +286,7 @@ class DataHandlingTest {
         }
         },
             "result": null
-        },
+        }],
             "id": 1
         }"""
 
@@ -300,7 +300,7 @@ class DataHandlingTest {
     fun testCreatingCultivationSettingsWithNegativeGrowthThrowsIllegalArgumentException() {
         val factory = SimulationFactory()
         val settings = """{
-            "batchCultivation": {
+            "batchCultivation": [{
             "costFactor": {
             "date": [
             2024,
@@ -370,7 +370,7 @@ class DataHandlingTest {
         }
         },
             "result": null
-        },
+        }],
             "id": 1
         }"""
 
@@ -384,7 +384,7 @@ class DataHandlingTest {
     fun testCreatingCultivationSettingsWithNegativeYieldThrowsIllegalArgumentException() {
         val factory = SimulationFactory()
         val settings = """{
-            "batchCultivation": {
+            "batchCultivation": [{
             "costFactor": {
             "date": [
             2024,
@@ -454,7 +454,7 @@ class DataHandlingTest {
         }
         },
             "result": null
-        },
+        }],
             "id": 1
         }"""
 
@@ -468,7 +468,7 @@ class DataHandlingTest {
     fun testCreatingReactorSettingsWithNegativeAgitatorSpeedThrowsIllegalArgumentException() {
         val factory = SimulationFactory()
         val settings = """{
-            "batchCultivation": {
+            "batchCultivation": [{
             "costFactor": {
             "date": [
             2024,
@@ -538,7 +538,7 @@ class DataHandlingTest {
         }
         },
             "result": null
-        },
+        }],
             "id": 1
         }"""
 
@@ -551,7 +551,7 @@ class DataHandlingTest {
     fun testCreatingReactorSettingsWithNegativeHeightThrowsIllegalArgumentException() {
         val factory = SimulationFactory()
         val settings = """{
-            "batchCultivation": {
+            "batchCultivation": [{
             "costFactor": {
             "date": [
             2024,
@@ -621,7 +621,7 @@ class DataHandlingTest {
         }
         },
             "result": null
-        },
+        }],
             "id": 1
         }"""
 
@@ -634,7 +634,7 @@ class DataHandlingTest {
     fun testCreatingReactorSettingsWithNegativeNomVolumeThrowsIllegalArgumentException() {
         val factory = SimulationFactory()
         val settings = """{
-            "batchCultivation": {
+            "batchCultivation": [{
             "costFactor": {
             "date": [
             2024,
@@ -704,7 +704,7 @@ class DataHandlingTest {
         }
         },
             "result": null
-        },
+        }],
             "id": 1
         }"""
 
@@ -717,7 +717,7 @@ class DataHandlingTest {
     fun testCreatingReactorSettingsWithNegativeNrImpellersThrowsIllegalArgumentException() {
         val factory = SimulationFactory()
         val settings = """{
-            "batchCultivation": {
+            "batchCultivation": [{
             "costFactor": {
             "date": [
             2024,
@@ -787,7 +787,7 @@ class DataHandlingTest {
         }
         },
             "result": null
-        },
+        }],
             "id": 1
         }"""
 
@@ -801,7 +801,7 @@ class DataHandlingTest {
     fun testCreatingReactorSettingsWithNegativeWidthThrowsIllegalArgumentException() {
         val factory = SimulationFactory()
         val settings = """{
-            "batchCultivation": {
+            "batchCultivation": [{
             "costFactor": {
             "date": [
             2024,
@@ -871,7 +871,7 @@ class DataHandlingTest {
         }
         },
             "result": null
-        },
+        }],
             "id": 1
         }"""
 
@@ -884,7 +884,7 @@ class DataHandlingTest {
     fun testCreatingReactorSettingsWithNegativeWorkVolumeThrowsIllegalArgumentException() {
         val factory = SimulationFactory()
         val settings = """{
-            "batchCultivation": {
+            "batchCultivation": [{
             "costFactor": {
             "date": [
             2024,
@@ -954,7 +954,7 @@ class DataHandlingTest {
         }
         },
             "result": null
-        },
+        }],
             "id": 1
         }"""
 
@@ -963,5 +963,319 @@ class DataHandlingTest {
         }
     }
 
+    @Test
+    fun testCreatingCentrifugeInputWithNegativeFlowRateThrowsIllegalArgumentException() {
+        val factory = SimulationFactory()
+        val settings = """{
+          "centrifugation": [{
+            "position": 1,
+            "request": {
+              "centrifugeProperties": {
+                "outerRadius": null,
+                "innerRadius": null,
+                "numberOfDisks": null,
+                "diskAngle": null,
+                "motorPower": null
+              },
+              "centrifugationSettings": {
+                "frequencyOfRotation": 9200.0,
+                "liquidFlowRate": -3.22E-5,
+                "liquidVolume": 52.5E-3
+              }
+            },
+            "costFactor": {
+              "date": [
+                2024,
+                4,
+                25
+              ],
+              "energy": 0.15,
+              "id": 1
+            },
+            "centrifuge": {
+              "outerRadius": 8.0E-2,
+              "innerRadius": 2.2E-3,
+              "numberOfDisks": 50,
+              "diskAngle": 45.0,
+              "motorPower": 5.0
+            }
+          }],
+          "id": 1
+        }"""
+
+        assertThrows<IllegalArgumentException> {
+            factory.createNewSimulation(listOf("centrifugation"), settings)
+        }
+    }
+
+    @Test
+    fun testCreatingCentrifugeInputWithNegativeFrequencyThrowsIllegalArgumentException() {
+        val factory = SimulationFactory()
+        val settings = """{
+          "centrifugation": [{
+            "position": 1,
+            "request": {
+              "centrifugeProperties": {
+                "outerRadius": null,
+                "innerRadius": null,
+                "numberOfDisks": null,
+                "diskAngle": null,
+                "motorPower": null
+              },
+              "centrifugationSettings": {
+                "frequencyOfRotation": -9200.0,
+                "liquidFlowRate": 3.22E-5,
+                "liquidVolume": 52.5E-3
+              }
+            },
+            "costFactor": {
+              "date": [
+                2024,
+                4,
+                25
+              ],
+              "energy": 0.15,
+              "id": 1
+            },
+            "centrifuge": {
+              "outerRadius": 8.0E-2,
+              "innerRadius": 2.2E-3,
+              "numberOfDisks": 50,
+              "diskAngle": 45.0,
+              "motorPower": 5.0
+            }
+          }],
+          "id": 1
+        }"""
+
+        assertThrows<IllegalArgumentException> {
+            factory.createNewSimulation(listOf("centrifugation"), settings)
+        }
+    }
+
+    @Test
+    fun testCreatingCentrifugeInputWithZeroDisksThrowsIllegalArgumentException() {
+        val factory = SimulationFactory()
+        val settings = """{
+          "centrifugation": [{
+            "position": 1,
+            "request": {
+              "centrifugeProperties": {
+                "outerRadius": null,
+                "innerRadius": null,
+                "numberOfDisks": null,
+                "diskAngle": null,
+                "motorPower": null
+              },
+              "centrifugationSettings": {
+                "frequencyOfRotation": 9200.0,
+                "liquidFlowRate": 3.22E-5,
+                "liquidVolume": 52.5E-3
+              }
+            },
+            "costFactor": {
+              "date": [
+                2024,
+                4,
+                25
+              ],
+              "energy": 0.15,
+              "id": 1
+            },
+            "centrifuge": {
+              "outerRadius": 8.0E-2,
+              "innerRadius": 2.2E-3,
+              "numberOfDisks": 0,
+              "diskAngle": 45.0,
+              "motorPower": 5.0
+            }
+          }],
+          "id": 1
+        }"""
+
+        assertThrows<IllegalArgumentException> {
+            factory.createNewSimulation(listOf("centrifugation"), settings)
+        }
+    }
+
+    @Test
+    fun testCreatingCentrifugeInputWithNegativeInnerRadiusThrowsIllegalArgumentException() {
+        val factory = SimulationFactory()
+        val settings = """{
+          "centrifugation": [{
+            "position": 1,
+            "request": {
+              "centrifugeProperties": {
+                "outerRadius": null,
+                "innerRadius": -5,
+                "numberOfDisks": null,
+                "diskAngle": null,
+                "motorPower": null
+              },
+              "centrifugationSettings": {
+                "frequencyOfRotation": 9200.0,
+                "liquidFlowRate": 3.22E-5,
+                "liquidVolume": 52.5E-3
+              }
+            },
+            "costFactor": {
+              "date": [
+                2024,
+                4,
+                25
+              ],
+              "energy": 0.15,
+              "id": 1
+            },
+            "centrifuge": {
+              "outerRadius": 8.0E-2,
+              "innerRadius": 2.2E-3,
+              "numberOfDisks": 50,
+              "diskAngle": 45.0,
+              "motorPower": 5.0
+            }
+          }],
+          "id": 1
+        }"""
+
+        assertThrows<IllegalArgumentException> {
+            factory.createNewSimulation(listOf("centrifugation"), settings)
+        }
+    }
+
+    @Test
+    fun testCreatingCentrifugeInputWithNegativeOuterRadiusThrowsIllegalArgumentException() {
+        val factory = SimulationFactory()
+        val settings = """{
+          "centrifugation": [{
+            "position": 1,
+            "request": {
+              "centrifugeProperties": {
+                "outerRadius": -5,
+                "innerRadius": null,
+                "numberOfDisks": null,
+                "diskAngle": null,
+                "motorPower": null
+              },
+              "centrifugationSettings": {
+                "frequencyOfRotation": 9200.0,
+                "liquidFlowRate": 3.22E-5,
+                "liquidVolume": 52.5E-3
+              }
+            },
+            "costFactor": {
+              "date": [
+                2024,
+                4,
+                25
+              ],
+              "energy": 0.15,
+              "id": 1
+            },
+            "centrifuge": {
+              "outerRadius": 8.0E-2,
+              "innerRadius": 2.2E-3,
+              "numberOfDisks": 50,
+              "diskAngle": 45.0,
+              "motorPower": 5.0
+            }
+          }],
+          "id": 1
+        }"""
+
+        assertThrows<IllegalArgumentException> {
+            factory.createNewSimulation(listOf("centrifugation"), settings)
+        }
+    }
+
+    @Test
+    fun testCreatingCentrifugeInputWithNegativeDiskAngleThrowsIllegalArgumentException() {
+        val factory = SimulationFactory()
+        val settings = """{
+          "centrifugation": [{
+            "position": 1,
+            "request": {
+              "centrifugeProperties": {
+                "outerRadius": null,
+                "innerRadius": null,
+                "numberOfDisks": null,
+                "diskAngle": -45,
+                "motorPower": null
+              },
+              "centrifugationSettings": {
+                "frequencyOfRotation": 9200.0,
+                "liquidFlowRate": 3.22E-5,
+                "liquidVolume": 52.5E-3
+              }
+            },
+            "costFactor": {
+              "date": [
+                2024,
+                4,
+                25
+              ],
+              "energy": 0.15,
+              "id": 1
+            },
+            "centrifuge": {
+              "outerRadius": 8.0E-2,
+              "innerRadius": 2.2E-3,
+              "numberOfDisks": 50,
+              "diskAngle": 45.0,
+              "motorPower": 5.0
+            }
+          }],
+          "id": 1
+        }"""
+
+        assertThrows<IllegalArgumentException> {
+            factory.createNewSimulation(listOf("centrifugation"), settings)
+        }
+    }
+
+    @Test
+    fun testCreatingCentrifugeInputWithNegativeMotorPowerThrowsIllegalArgumentException() {
+        val factory = SimulationFactory()
+        val settings = """{
+          "centrifugation": [{
+            "position": 1,
+            "request": {
+              "centrifugeProperties": {
+                "outerRadius": null,
+                "innerRadius": null,
+                "numberOfDisks": null,
+                "diskAngle": null,
+                "motorPower": -5
+              },
+              "centrifugationSettings": {
+                "frequencyOfRotation": 9200.0,
+                "liquidFlowRate": 3.22E-5,
+                "liquidVolume": 52.5E-3
+              }
+            },
+            "costFactor": {
+              "date": [
+                2024,
+                4,
+                25
+              ],
+              "energy": 0.15,
+              "id": 1
+            },
+            "centrifuge": {
+              "outerRadius": 8.0E-2,
+              "innerRadius": 2.2E-3,
+              "numberOfDisks": 50,
+              "diskAngle": 45.0,
+              "motorPower": -5.0
+            }
+          }],
+          "id": 1
+        }"""
+
+        assertThrows<IllegalArgumentException> {
+            factory.createNewSimulation(listOf("centrifugation"), settings)
+        }
+    }
 
 }

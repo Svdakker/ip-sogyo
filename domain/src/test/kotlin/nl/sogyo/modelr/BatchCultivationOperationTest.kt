@@ -7,12 +7,12 @@ import nl.sogyo.modelr.data.batchCultivationRequest.ReactorSettings
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class BatchCultivationCalcTest {
+class BatchCultivationOperationTest {
 
     @Test
     fun testCalculateDuration() {
         val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5, impellerDiameter = 0.97, impellerFlowNumber = 0.72, impellerPowerNumber = 5.2))
-        val operation = BatchCultivationCalc(input)
+        val operation = BatchCultivationOperation(input)
 
         val result = operation.calculateDuration()
 
@@ -22,7 +22,7 @@ class BatchCultivationCalcTest {
     @Test
     fun testCalculateCellDensity() {
         val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5, impellerDiameter = 0.97, impellerFlowNumber = 0.72, impellerPowerNumber = 5.2))
-        val operation = BatchCultivationCalc(input)
+        val operation = BatchCultivationOperation(input)
         val timePoint = 10.00 //h
 
         val result = operation.calculateCellDensity(timePoint)
@@ -33,7 +33,7 @@ class BatchCultivationCalcTest {
     @Test
     fun testCalculateCellDensityAtTime0() {
         val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5, impellerDiameter = 0.97, impellerFlowNumber = 0.72, impellerPowerNumber = 5.2))
-        val operation = BatchCultivationCalc(input)
+        val operation = BatchCultivationOperation(input)
         val timePoint = 0.0 //h
 
         val result = operation.calculateCellDensity(timePoint)
@@ -44,7 +44,7 @@ class BatchCultivationCalcTest {
     @Test
     fun testCalculateFinalCellDensity() {
         val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5, impellerDiameter = 0.97, impellerFlowNumber = 0.72, impellerPowerNumber = 5.2))
-        val operation = BatchCultivationCalc(input)
+        val operation = BatchCultivationOperation(input)
 
         val result = operation.calculateFinalCellDensity()
 
@@ -54,7 +54,7 @@ class BatchCultivationCalcTest {
     @Test
     fun testCalculateSpecificSugarUptakeRate() {
         val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5, impellerDiameter = 0.97, impellerFlowNumber = 0.72, impellerPowerNumber = 5.2))
-        val operation = BatchCultivationCalc(input)
+        val operation = BatchCultivationOperation(input)
 
         val result = operation.calculateSugarUptakeRate()
 
@@ -64,7 +64,7 @@ class BatchCultivationCalcTest {
     @Test
     fun testCalculateSugarConcentration() {
         val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5, impellerDiameter = 0.97, impellerFlowNumber = 0.72, impellerPowerNumber = 5.2))
-        val operation = BatchCultivationCalc(input)
+        val operation = BatchCultivationOperation(input)
         val timePoint = 10.0
 
         val result = operation.calculateSugarConcentration(timePoint)
@@ -75,7 +75,7 @@ class BatchCultivationCalcTest {
     @Test
     fun testCalculateSugarConcentrationAtTime0() {
         val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5, impellerDiameter = 0.97, impellerFlowNumber = 0.72, impellerPowerNumber = 5.2))
-        val operation = BatchCultivationCalc(input)
+        val operation = BatchCultivationOperation(input)
         val timePoint = 0.0
 
         val result = operation.calculateSugarConcentration(timePoint)
@@ -86,7 +86,7 @@ class BatchCultivationCalcTest {
     @Test
     fun testProcessCanBeModeledOverTime() {
         val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5, impellerDiameter = 0.97, impellerFlowNumber = 0.72, impellerPowerNumber = 5.2))
-        val operation = BatchCultivationCalc(input)
+        val operation = BatchCultivationOperation(input)
 
         val expected = listOf(
             listOf(0.0, 0.12, 20.0), listOf(1.0, .16, 19.89), listOf(2.0, 0.21, 19.71), listOf(3.0, 0.27, 19.45),
@@ -103,7 +103,7 @@ class BatchCultivationCalcTest {
     @Test
     fun testProcessOutputCanBeGenerated() {
         val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5, impellerDiameter = 0.97, impellerFlowNumber = 0.72, impellerPowerNumber = 5.2))
-        val operation = BatchCultivationCalc(input)
+        val operation = BatchCultivationOperation(input)
 
         val expected = OperationOutput(duration = 15.57, model = listOf(
             listOf(0.0, 0.12, 20.0), listOf(1.0, .16, 19.89), listOf(2.0, 0.21, 19.71), listOf(3.0, 0.27, 19.45),
@@ -121,7 +121,7 @@ class BatchCultivationCalcTest {
     @Test
     fun testMixingTimeCanBeCalculated() {
         val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5, impellerDiameter = 0.97, impellerFlowNumber = 0.72, impellerPowerNumber = 5.2))
-        val operation = BatchCultivationCalc(input)
+        val operation = BatchCultivationOperation(input)
 
         val result = operation.calculateMixingTime()
 
@@ -131,7 +131,7 @@ class BatchCultivationCalcTest {
     @Test
     fun testMixingTimeIsCalculatedBasedOnCirculationAtLowVolume() {
         val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 50.0, workingVolume = 35.0, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5, impellerDiameter = 0.97, impellerFlowNumber = 0.72, impellerPowerNumber = 5.2))
-        val operation = BatchCultivationCalc(input)
+        val operation = BatchCultivationOperation(input)
 
         val result = operation.calculateMixingTime()
 
@@ -141,7 +141,7 @@ class BatchCultivationCalcTest {
     @Test
     fun testRelativePowerConsumptionCanBeCalculated() {
         val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5, impellerDiameter = 0.97, impellerFlowNumber = 0.72, impellerPowerNumber = 5.2))
-        val operation = BatchCultivationCalc(input)
+        val operation = BatchCultivationOperation(input)
 
         val result = operation.calculatePowerConsumptionWattsPerCube()
 
@@ -151,7 +151,7 @@ class BatchCultivationCalcTest {
     @Test
     fun testTotalPowerConsumptionCanBeCalculated() {
         val input = BatchCultivationInput(cultivationSettings = CultivationSettings(1.0,20.00, 0.12, 0.27, 0.00703, 0.4), reactorSettings = ReactorSettings(nominalVolume = 70.0, workingVolume = 52.5, height = 9.29, width = 3.10, impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5, impellerDiameter = 0.97, impellerFlowNumber = 0.72, impellerPowerNumber = 5.2))
-        val operation = BatchCultivationCalc(input)
+        val operation = BatchCultivationOperation(input)
 
         val result = operation.calculatePowerConsumptionKWh()
 

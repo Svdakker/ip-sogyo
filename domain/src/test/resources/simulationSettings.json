@@ -1,5 +1,5 @@
 {
-  "batchCultivation": {
+  "batchCultivation": [{
     "costFactor": {
       "date": [
         2024,
@@ -69,6 +69,6 @@
       }
     },
     "result": null
-  },
+  }],
   "id": 1
 }

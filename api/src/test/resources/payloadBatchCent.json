@@ -1,0 +1,29 @@
+{
+  "order": ["batch-cultivation", "centrifugation"],
+  "batchCultivation" : [{
+    "operationType": "batch-cultivation",
+    "cultivationSettings": {
+      "accuracy": 0.01,
+      "initialSugarConcentration": 20,
+      "initialCellDensity": 0.12,
+      "microorganism": "saccharomyces cerevisiae"
+    },
+    "reactorSettings": {
+      "reactorType": "example",
+      "impellerType": "rushton turbine",
+      "numberOfImpellers": 4,
+      "agitatorSpeed": 2.5
+    }
+  }],
+  "centrifugation" : [{
+    "operationType": "centrifugation",
+    "centrifugationSettings": {
+      "frequencyOfRotation": 9200,
+      "liquidFlowRate": 0.0052,
+      "liquidVolume": null
+    },
+    "centrifugeProperties": {
+      "centrifugeType": "example"
+    }
+  }]
+}

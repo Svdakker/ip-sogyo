@@ -4,5 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class SimulationResultDTO(
     @JsonProperty
-    var batchCultivation: OperationResultDTO? = null
+    var order: List<String?> = emptyList(),
+    @JsonProperty
+    var output: List<OperationResultDTO?> = emptyList()
 )

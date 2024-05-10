@@ -1,5 +1,5 @@
 {
-  "batchCultivation": {
+  "batchCultivation": [{
     "costFactor": {
       "date": [
         2024,
@@ -69,6 +69,39 @@
       }
     },
     "result": null
-  },
+  }],
+  "centrifugation": [{
+    "position": 1,
+    "request": {
+      "centrifugeProperties": {
+        "outerRadius": 6.0E-2,
+        "innerRadius": 1.1E-3,
+        "numberOfDisks": 25,
+        "diskAngle": 30.0,
+        "motorPower": 1.0
+      },
+      "centrifugationSettings": {
+        "frequencyOfRotation": 9200.0,
+        "liquidFlowRate": 1.22E-5,
+        "liquidVolume": 52.5E-3
+      }
+    },
+    "costFactor": {
+      "date": [
+        2024,
+        4,
+        25
+      ],
+      "energy": 0.15,
+      "id": 1
+    },
+    "centrifuge": {
+      "outerRadius": 8.0E-2,
+      "innerRadius": 2.2E-3,
+      "numberOfDisks": 50,
+      "diskAngle": 45.0,
+      "motorPower": 5.0
+    }
+  }],
   "id": 1
 }

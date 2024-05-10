@@ -16,7 +16,7 @@ class BatchRepositoryIntegrationTest {
 
     @Test
     fun `test findByRequest returns matching batchCultivation`() {
-        val request = Request("batch-cultivation", ReactorSettings("example", impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5), CultivationSettings("saccharomyces cerevisiae", 0.01, 20.0,0.12))
+        val request = BatchRequest("batch-cultivation", ReactorSettings("example", impellerType = "rushton turbine", numberOfImpellers = 4, agitatorSpeed = 2.5), CultivationSettings("saccharomyces cerevisiae", 0.01, 20.0,0.12))
         val date = LocalDate.now()
         val microorganism = Microorganism(date, "saccharomyces cerevisiae", 0.24, 0.4, 0.00703)
         val reactor = Reactor(date, "example", 70.0,52.5,9.29,3.10)

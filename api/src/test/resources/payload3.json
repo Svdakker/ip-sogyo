@@ -1,6 +1,6 @@
 {
   "order": ["random-operation"],
-  "batchCultivation" : {
+  "batchCultivation" : [{
     "operationType": "batch-cultivation",
     "cultivationSettings": {
       "accuracy": 0.01,
@@ -14,5 +14,6 @@
       "numberOfImpellers": 4,
       "agitatorSpeed": 2.5
     }
-  }
+  }],
+  "centrifugation": []
 }
