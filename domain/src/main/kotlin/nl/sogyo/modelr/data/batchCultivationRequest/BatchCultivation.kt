@@ -1,6 +1,7 @@
 package nl.sogyo.modelr.data.batchCultivationRequest
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import nl.sogyo.modelr.data.CostFactors
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class BatchCultivation(

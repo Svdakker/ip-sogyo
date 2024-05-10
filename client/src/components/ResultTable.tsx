@@ -32,7 +32,7 @@ export const ResultTable = ( { data, switchGraph }: TableData ) => {
             return (
                 <tr key={index} className="border-b bg-gray-800 border-gray-700">
                     <th scope="row" onClick={() => switchGraph(index)} className="px-6 py-4 font-medium whitespace-nowrap text-white hover:cursor-pointer">
-                        {`Batch cultivation ${index + 1}`}
+                        {`Operation ${index + 1}`}
                     </th>
                     <td className="px-6 py-4">
                         {String(batchCultivation.duration)}

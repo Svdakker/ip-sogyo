@@ -3,7 +3,7 @@ package nl.sogyo.modelr
 import nl.sogyo.modelr.data.CostEstimation
 import nl.sogyo.modelr.data.OperationOutput
 import nl.sogyo.modelr.data.PowerConsumption
-import nl.sogyo.modelr.data.batchCultivationRequest.CostFactors
+import nl.sogyo.modelr.data.CostFactors
 import nl.sogyo.modelr.data.centrifugationRequest.CentrifugationInput
 import kotlin.math.PI
 import kotlin.math.pow
@@ -14,12 +14,21 @@ class CentrifugationOperation(private val input: CentrifugationInput,
                               private val nextOperation: UnitOperation? = null
 ) : UnitOperation() {
 
+    private val requestedFlowRate = input.centrifugationSettings.liquidFlowRate
+    private var liquidVolume = input.centrifugationSettings.liquidVolume
+
+    private fun setLiquidVolume(volume: Double) {
+        this.liquidVolume = volume
+    }
+
     override fun getNextOperation(): UnitOperation? {
         return this.nextOperation
     }
 
-    override fun generateOutput(previousResult: OperationOutput?, previousOperation: UnitOperation?): OperationOutput {
-        return OperationOutput(calculateDuration(), modelOperation(), calculateCosts(), calculateEnergyConsumption())
+    override fun setCorrection(previousResult: OperationOutput, previousOperation: BatchCultivationOperation) {
+        val previousVolume = previousOperation.getCultivationInput().reactorSettings.workingVolume
+
+        setLiquidVolume(previousVolume!!)
     }
 
     /**
@@ -34,21 +43,23 @@ class CentrifugationOperation(private val input: CentrifugationInput,
 
     override fun modelOperation(): List<List<Double>> {
         val model = mutableListOf<List<Double>>()
-        modelDataPoints(model, input.centrifugationSettings.minLiquidFlowRate)
+        modelDataPoints(model, 0.4)
         return model
     }
 
-    private fun modelDataPoints(model: MutableList<List<Double>>, flowRate: Double) {
-        if (flowRate < input.centrifugationSettings.maxLiquidFlowRate) {
+    private fun modelDataPoints(model: MutableList<List<Double>>, accumulator: Double) {
+        val flowRate = multiply(requestedFlowRate, accumulator)
+        if (flowRate < multiply(requestedFlowRate, 1.5)) {
             model.add(calculateDataPoint(flowRate))
-            modelDataPoints(model,flowRate + multiply(0.20, flowRate))
+            modelDataPoints(model,accumulator + 0.2)
         } else {
-            model.add(calculateDataPoint(input.centrifugationSettings.maxLiquidFlowRate))
+            model.add(calculateDataPoint(multiply(requestedFlowRate, 1.6)))
         }
     }
 
     private fun calculateDataPoint(flowRate: Double): List<Double> {
-        return listOf(flowRate, calculateEfficiencyOfSeparation(flowRate))
+        return listOf(flowRate, calculateEfficiencyOfSeparation(flowRate), modelDuration(flowRate),
+            modelEnergyConsumption(flowRate).operations, modelCosts(flowRate).energy)
     }
 
     fun calculateEfficiencyOfSeparation(flowRate: Double): Double {
@@ -68,7 +79,7 @@ class CentrifugationOperation(private val input: CentrifugationInput,
 
     private fun calculateRelativeGravitationalVelocity(): Double {
         val centrifugeProperties = input.centrifugeProperties
-        return multiply(calculateAngularVelocity().pow(2), (centrifugeProperties.outerRadius - centrifugeProperties.innerRadius))
+        return multiply(calculateAngularVelocity().pow(2), (centrifugeProperties.outerRadius!! - centrifugeProperties.innerRadius!!))
     }
 
     private fun calculateSigmaFactor(): Double {
@@ -78,15 +89,15 @@ class CentrifugationOperation(private val input: CentrifugationInput,
                 multiply(
                     multiply(
                         multiply(2.0, PI),
-                        centrifugeProperties.numberOfDisks.toDouble()
+                        centrifugeProperties.numberOfDisks!!.toDouble()
                     ),
                         calculateAngularVelocity().pow(2)
                 ),
-                (centrifugeProperties.outerRadius.pow(3) - centrifugeProperties.innerRadius.pow(2))
+                (centrifugeProperties.outerRadius!!.pow(3) - centrifugeProperties.innerRadius!!.pow(2))
             ),
             multiply(
                 multiply(3.0, 9.81),
-                tan(centrifugeProperties.diskAngle))
+                tan(centrifugeProperties.diskAngle!!))
         )
     }
 
@@ -101,7 +112,11 @@ class CentrifugationOperation(private val input: CentrifugationInput,
      */
 
     override fun calculateDuration(): Double {
-        return 100.0
+        return round(divide(divide(liquidVolume!!, requestedFlowRate), 3600.0))
+    }
+
+    private fun modelDuration(flowRate: Double): Double {
+        return round(divide(divide(liquidVolume!!, flowRate), 3600.0))
     }
 
     /**
@@ -110,7 +125,11 @@ class CentrifugationOperation(private val input: CentrifugationInput,
      */
 
     override fun calculateEnergyConsumption(): PowerConsumption {
-        return PowerConsumption(100.0)
+        return PowerConsumption(round(multiply(input.centrifugeProperties.motorPower!!, calculateDuration())))
+    }
+
+    private fun modelEnergyConsumption(flowRate: Double): PowerConsumption {
+        return PowerConsumption(round(multiply(input.centrifugeProperties.motorPower!!, modelDuration(flowRate))))
     }
 
     /**
@@ -119,6 +138,10 @@ class CentrifugationOperation(private val input: CentrifugationInput,
      */
 
     override fun calculateCosts(): CostEstimation {
-        return CostEstimation(100.0)
+        return CostEstimation(round(multiply(costs.energy, calculateEnergyConsumption().operations)))
+    }
+
+    private fun modelCosts(flowRate: Double): CostEstimation {
+        return CostEstimation(round(multiply(costs.energy, modelEnergyConsumption(flowRate).operations)))
     }
 }

@@ -1,9 +1,7 @@
 package nl.sogyo.modelr.acceptance
 
-import nl.sogyo.modelr.ImpellerRepository
-import nl.sogyo.modelr.MicroorganismRepository
-import nl.sogyo.modelr.ReactorRepository
-import nl.sogyo.modelr.RealDatabaseTest
+import nl.sogyo.modelr.*
+import nl.sogyo.modelr.entities.Centrifuge
 import nl.sogyo.modelr.entities.Impeller
 import nl.sogyo.modelr.entities.Microorganism
 import nl.sogyo.modelr.entities.Reactor
@@ -32,13 +30,17 @@ class GetKnownSettingsAcceptanceTest {
     @Autowired
     private lateinit var reactorRepository: ReactorRepository
 
+    @Autowired
+    private lateinit var centrifugeRepository: CentrifugeRepository
+
     @Test
     fun `scenario retrieve constants is successful`() {
         //Setup
-        val expected = """{"value":{"microorganisms":["saccharomyces cerevisiae"],"reactors":["example"],"impellers":["rushton turbine"]}}"""
+        val expected = """{"value":{"microorganisms":["saccharomyces cerevisiae"],"reactors":["example"],"impellers":["rushton turbine"],"centrifuges":["example"]}}"""
         impellerRepository.save(Impeller("rushton turbine", 0.97, 0.72, 5.2))
         microorganismRepository.save(Microorganism(LocalDate.now(), "saccharomyces cerevisiae", 0.24,0.4,0.00703))
         reactorRepository.save(Reactor(LocalDate.now(), "example", 70.0,52.5, 9.29,3.10))
+        centrifugeRepository.save(Centrifuge(LocalDate.now(), "example", 2.2E-2, 1.2E-3, 50, 45.0, 5.0))
 
         //Act
         val result = mockMvc.perform(

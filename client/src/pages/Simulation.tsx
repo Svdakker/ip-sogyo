@@ -1,21 +1,37 @@
-import {BatchCultivation} from "../components/Unit-Operations.tsx";
+import {BatchCultivation} from "../components/BatchCultivation.tsx";
 import batch from "/src/assets/batch-reactor.png"
-import {runSimulation} from "../services/api.tsx";
-import {isSaved} from "../ResultTypes.tsx";
+import disk from "/src/assets/disk-stack.png"
+import {fetchConstants, runSimulation} from "../services/api.tsx";
+import {Constants, isConstants, isSaved} from "../ResultTypes.tsx";
 import Chart from "chart.js/auto";
 import {CategoryScale} from "chart.js";
 import classNames from "classnames";
 import {useNavigate} from "react-router-dom";
 import {useSimulationRequest} from "../contexts/simulationRequestContext.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {ArcherContainer} from "react-archer";
+import {Centrifugation} from "../components/Centrifugation.tsx";
 
 Chart.register(CategoryScale);
 
 export const Simulation = () => {
     const { simulationRequest } = useSimulationRequest()
 
-    const [operations, setOperations] = useState<number[]>([])
+    const [operations, setOperations] = useState<string[]>([])
+
+    const [ constants, setConstants] = useState<Constants | undefined>(undefined)
+
+    useEffect(() => {
+        retrieveConstants().then(constants => {
+            if(isConstants(constants)) {
+                setConstants(constants)
+            }
+        })
+    }, []);
+
+    async function retrieveConstants() {
+        return await fetchConstants()
+    }
 
     const navigate = useNavigate()
 
@@ -30,18 +46,34 @@ export const Simulation = () => {
     }
 
     const addBatchCultivation = () => {
-        setOperations([...operations, operations.length])
+        setOperations([...operations, "batch-cultivation"])
+    }
+
+    const addCentrifugation = () => {
+        setOperations([...operations, "centrifugation"])
     }
 
     return (
             <div className="relative h-screen w-screen flex flex-wrap justify-center">
                 <div className="h-[10%] basis-full flex justify-center">
-                    <button onClick={addBatchCultivation} className={classNames("text-center text-lg text-white font-black")}>+ Batch-cultivation</button>
+                    <button onClick={addBatchCultivation}
+                            className={classNames("text-center mx-2 text-lg text-white font-black")}>+ Batch-cultivation
+                    </button>
+                    <button onClick={addCentrifugation}
+                            className={classNames("text-center mx-2 text-lg text-white font-black")}>+ Centrifugation
+                    </button>
                 </div>
-                <ArcherContainer key="config-container" startMarker={true} endMarker={false} strokeColor={"black"} offset={10}
+                <ArcherContainer key="config-container" startMarker={true} endMarker={false} strokeColor={"black"}
+                                 offset={10}
                                  className={classNames("basis-full h-3/4 mx-4 bg-white border-8 border-cyan-800 rounded-md")}>
                     <div className={`flex flex-wrap justify-center gap-[10%] items-center size-full relative overflow-visible`}>
-                        {operations.map((operation) => (<BatchCultivation key={operation} position={operation} icon={batch}/>))}
+                        {operations.map((operation, index) => {
+                            if (operation == "batch-cultivation") {
+                                return (<BatchCultivation key={index} position={index} icon={batch} constants={constants!}/>)
+                            } else {
+                                return (<Centrifugation key={index} icon={disk} position={index} constants={constants!}/>)
+                            }
+                        })}
                     </div>
                 </ArcherContainer>
                 <button onClick={requestSimulation} className={classNames(

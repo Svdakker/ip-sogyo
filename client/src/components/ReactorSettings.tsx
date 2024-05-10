@@ -1,40 +1,42 @@
 import {FormProps, UpdateReactorSettings} from "../RequestTypes.tsx";
 import classNames from "classnames";
-import {useState} from "react";
+import {Fragment, useEffect, useState} from "react";
 
-export const ReactorSettings = ( { labelStyling, inputStyling, constants, stateUpdaters }: FormProps ) => {
+export const ReactorSettings = ( { position, labelStyling, inputStyling, constants, stateUpdaters }: FormProps ) => {
 
     const [showAdvanced, setShowAdvanced] = useState(false)
 
-    const setPossibleReactors = () => {
-        (stateUpdaters as UpdateReactorSettings).updateReactorType(constants?.reactors[constants?.reactors.length - 1])
-        return constants?.reactors.map(function(val) {
-            return <option key={constants?.reactors.indexOf(val)}>{val}</option>
-        })
-    }
+    const [reactorOptions, setReactorOptions] = useState([<Fragment key={"reactorOptions"}></Fragment>])
 
-    const setPossibleImpellers = () => {
-        (stateUpdaters as UpdateReactorSettings).updateImpellerType(constants?.impellers[constants?.impellers.length - 1])
-        return constants?.impellers.map(function(val) {
-            return <option key={constants?.impellers.indexOf(val)}>{val}</option>
-        })
-    }
+    const [impellerOptions, setImpellerOptions] = useState([<Fragment key={"impellerOptions"}></Fragment>])
+
+    useEffect(() => {
+        (stateUpdaters as UpdateReactorSettings).updateReactorType(constants?.reactors[constants?.reactors.length - 1]);
+        (stateUpdaters as UpdateReactorSettings).updateImpellerType(constants?.impellers[constants?.impellers.length - 1]);
+        if(constants) {
+            setReactorOptions(constants?.reactors.map(function(val) {
+                return <option key={val}>{val}</option>
+            }))
+            setImpellerOptions(constants?.impellers.map(function(val) {
+                return <option key={val}>{val}</option>
+            }))
+        }
+    }, [constants, stateUpdaters]);
 
     return (
         <>
             <div className="grid gap-4 mb-4 md:grid-cols-2">
-                <div>
+                <div key={"reactorType" + position}>
                     <label className={labelStyling}>Reactor:</label>
-                    <select className={inputStyling} id="reactorType"
-                            onChange={(e) => (stateUpdaters as UpdateReactorSettings).updateReactorType(e.target.value)}>
-                        {setPossibleReactors()}
+                    <select className={inputStyling} id="reactorType" onChange={(e) => (stateUpdaters as UpdateReactorSettings).updateReactorType(e.target.value)}>
+                        {reactorOptions}
                     </select>
                 </div>
                 <div>
                     <label className={labelStyling}>Impeller:</label>
                     <select className={inputStyling} id="impellerType"
                             onChange={(e) => (stateUpdaters as UpdateReactorSettings).updateImpellerType(e.target.value)}>
-                        {setPossibleImpellers()}
+                        {impellerOptions}
                     </select>
                 </div>
                 <div>

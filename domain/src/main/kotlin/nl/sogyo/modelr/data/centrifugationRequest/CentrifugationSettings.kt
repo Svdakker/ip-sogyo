@@ -1,7 +1,10 @@
 package nl.sogyo.modelr.data.centrifugationRequest
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class CentrifugationSettings(
-    val frequencyOfRotation: Double = 9200.0, //rpm
-    val minLiquidFlowRate: Double = 3.22E-5, //m3 s-1
-    val maxLiquidFlowRate: Double = 6.22E-5 //m3 s-1
+    val frequencyOfRotation: Double, //rpm
+    val liquidFlowRate: Double, //m3 s-1
+    val liquidVolume: Double?//m3
 )

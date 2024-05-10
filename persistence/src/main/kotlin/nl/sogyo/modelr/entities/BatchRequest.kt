@@ -3,7 +3,7 @@ package nl.sogyo.modelr.entities
 import jakarta.persistence.*
 
 @Entity
-class Request(
+class BatchRequest(
     @Column(nullable = false)
     var operationType: String,
 
