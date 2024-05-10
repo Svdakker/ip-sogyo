@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0.35
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: s56ntJp!?
+      MYSQL_DATABASE: individual_project
+      MYSQL_USER: springuser
+      MYSQL_PASSWORD: s56ntJp!?
+
+  web-backend:
+    build:
+      context: .
+      dockerfile: backend.dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://${MYSQL_HOST:localhost}:3306/individual_project
+      SPRING_DATASOURCE_USERNAME: springuser
+      SPRING_DATASOURCE_PASSWORD: s56ntJp!?
+
+  web-frontend:
+    build:
+      context: ./client
+      dockerfile: frontend.dockerfile
+    ports:
+      - "4173:4173"
