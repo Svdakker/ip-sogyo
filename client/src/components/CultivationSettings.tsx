@@ -12,7 +12,7 @@ export const CultivationSettings = ( { position, labelStyling, inputStyling, con
         (stateUpdaters as UpdateCultivationSettings).updateMicroorganism(constants?.microorganisms[constants?.microorganisms.length - 1])
         if (constants) {
             setMicroorganismOptions(constants!.microorganisms.map(function(val, index) {
-                return <option key={index}>{val}</option>
+                return <option key={"microorganismOption" + index}>{val}</option>
             }))
         }
     }, [constants, stateUpdaters]);

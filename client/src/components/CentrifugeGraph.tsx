@@ -9,6 +9,9 @@ export const CentrifugeGraph = ( { position, model }: GraphData) => {
     const energy = () => model?.map(dataPoint => dataPoint[3])
     const costs = () => model?.map(dataPoint => dataPoint[4])
 
+    const right = "right" as const
+    const left = "left" as const
+
     const canvasData = {
         datasets: [
             {
@@ -74,7 +77,7 @@ export const CentrifugeGraph = ( { position, model }: GraphData) => {
                         size: 12,
                     },
                 },
-                position: "left"
+                position:left,
             },
             y1: {
                 title: {
@@ -95,7 +98,7 @@ export const CentrifugeGraph = ( { position, model }: GraphData) => {
                         size: 12,
                     },
                 },
-                position: "left",
+                position:left,
             },
             y2: {
                 title: {
@@ -116,7 +119,7 @@ export const CentrifugeGraph = ( { position, model }: GraphData) => {
                         size: 12,
                     },
                 },
-                position: "right",
+                position: right
             },
             y3: {
                 title: {
@@ -137,7 +140,7 @@ export const CentrifugeGraph = ( { position, model }: GraphData) => {
                         size: 12,
                     },
                 },
-                position: "right",
+                position: right,
             }
         },
         plugins: {

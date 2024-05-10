@@ -30,7 +30,7 @@ export const Centrifugation = ({icon, position, constants}: UnitOperation) => {
         setCentrifugeTypeInput(constants?.value.centrifuges[constants?.value.centrifuges.length - 1]);
         if(constants) {
             setCentrifugeOptions(constants?.value.centrifuges.map(function(val, index) {
-                return <option key={index}>{val}</option>
+                return <option key={"centrifugeOption" + index}>{val}</option>
             }))
         }
     }, [constants])

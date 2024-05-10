@@ -15,10 +15,10 @@ export const ReactorSettings = ( { labelStyling, inputStyling, constants, stateU
         (stateUpdaters as UpdateReactorSettings).updateImpellerType(constants?.impellers[constants?.impellers.length - 1]);
         if(constants) {
             setReactorOptions(constants?.reactors.map(function(val, index) {
-                return <option key={index}>{val}</option>
+                return <option key={"reactorOption" + index}>{val}</option>
             }))
             setImpellerOptions(constants?.impellers.map(function(val, index) {
-                return <option key={index}>{val}</option>
+                return <option key={"impellerOption" + index}>{val}</option>
             }))
         }
     }, [constants, stateUpdaters]);
