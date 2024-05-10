@@ -148,10 +148,17 @@ export const Centrifugation = ({icon, position, constants}: UnitOperation) => {
 
     function updateRequestCentrifugation(operation: CentrifugationRequest) {
         if (simulationRequest?.order != undefined) {
-            let updatedRequest = simulationRequest
-            updatedRequest.order!.push("centrifugation")
-            updatedRequest.centrifugation!.push(operation)
-            setSimulationRequest(updatedRequest)
+            setSimulationRequest({
+                order: [...simulationRequest.order, "centrifugation"],
+                batchCultivation: simulationRequest.batchCultivation,
+                centrifugation: function() {
+                    if (simulationRequest.centrifugation != undefined) {
+                        return [...simulationRequest.centrifugation, operation]
+                    } else {
+                        return [operation]
+                    }
+                }()
+            })
         } else {
             alert("Centrifugation is not supported as first operation in the cascade")
         }

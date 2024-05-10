@@ -132,10 +132,17 @@ export const BatchCultivation = ({ icon, position, constants }: UnitOperation) =
 
     function updateRequestBatch(operation: BatchCultivationRequest) {
         if (simulationRequest?.order != undefined) {
-            let updatedRequest = simulationRequest
-            updatedRequest.order!.push("batch-cultivation")
-            updatedRequest.batchCultivation!.push(operation)
-            setSimulationRequest(updatedRequest)
+            setSimulationRequest({
+                order: [...simulationRequest.order, "batch-cultivation"],
+                batchCultivation: function() {
+                    if (simulationRequest.batchCultivation != undefined) {
+                        return [...simulationRequest.batchCultivation, operation]
+                    } else {
+                        return [operation]
+                    }
+                }(),
+                centrifugation: simulationRequest.centrifugation
+            })
         } else {
             setSimulationRequest({
                 order: ["batch-cultivation"],
