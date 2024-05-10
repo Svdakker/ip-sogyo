@@ -27,4 +27,17 @@ class CentrifugeRepositoryIntegrationTest {
         assertEquals(result?.numberOfDisks, centrifuge.numberOfDisks)
         assertEquals(result?.diskAngle, centrifuge.diskAngle)
     }
+
+    @Test
+    fun `Test findAllNames returns all names of centrifuges in repository`() {
+        val centrifuge = Centrifuge(LocalDate.now(), "example", 2.2E-2, 1.2E-3, 50, 45.0, 5.0)
+        val centrifuge2 = Centrifuge(LocalDate.now(), "example2", 2.2E-2, 1.2E-3, 50, 45.0, 5.0)
+        centrifugeRepository.save(centrifuge)
+        centrifugeRepository.save(centrifuge2)
+
+        val result = centrifugeRepository.findAllNames()
+
+        assertEquals("example", result[0])
+        assertEquals("example2", result[1])
+    }
 }
