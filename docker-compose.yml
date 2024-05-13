@@ -15,6 +15,7 @@ services:
       MYSQL_USER: springuser
       MYSQL_PASSWORD: s56ntJp!?
 
+
   web-backend:
     build:
       context: .
@@ -31,9 +32,14 @@ services:
       SPRING_DATASOURCE_PASSWORD: s56ntJp!?
       SPRING_DATASOURCE_DRIVER-CLASS-NAME: com.mysql.cj.jdbc.Driver
 
+
   web-frontend:
     build:
       context: ./client
       dockerfile: frontend.dockerfile
     ports:
       - "4173:4173"
+    environment:
+      BACKEND_SERVER: http://web-backend:8080
+
+
