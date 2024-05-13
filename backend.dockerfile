@@ -2,7 +2,11 @@ FROM openjdk:21
 
 WORKDIR /individual-project
 
-CMD ["./gradlew", "clean", "bootJar"]
+CMD ["./gradlew", "clean", "build"]
+
+COPY domain/build/libs/domain-plain.jar domain-plain.jar
+
+COPY persistence/build/libs/persistence-plain.jar persistence.plain.jar
 
 COPY api/build/libs/api.jar app.jar
 

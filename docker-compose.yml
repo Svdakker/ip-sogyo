@@ -3,8 +3,12 @@ version: '3.8'
 services:
   mysql:
     image: mysql:8.0.35
+    healthcheck:
+      test: ["CMD", 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'springuser', '-p$$SPRING_DATASOURCE_PASSWORD' ]
+      timeout: 20s
+      retries: 10
     ports:
-      - "3306:3306"
+      - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: s56ntJp!?
       MYSQL_DATABASE: individual_project
@@ -18,11 +22,14 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - mysql
+      mysql:
+         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://${MYSQL_HOST:localhost}:3306/individual_project
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/individual_project
+      SPRING_JPA_DATABASE-PLATFORM: org.hibernate.dialect.MySQLDialect
       SPRING_DATASOURCE_USERNAME: springuser
       SPRING_DATASOURCE_PASSWORD: s56ntJp!?
+      SPRING_DATASOURCE_DRIVER-CLASS-NAME: com.mysql.cj.jdbc.Driver
 
   web-frontend:
     build:
