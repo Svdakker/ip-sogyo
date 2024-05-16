@@ -8,10 +8,10 @@ When designing a (bio)-process, for example to produce a protein powder from agr
 
 # Installation instructions
 
-To use this project, clone the repository:
+To use this project, clone the repository and change into the project root directory:
 
 ```
-git clone git@git.sogyo.nl:svdakker/individual-project.git
+git clone git@github.com:Svdakker/ip-sogyo.git
 ```
 
 Build the project using the gradle wrapper:

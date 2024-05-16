@@ -40,7 +40,6 @@ java {
     }
 }
 
-
 tasks.withType(KotlinJvmCompile.class).configureEach {
     jvmTargetValidationMode = JvmTargetValidationMode.WARNING
 }
