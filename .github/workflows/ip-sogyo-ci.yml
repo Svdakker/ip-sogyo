@@ -89,6 +89,15 @@ jobs:
     - name: Build with Gradle Wrapper
       run: ./gradlew clean build
 
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: backend-package
+        path: |
+          domain/build/libs/domain-plain.jar
+          persistence/build/libs/persistence-plain.jar
+          api/build/libs/api.jar app.jar
+
   build-frontend:
 
     strategy:

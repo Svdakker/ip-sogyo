@@ -12,22 +12,17 @@ When designing a (bio)-process, for example to produce a protein powder from agr
 
 To use this project, clone the repository:
 
-git@git.sogyo.nl:svdakker/individual-project.git
+```
+git clone git@git.sogyo.nl:svdakker/individual-project.git
+```
 
-To build the project, node.js (v20.x) and node package manager (included in node.js installation) should be installed. Following the instructions for your operating system on:
+Download and copy the latest workflow artifact into the 'docker' directory and run the following command from the root directory:
 
-https://nodejs.org/en/learn/getting-started/how-to-install-nodejs
+```
+docker compose up --build
+```
 
-Run the following command(s) in the /client folder to assemble and run the front-end:
-
-- npm install
-- npm run dev
-
-Gradle (v8.7) and SpringBoot (v3.2.4) are used to build and run the backend, the gradle wrapper and Spring dependencies are included in the project. Run the following command(s) on the command line in the root folder of the project:
-
-- ./gradlew clean bootRun
-
-Once the front-end and back-end are assembled, the application should be running at http://localhost:5173/
+Once the front-end and back-end are assembled, the application should be running at http://localhost:4173/
 
 # Learning goals
 
