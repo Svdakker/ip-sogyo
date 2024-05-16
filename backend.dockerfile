@@ -2,11 +2,11 @@ FROM openjdk:21
 
 WORKDIR /individual-project
 
-COPY docker/domain-plain.jar domain-plain.jar
+COPY domain/build/libs/domain-plain.jar domain-plain.jar
 
-COPY docker/persistence-plain.jar persistence.plain.jar
+COPY persistence/build/libs/persistence-plain.jar persistence.plain.jar
 
-COPY docker/api.jar app.jar
+COPY api/build/libs/api.jar app.jar
 
 EXPOSE 8080
 

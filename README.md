@@ -16,7 +16,19 @@ To use this project, clone the repository:
 git clone git@git.sogyo.nl:svdakker/individual-project.git
 ```
 
-Download and copy the latest workflow artifact into the 'docker' directory and run the following command from the root directory:
+Build the project using the gradle wrapper:
+
+```
+./gradlew clean build
+```
+
+Make sure Docker is installed and configured using the Docker documentation:
+
+```
+https://docs.docker.com/get-docker/
+```
+
+Run the following command from the root directory of the project:
 
 ```
 docker compose up --build
