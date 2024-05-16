@@ -1,6 +1,6 @@
-[![pipeline status](https://git.sogyo.nl/svdakker/individual-project/badges/main/pipeline.svg)](https://git.sogyo.nl/svdakker/individual-project/-/commits/main)
+[![workflow status](https://github.com/Svdakker/ip-sogyo/actions/workflows/gradle-build-ci.yml/badge.svg?branch=main)](https://github.com/Svdakker/ip-sogyo/actions/workflows/ip-sogyo-ci.yml)
 
-[![coverage report](https://git.sogyo.nl/svdakker/individual-project/badges/main/coverage.svg)](https://git.sogyo.nl/svdakker/individual-project/-/commits/main)
+[![coverage report](https://github.com/Svdakker/ip-sogyo/actions/badges/jacoco.svg?branch=main)](https://github.com/Svdakker/ip-sogyo/actions/workflows/ip-sogyo-ci.yml)
 
 # Project introduction
 This project aims to deliver a web-based application for simulating a cascade of unit operations in a (bio)-process. Users can choose from a set of unit-operations and chain them together in a cascade. Inputs and outputs can be defined, as well as sizes and configurations (microorganism used, pH, temperature, duration, etc.). When running a process, the application will output graphs and tables displaying the predicted events in the unit operations over time. A final predicted cost over the entire process will be calculated and shown as well.
@@ -12,31 +12,17 @@ When designing a (bio)-process, for example to produce a protein powder from agr
 
 To use this project, clone the repository:
 
-git@git.sogyo.nl:svdakker/individual-project.git
-
-To build the project, node.js (v20.x) and node package manager (included in node.js installation) should be installed. Following the instructions for your operating system on:
-
 ```
-https://nodejs.org/en/learn/getting-started/how-to-install-nodejs
+git clone git@git.sogyo.nl:svdakker/individual-project.git
 ```
 
-Run the following command(s) in the /client folder to assemble and run the front-end:
+Download and copy the latest workflow artifact into the 'docker' directory and run the following command from the root directory:
 
 ```
-npm install
+docker compose up --build
 ```
 
-```
-npm run dev
-```
-
-Gradle (v8.7) and SpringBoot (v3.2.4) are used to build and run the backend, the gradle wrapper and Spring dependencies are included in the project. Run the following command(s) on the command line in the root folder of the project:
-
-```
-./gradlew clean bootRun
-```
-
-Once the front-end and back-end are assembled, the application should be running at http://localhost:5173/
+Once the front-end and back-end are assembled, the application should be running at http://localhost:4173/
 
 # Learning goals
 
