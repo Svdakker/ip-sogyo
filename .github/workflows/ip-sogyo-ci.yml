@@ -65,10 +65,7 @@ jobs:
 
     needs: test-backend
 
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, windows-latest, macOs-latest ]
-    runs-on: ${{matrix.os}}
+    runs-on: ubuntu-latest
 
     permissions:
       contents: read
@@ -100,11 +97,7 @@ jobs:
 
   build-frontend:
 
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, windows-latest, macOs-latest ]
-
-    runs-on: ${{matrix.os}}
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
