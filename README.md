@@ -1,4 +1,4 @@
-![pipeline status](https://https://github.com/Svdakker/ip-sogyo/actions/workflows/main.yml/pipeline.svg)
+![pipeline status](https://https://github.com/Svdakker/ip-sogyo/actions/workflows/gradle-build-ci.yml/pipeline.svg)
 
 ![coverage report](https://https://github.com/Svdakker/ip-sogyo/.github/badges/jacoco.svg)
 
