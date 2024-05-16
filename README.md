@@ -1,6 +1,6 @@
-![pipeline status](https://https://github.com/Svdakker/ip-sogyo/actions/workflows/gradle-build-ci.yml/pipeline.svg)
+[![workflow status](https://github.com/Svdakker/ip-sogyo/actions/workflows/gradle-build-ci.yml/badge.svg?branch=main)](https://github.com/Svdakker/ip-sogyo/actions/workflows/ip-sogyo-ci.yml)
 
-![coverage report](https://https://github.com/Svdakker/ip-sogyo/.github/badges/jacoco.svg)
+[![coverage report](https://github.com/Svdakker/ip-sogyo/actions/badges/jacoco.svg?branch=main)](https://github.com/Svdakker/ip-sogyo/actions/workflows/ip-sogyo-ci.yml)
 
 # Project introduction
 This project aims to deliver a web-based application for simulating a cascade of unit operations in a (bio)-process. Users can choose from a set of unit-operations and chain them together in a cascade. Inputs and outputs can be defined, as well as sizes and configurations (microorganism used, pH, temperature, duration, etc.). When running a process, the application will output graphs and tables displaying the predicted events in the unit operations over time. A final predicted cost over the entire process will be calculated and shown as well.
